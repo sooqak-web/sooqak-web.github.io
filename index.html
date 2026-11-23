@@ -288,7 +288,7 @@ window.addEventListener("popstate",function(){var h=location.hash;if(h==="#cart"
 var RAWP=[],DEALS=[],MERCHANTS=[],activeMerchant="";
 try{DEALS=JSON.parse(localStorage.getItem("sooqak_deals")||"[]");MERCHANTS=JSON.parse(localStorage.getItem("sooqak_merchants")||"[]")}catch(e){}
 function renderStores(){var all=[{id:"",name:"كل المنتجات"}].concat(MERCHANTS);$("stores").innerHTML=all.map(function(m){return '<button class="store '+(activeMerchant===m.id?'sel':'')+'" data-m="'+esc(m.id)+'"><span class="storeicon">'+(m.img?'<img loading="lazy" alt="" src="'+esc(m.img)+'">':esc(m.id?m.name.charAt(0):'🏪'))+'</span><span>'+esc(m.name)+'</span></button>'}).join('')}
-$("stores").onclick=function(e){var b=e.target.closest("[data-m]");if(!b)return;activeMerchant=b.getAttribute("data-m");activeCat="";query="";$("search").value="";renderStores();renderChips();renderGrid()};
+$("stores").onclick=function(e){var b=e.target.closest("[data-m]");if(!b)return;activeMerchant=b.getAttribute("data-m");activeCat="";query="";$("q").value="";renderStores();renderChips();renderGrid()};
 function merchant(p){var m=MERCHANTS.find(function(x){return x.id===p.merchantId});return m?m.name:"سوقك"}
 function merchantHtml(p){return p.merchantId&&merchant(p)!=="سوقك"?'<div class="merchant">من متجر: '+esc(merchant(p))+'</div>':""}
 function renderDeal(){var d=$("deal"),live=DEALS.filter(function(a){return byId(a.productId)});if(!live.length){d.style.display="none";return}
