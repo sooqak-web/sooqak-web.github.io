@@ -1,1 +1,14 @@
-[{"id": "d1", "productId": "pmwt58ue2", "price": "6400", "text": "عرض اليوم"}]
+[
+ {
+  "id": "d1",
+  "productId": "pmwt58ue2",
+  "price": "6400",
+  "text": "عرض اليوم"
+ },
+ {
+  "id": "dmwt8egeh",
+  "productId": "pmwt3a5nx",
+  "price": "",
+  "text": "عرض اليوم"
+ }
+]
