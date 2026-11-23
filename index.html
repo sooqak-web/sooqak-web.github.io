@@ -129,7 +129,7 @@ footer a.ph2{display:inline-block;margin-top:8px;color:var(--gold);font-family:v
 .deal{padding:10px 0;overflow:hidden}.dealhead{padding:0 12px 8px;display:flex;justify-content:space-between;align-items:center}.dealhead span{font-size:.7rem;opacity:.8}.dealtrack{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;padding:0 12px 8px;touch-action:pan-x pan-y;scrollbar-width:thin;scrollbar-color:#ffc400 transparent}.dealitem{display:flex;align-items:center;gap:10px;flex:0 0 calc(100% - 22px);scroll-snap-align:start;min-width:0;padding:5px;border:1px solid #ffffff30;border-radius:14px}.dealitem .dimg{width:64px;height:72px}.dealitem .dp{font-size:1rem}.merchant{font-size:.7rem;color:var(--muted);margin:4px 0}.dealitem .dt{min-width:0}
 .stores{padding:8px 12px}.stores h2{font-family:var(--disp);font-size:1.05rem;margin-bottom:6px}.storetrack{display:flex;gap:12px;overflow-x:auto;padding:4px 0 8px}.store{flex:0 0 78px;display:flex;flex-direction:column;align-items:center;gap:5px;font-size:.72rem;font-weight:700;color:var(--navy);background:transparent;border:0}.storeicon{width:58px;height:58px;border:2px solid #d3e1f5;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:1.6rem;overflow:hidden}.storeicon img{width:100%;height:100%;object-fit:cover}.store.sel .storeicon{border:3px solid var(--primary);box-shadow:0 0 0 3px #1976d219}.store.sel{color:var(--primary)}
 .shopicon{width:28px;height:28px;display:inline-block;vertical-align:middle;color:#1976d2;flex:none}.chip.on .shopicon{color:#fff}.mf .shopicon{width:38px;height:38px}.iconchoices{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin:12px 0}.iconchoice{padding:8px 2px;background:#eef4ff;border:2px solid transparent;min-width:0;color:#0a2c61}.iconchoice small{display:block;font-size:.55rem;font-weight:600;line-height:1.5}.iconchoice.selected{border-color:#1976d2;background:#fff6cc}.iconchoice .shopicon{width:26px;height:26px}
-</style>
+#subchips[hidden]{display:none}#subchips{padding-top:0}#subchips .chip{font-size:13px;background:#f1f6ff}#subchips .chip.on{background:#0A2C61;color:#fff}</style>
 </head>
 <body>
 <header>
@@ -148,7 +148,7 @@ footer a.ph2{display:inline-block;margin-top:8px;color:var(--gold);font-family:v
 
 <div class="deal" id="deal"></div>
 <button class="reorder" id="reorder"></button>
-<div class="chips" id="chips"></div>
+<div class="chips" id="chips"></div><div class="chips" id="subchips" hidden aria-label="التصنيفات الفرعية"></div>
 <div class="wrap">
 <div class="promo">أسعار يوم السوق، محدّثة باستمرار <span>التوصيل لباب البيت</span></div>
 <div class="sec"><h2 id="secT">كل المنتجات</h2><div class="cnt" id="secC"></div></div>
@@ -178,6 +178,7 @@ footer a.ph2{display:inline-block;margin-top:8px;color:var(--gold);font-family:v
 
 <script>
 var SHOP_ICONS=[["store", "متجر عام", "M3 10h18M5 10v11h14V10M3 4h18l1 6H2zM9 21v-7h6v7"], ["vegetables", "خضار", "M12 21V9M12 14C2 15 3 5 3 5s10-1 9 9M12 11C11 1 21 3 21 3s2 10-9 8"], ["fruit", "فواكه", "M12 7c-7-6-13 5-6 13 3 3 4 0 6 1 3-1 3 2 6-1 7-8 1-19-6-13M12 7V3l5-1"], ["grocery", "بقالة", "M3 7h18l-2 13H5zM8 7l4-5 4 5M8 11v5M12 11v5M16 11v5"], ["wholesale", "جملة", "M3 8l9-5 9 5v13H3zM8 21v-8h8v8M3 8h18"], ["meat", "لحوم", "M5 5c4-5 15-1 15 6s-8 10-12 7-9-8-3-13zM9 9c2-3 7-1 6 2s-7 1-6-2M5 17l-3 4M3 18l3 3"], ["fish", "أسماك", "M3 12l4-5c5-4 12 1 14 5-3 5-9 9-14 5zM7 7v10M16 10h.01M2 7v10l5-5z"], ["bakery", "مخبوزات", "M4 9c-4-8 20-8 16 0v12H4zM8 5v5M12 4v6M16 5v5"], ["dairy", "ألبان", "M7 2h10v5l3 4v11H4V11l3-4zM7 7h10M4 11h16M9 15h6v4H9z"], ["clothes", "ملابس وبوتيك", "M8 3l4 3 4-3 6 5-4 4v10H6V12L2 8z"], ["shoes", "أحذية", "M4 3h6l1 9 10 5v4H3V9zM10 10l-4 2M11 14l-4 2"], ["bags", "شنط", "M4 8h16l2 14H2zM8 9V6a4 4 0 018 0v3"], ["perfume", "عطور", "M8 2h8v4H8zM10 6v3M14 6v3M6 9h12v13H6zM9 13h6v5H9z"], ["skincare", "كريمات وعناية", "M6 8h12l-2 14H8zM6 5h12v3H6zM10 12h4M10 16h4M8 2h8"], ["pharmacy", "صيدلية", "M8 2h8v6h6v8h-6v6H8v-6H2V8h6z"], ["phone", "هواتف", "M7 2h10v20H7zM7 5h10M11 19h2"], ["electronics", "إلكترونيات", "M2 3h20v14H2zM8 22h8M12 17v5M5 6h14v8H5z"], ["appliances", "أجهزة منزلية", "M4 2h16v20H4zM4 7h16M7 4h.01M10 4h.01M17 14a5 5 0 11-10 0 5 5 0 0110 0"], ["kitchen", "أدوات مطبخ", "M4 10h16v7a4 4 0 01-4 4H8a4 4 0 01-4-4zM2 12h2M20 12h2M6 7h12M12 4v3"], ["home", "مستلزمات منزلية", "M2 11L12 2l10 9M5 9v13h14V9M9 22v-8h6v8"], ["toys", "ألعاب", "M8 8V5a3 3 0 016 0v3h5v5h-3a3 3 0 000 6h3v3H2V8z"], ["kids", "أطفال", "M8 3l4 2 4-2 5 5-4 4-1 9H8l-1-9-4-4zM10 15h4M11 18h2"], ["books", "كتب وقرطاسية", "M12 5C7 1 2 3 2 3v17s5-2 10 2c5-4 10-2 10-2V3s-5-2-10 2v17"], ["sweets", "حلويات", "M5 11h14v10H5zM5 15h14M3 11h18M7 11V7h10v4M9 7V3M15 7V3"], ["drinks", "مشروبات", "M5 5h14l-2 17H7zM11 5l2-4h5M7 10h10"], ["spices", "عطارة وبهارات", "M7 2h10v5H7zM6 7h12v15H6zM10 12h4M10 16h4"], ["furniture", "أثاث", "M5 10V4h14v6M3 10h5v7h8v-7h5v10H3zM5 20v2M19 20v2"], ["tools", "عدد وأدوات", "M14 3a6 6 0 00-7 8l-6 6 4 4 6-6a6 6 0 008-7l-5 4-3-3z"], ["car", "سيارات", "M3 11l3-7h12l3 7v9h-3v-3H6v3H3zM3 11h18M6 14h2M16 14h2"], ["cleaning", "منظفات", "M9 2h7v4H9zM11 6v3l-5 5v8h13V10l-3-4M9 16h7M9 19h7"], ["sports", "رياضة", "M12 2a10 10 0 110 20 10 10 0 010-20M2 12h20M12 2c-6 6-6 14 0 20 6-6 6-14 0-20"], ["jewelry", "إكسسوارات", "M3 8l5-6h8l5 6-9 14zM3 8h18M8 2l4 20 4-20"], ["gifts", "هدايا", "M3 9h18v4H3zM5 13v9h14v-9M12 9v13M12 9C1 9 6-4 12 9c6-13 11 0 0 0"], ["coffee", "قهوة وشاي", "M3 7h14v9a5 5 0 01-5 5H8a5 5 0 01-5-5zM17 8h2a3 3 0 010 6h-2M7 2v2M11 1v3"], ["pet", "حيوانات أليفة", "M6 14c3-7 9-7 12 0 5 8-4 8-6 6-3 2-11 2-6-6M4 5a2 2 0 110 4 2 2 0 010-4M10 2a2 2 0 110 4 2 2 0 010-4M17 3a2 2 0 110 4 2 2 0 010-4M21 8a2 2 0 110 4 2 2 0 010-4"]];
+SHOP_ICONS=SHOP_ICONS.concat([["lotion", "لوشن", "M9 2h8v3h-5v3M7 8h10v14H7zM10 13h4M10 17h4"], ["shampoo", "شامبو", "M9 2h6v4H9zM8 6h8l2 5v11H6V11zM9 12h6v5H9z"], ["deodorant", "مزيل عرق", "M8 8V6a4 4 0 018 0v2M6 8h12v14H6zM6 12h12M10 16h4"], ["soap", "صابون", "M3 12c0-4 18-4 18 0v6c0 5-18 5-18 0zM3 12c0 5 18 5 18 0M7 4h.01M12 2h.01M17 5h.01"], ["haircream", "كريم شعر", "M5 12h14v10H5zM4 8h16v4H4zM8 4c0-3 3-3 3 0s3 3 3 0M9 16h6"]]);
 function shopIcon(key,fallback){var x=SHOP_ICONS.find(function(x){return x[0]===key});if(!x)return fallback||"🏪";return '<svg class="shopicon" viewBox="0 0 24 24" aria-hidden="true"><path d="'+x[2]+'" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><circle cx="20" cy="4" r="2.2" fill="#FFC400" stroke="#fff" stroke-width=".5"/></svg>'}
 
 var WHATSAPP_NUMBER="249115079683",DISPLAY_PHONE="0115079683";
@@ -193,7 +194,7 @@ function priceNum(p){return parseInt(String(p.price).replace(/[٠-٩]/g,function
 function byId(id){return PRODUCTS.find(function(p){return p.id===id})}
 function waLink(t){return"https://wa.me/"+WHATSAPP_NUMBER+"?text="+encodeURIComponent(t)}
 function norm(s){return String(s||"").replace(/[ًٌٍَُِّْـ]/g,"").replace(/[أإآ]/g,"ا").replace(/ى/g,"ي").replace(/ة/g,"ه").toLowerCase()}
-var MERCHANTS=[];try{MERCHANTS=JSON.parse(localStorage.getItem("sooqak_merchants")||"[]")}catch(e){}
+var SUBCATEGORIES=[],activeSub="";var MERCHANTS=[];try{MERCHANTS=JSON.parse(localStorage.getItem("sooqak_merchants")||"[]")}catch(e){}
 function productMerchant(p){if(p.merchantId&&MERCHANTS.some(function(m){return m.id===p.merchantId}))return p.merchantId;var m=MERCHANTS.filter(function(m){return m.name===p.cat});return m.length===1?m[0].id:""}
 function matchCat(p,c){return !c||productMerchant(p)===c}
 
@@ -205,18 +206,20 @@ function imgTag(p,eager){if(!p.img)return'<div class="noimg">🛍️</div>';retu
 /* chips */
 function renderChips(){
 var list=[["","الكل","🏪"]].concat((MERCHANTS||[]).map(function(m){return[m.id,m.name,shopIcon(m.icon,esc(m.emoji||"🏪"))]}));
-$("chips").innerHTML=list.map(function(c){return'<button class="chip'+(c[0]===activeCat?" on":"")+'" data-c="'+esc(c[0])+'"><span class="em">'+c[2]+'</span>'+esc(c[1])+'</button>'}).join("");
+$("chips").innerHTML=list.map(function(c){return'<button class="chip'+(c[0]===activeCat?" on":"")+'" data-c="'+esc(c[0])+'"><span class="em">'+c[2]+'</span>'+esc(c[1])+'</button>'}).join("");renderSubchips();
 }
-$("chips").addEventListener("click",function(e){var b=e.target.closest(".chip");if(!b)return;activeCat=b.getAttribute("data-c");renderChips();renderGrid()});
+$("chips").addEventListener("click",function(e){var b=e.target.closest(".chip");if(!b)return;activeCat=b.getAttribute("data-c");activeSub="";renderChips();renderGrid()});
 
+function renderSubchips(){var list=SUBCATEGORIES.filter(function(x){return x.merchantId===activeCat});var el=$("subchips");el.hidden=!activeCat||!list.length;if(el.hidden){activeSub="";el.innerHTML="";return}if(!list.some(function(x){return x.id===activeSub}))activeSub="";el.innerHTML='<button class="chip '+(!activeSub?'on':'')+'" data-sub="">الكل في القسم</button>'+list.map(function(x){return '<button class="chip '+(activeSub===x.id?'on':'')+'" data-sub="'+esc(x.id)+'"><span class="em">'+shopIcon(x.icon)+'</span>'+esc(x.name)+'</button>'}).join('')}
+$("subchips").onclick=function(e){var b=e.target.closest('[data-sub]');if(b){activeSub=b.dataset.sub;renderSubchips();renderGrid()}};
 /* grid */
 function renderGrid(){
 var q=norm(query).trim();
-var items=PRODUCTS.filter(function(p){return (!activeMerchant||p.merchantId===activeMerchant)&&matchCat(p,activeCat)&&(!q||norm(p.name+" "+(p.cat||"")).indexOf(q)!==-1)});
+var items=PRODUCTS.filter(function(p){return (!activeMerchant||p.merchantId===activeMerchant)&&matchCat(p,activeCat)&&(!activeSub||p.subcategoryId===activeSub)&&(!q||norm(p.name+" "+(p.cat||"")+" "+((SUBCATEGORIES.find(function(x){return x.id===p.subcategoryId})||{}).name||"")).indexOf(q)!==-1)});
 $("secT").textContent=activeMerchant?(MERCHANTS.find(function(m){return m.id===activeMerchant})||{name:""}).name:(activeCat?((MERCHANTS.find(function(m){return m.id===activeCat})||{}).name||"كل المنتجات"):"كل المنتجات");
 $("secC").textContent=toAr(items.length)+" منتج";
 if(!items.length){
-var msg=q?'ما لقينا "'+esc(query)+'"':'ما في منتجات في '+esc(activeCat)+' حالياً';
+var sectionName=(MERCHANTS.find(function(m){return m.id===activeCat})||{}).name||"القسم";var msg=q?'ما لقينا "'+esc(query)+'"':'ما في منتجات في '+esc(sectionName)+' حالياً';
 $("grid").innerHTML='<div class="empty"><span class="big">🔍</span>'+msg+'<br>اطلبه منا ونوفّره ليك<br><a target="_blank" rel="noopener" href="'+waLink("مرحباً سوقك، أبحث عن: "+(query||activeCat))+'">اطلب عبر واتساب</a></div>';return}
 $("grid").innerHTML=items.map(function(p){
 return'<div class="card" data-id="'+esc(p.id)+'">'+(p.badge?'<span class="tag">'+esc(p.badge)+'</span>':'')+'<div class="ph" data-open="1">'+imgTag(p)+'</div><div class="info"><div class="nm" data-open="1">'+esc(productName(p))+'</div>'+merchantHtml(p)+stars()+'<div class="price">'+esc(p.price)+' <small>جنيه</small></div><button class="add" data-add="1"><svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6z"/></svg>أضف للسلة</button></div></div>'}).join("");
@@ -225,7 +228,7 @@ $("grid").addEventListener("click",function(e){
 var c=e.target.closest(".card");if(!c)return;var id=c.getAttribute("data-id");
 if(e.target.closest("[data-add]")){addToCart(id,1);return}
 if(e.target.closest("[data-open]"))openDetail(id)});
-$("q").addEventListener("input",function(){query=this.value;$("clr").style.display=query?"block":"none";renderGrid()});
+$("q").addEventListener("input",function(){query=this.value;if(query){activeCat="";activeSub="";renderChips()}$("clr").style.display=query?"block":"none";renderGrid()});
 $("clr").addEventListener("click",function(){$("q").value="";query="";this.style.display="none";renderGrid();$("q").focus()});
 
 /* cart */
@@ -308,6 +311,7 @@ try{var cached=JSON.parse(localStorage.getItem("sooqak_products")||"null");if(ca
 fetch("products.json?v="+Date.now(),{cache:"no-store"}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(l){try{localStorage.setItem("sooqak_products",JSON.stringify(l))}catch(e){}applyProducts(l);var m=location.hash.match(/^#p\/(.+)$/);if(m)openDetail(decodeURIComponent(m[1]))}).catch(function(){if(!PRODUCTS.length){renderChips();$("grid").innerHTML='<div class="empty"><span class="big">📶</span>تعذّر تحميل المنتجات. تأكد من الشبكة وحدّث الصفحة.</div>'}});
 fetch("deals.json?v="+Date.now(),{cache:"no-store"}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(d){try{localStorage.setItem("sooqak_deals",JSON.stringify(d))}catch(e){}DEALS=d;applyProducts(RAWP);if($("pCart").classList.contains("open"))renderCart(true);if(curId&&$("pDetail").classList.contains("open"))openDetail(curId)}).catch(function(){});
 fetch("merchants.json?v="+Date.now(),{cache:"no-store"}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(d){MERCHANTS=d;renderChips();try{localStorage.setItem("sooqak_merchants",JSON.stringify(d))}catch(e){}renderGrid();if(curId&&$("pDetail").classList.contains("open"))openDetail(curId)}).catch(function(){});
+fetch("subcategories.json?v="+Date.now(),{cache:"no-store"}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(d){SUBCATEGORIES=d;renderSubchips();renderGrid()}).catch(function(){});
 function applyAreas(l){AREAS=(l||[]).filter(function(a){return a&&a.name});if(!curArea())AREA="";if($("pCart").classList.contains("open"))renderCart(true)}
 fetch("areas.json?v="+Date.now(),{cache:"no-store"}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(l){try{localStorage.setItem("sooqak_areas",JSON.stringify(l))}catch(e){}applyAreas(l)}).catch(function(){});
 var g=waLink("مرحباً سوقك، عندي استفسار");
