@@ -38,7 +38,7 @@ header{position:sticky;top:0;z-index:30;background:linear-gradient(135deg,var(--
 .chip .em{margin-left:5px}
 /* promo */
 .promo{margin:8px 12px 4px;background:linear-gradient(120deg,var(--gold),#ffd84d);color:var(--navy);border-radius:14px;padding:10px 14px;font-weight:800;font-family:var(--disp);display:flex;justify-content:space-between;align-items:center;max-width:876px}
-.promo span{font-family:'Cairo';font-weight:600;font-size:.8rem}
+.promo span{font-family:'Cairo';font-weight:600;font-size:.78rem;white-space:nowrap}.promo{gap:8px;font-size:.95rem}
 .sec{display:flex;justify-content:space-between;align-items:baseline;padding:10px 4px 6px}
 .sec h2{font-family:var(--disp);font-size:1.2rem;font-weight:800}
 .sec .cnt{color:var(--muted);font-size:.82rem;font-weight:600}
@@ -220,6 +220,7 @@ if(e.target.closest("[data-p]"))setQty(id,cart[id]+1);
 else if(e.target.closest("[data-m]"))setQty(id,cart[id]-1);
 else if(e.target.closest("[data-r]"))setQty(id,0)}
 if(e.target.closest("#checkout"))checkout()});
+$("cBody").addEventListener("input",function(){var h=$("hint");if(h)h.style.display="none"});
 function orderMessage(){
 var nm=($("custName")||{}).value||"",ph=($("custPhone")||{}).value||"";
 var L=["طلب جديد من موقع سوقك 🛒",""];
