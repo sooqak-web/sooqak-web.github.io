@@ -31,6 +31,7 @@ button{font:inherit;font-weight:800;border:0;border-radius:12px;padding:12px 18p
 #msg.info{background:#0a2c61;color:#fff;display:block}
 #preview{max-width:120px;max-height:120px;margin-top:8px;border-radius:12px;display:none}
 .hint{font-size:.82rem;color:#5b6b8c;margin-top:4px}
+.mfilters{display:flex;gap:8px;overflow:auto;padding:6px 0 14px}.mf{flex:0 0 95px;padding:10px 6px;background:#eef3fc;border:2px solid transparent;color:#0a2c61;display:flex;flex-direction:column;align-items:center;gap:4px}.mf span{font-size:2rem}.mf b{font-size:.8rem;max-width:100%;overflow-wrap:anywhere}.mf small{font-size:.7rem}.mf.on{border-color:#1976d2;background:#e2efff}
 </style>
 </head>
 <body>
@@ -67,7 +68,7 @@ button{font:inherit;font-weight:800;border:0;border-radius:12px;padding:12px 18p
 
 <div class="card">
 <h2>المنتجات الحالية (<span id="count">0</span>)</h2>
-<div id="list">جاري التحميل...</div>
+<div id="mfilter" class="mfilters"></div><div id="list">جاري التحميل...</div>
 </div>
 <div class="card">
 <h2>مناطق التوصيل (<span id="acount">0</span>)</h2>
@@ -88,7 +89,7 @@ button{font:inherit;font-weight:800;border:0;border-radius:12px;padding:12px 18p
 <label for="dprice">سعر العرض بالجنيه (اختياري)</label><input id="dprice" type="number" min="0" step="1" inputmode="numeric">
 <label for="dtext">عنوان العرض</label><select id="dtext"><option>عرض اليوم</option><option>عرض الأسبوع</option></select>
 <button class="primary" id="dsave" type="submit">إضافة عرض جديد</button><button class="ghost" id="dcancel" type="button" style="display:none;width:100%;margin-top:8px">إلغاء التعديل</button></form></div>
-<div class="card"><h2>التجار</h2><div id="mlist">جاري التحميل...</div><form id="mform"><label for="mname">اسم التاجر / المتجر</label><input id="mname" required maxlength="60"><label for="mphoto">صورة التاجر (اختياري)</label><input id="mphoto" type="file" accept="image/*"><img id="mpreview" alt="" style="display:none;width:70px;height:70px;object-fit:cover;border-radius:50%;margin-top:8px"><p class="hint">بدون صورة، بيظهر أول حرف من اسم المتجر. الصورة بتصغر لوحدها.</p><button class="primary" id="msave" type="submit">إضافة تاجر</button><button class="ghost" id="mcancel" type="button" style="display:none;width:100%;margin-top:8px">إلغاء التعديل</button></form><p class="hint">أضف التاجر هنا، وبعدها اختاره عند إضافة أو تعديل المنتج. لا يمكن حذف تاجر مربوط بمنتجات حتى تنقلها لتاجر آخر.</p></div>
+<div class="card"><h2>التجار</h2><div id="mlist">جاري التحميل...</div><form id="mform"><label for="mname">اسم التاجر / المتجر</label><input id="mname" required maxlength="60"><label for="memoji">أيقونة نشاط التاجر</label><select id="memoji"><option value="🏪">🏪 متجر عام</option><option value="🥬">🥬 خضار</option><option value="🧴">🧴 كريمات وعناية</option><option value="🛒">🛒 بقالة</option><option value="🥩">🥩 جزارة</option><option value="💊">💊 صيدلية</option><option value="🍞">🍞 مخبوزات</option><option value="👗">👗 ملابس</option><option value="📱">📱 إلكترونيات</option><option value="🌿">🌿 عطارة</option><option value="🍳">🍳 أدوات منزلية</option></select><button class="primary" id="msave" type="submit">إضافة تاجر</button><button class="ghost" id="mcancel" type="button" style="display:none;width:100%;margin-top:8px">إلغاء التعديل</button></form><p class="hint">أضف التاجر هنا، وبعدها اختاره عند إضافة أو تعديل المنتج. لا يمكن حذف تاجر مربوط بمنتجات حتى تنقلها لتاجر آخر.</p></div>
 <p class="hint">بعد الحفظ، التغيير بيظهر في الموقع خلال حوالي دقيقة. حدّث الصفحة في الموقع عشان تشوفو.</p>
 </div>
 </main>
@@ -150,15 +151,15 @@ throw e;
 });
 }
 function render(){
-renderDeal();document.getElementById('count').textContent = products.length;
+renderDeal();renderMerchantFilters();var visible=products.filter(function(p){return merchantFilter===''|| (merchantFilter==='__none'?!p.merchantId:p.merchantId===merchantFilter)});document.getElementById('count').textContent = visible.length;
 var el = document.getElementById('list');
-if (!products.length){ el.textContent = 'ما في منتجات لسه'; return; }
-el.innerHTML = products.map(function(p){
+if (!visible.length){ el.textContent = 'ما في منتجات لسه'; return; }
+el.innerHTML = visible.map(function(p){
 return '<div class="row"><img src="' + (p.img || '') + '" alt=""><div class="info"><div class="nm"></div><div class="sub"></div></div>'
 + '<button class="ghost" data-e="' + p.id + '">تعديل</button><button class="danger" data-d="' + p.id + '">حذف</button></div>';
 }).join('');
 var rows = el.querySelectorAll('.row');
-products.forEach(function(p, i){
+visible.forEach(function(p, i){
 rows[i].querySelector('.nm').textContent = p.name;
 rows[i].querySelector('.sub').textContent = p.price + ' جنيه - ' + (p.cat || '');
 });
@@ -241,7 +242,7 @@ products = products.filter(function(x){ return x.id !== id; });
 saveProducts('delete ' + id).then(function(){ toast('تم الحذف ✓', 'ok', 5000); render(); })
 .catch(function(e){ toast(e.message, 'err', 8000); load(); }).then(function(){ busy = false; });
 }
-var deals=[],dsha='',dEdit=null,merchants=[],msha='',mEdit=null;
+var deals=[],dsha='',dEdit=null,merchants=[],msha='',mEdit=null,merchantFilter='';
 function safe(s){return String(s||'').replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
 function jsonLoad(path){return fetch(API+path+'?ref='+BRANCH+'&t='+Date.now(),{headers:hdr(),cache:'no-store'}).then(function(r){if(!r.ok)throw new Error('تعذر التحميل ('+r.status+')');return r.json()})}
 function loadDeal(){return jsonLoad('deals.json').then(function(j){dsha=j.sha;deals=JSON.parse(b64dec(j.content));renderDeal()}).catch(function(e){document.getElementById('dlist').textContent=e.message})}
@@ -253,14 +254,15 @@ function saveDeals(){busy=true;toast('جاري الحفظ...','info');return put
 document.getElementById('dform').onsubmit=function(e){e.preventDefault();if(busy)return;var id=document.getElementById('dprod').value,pr=document.getElementById('dprice').value.trim();if(!id)return;if(deals.some(function(d){return d.productId===id&&d.id!==dEdit})){toast('هذا المنتج عنده عرض، عدّل عرضه الموجود','err',5000);return}var item={id:dEdit||'d'+Date.now().toString(36),productId:id,price:pr===''?'':String(Math.max(0,parseInt(pr,10))),text:document.getElementById('dtext').value};var ix=deals.findIndex(function(d){return d.id===dEdit});if(ix>=0)deals[ix]=item;else deals.push(item);saveDeals()};
 document.getElementById('dlist').onclick=function(e){var b=e.target.closest('button');if(!b||busy)return;var id=b.dataset.de||b.dataset.dd,d=deals.find(function(x){return x.id===id});if(!d)return;if(b.dataset.dd){deals=deals.filter(function(x){return x.id!==id});saveDeals();return}dEdit=id;document.getElementById('dprod').value=d.productId;document.getElementById('dprice').value=d.price;document.getElementById('dtext').value=d.text;document.getElementById('dsave').textContent='حفظ التعديل';document.getElementById('dcancel').style.display='block';document.getElementById('dform').scrollIntoView({behavior:'smooth'})};
 function loadMerchants(){return jsonLoad('merchants.json').then(function(j){msha=j.sha;merchants=JSON.parse(b64dec(j.content));renderMerchants()}).catch(function(e){document.getElementById('mlist').textContent=e.message})}
-function fillMerchants(id){var sel=document.getElementById('merchantId');id=id===undefined?sel.value:id;sel.innerHTML='<option value="">سوقك (بدون تاجر)</option>'+merchants.map(function(m){return '<option value="'+safe(m.id)+'">'+safe(m.name)+'</option>'}).join('');sel.value=id||''}
-function renderMerchants(){fillMerchants();document.getElementById('mlist').innerHTML=merchants.length?merchants.map(function(m){return '<div class="row"><div class="info nm">'+safe(m.name)+'</div><button class="ghost" data-me="'+safe(m.id)+'">تعديل</button><button class="danger" data-md="'+safe(m.id)+'">حذف</button></div>'}).join(''):'ما في تجار لسه';}
-function resetM(){mEdit=null;document.getElementById('mform').reset();document.getElementById('msave').textContent='إضافة تاجر';document.getElementById('mcancel').style.display='none';document.getElementById('mpreview').style.display='none'}
+function fillMerchants(id){var sel=document.getElementById('merchantId');id=id===undefined?sel.value:id;sel.innerHTML='<option value="">سوقك (بدون تاجر)</option>'+merchants.map(function(m){return '<option value="'+safe(m.id)+'">'+safe(m.emoji||'🏪')+' '+safe(m.name)+'</option>'}).join('');sel.value=id||''}
+function renderMerchants(){fillMerchants();render();document.getElementById('mlist').innerHTML=merchants.length?merchants.map(function(m){return '<div class="row"><div class="info nm">'+safe(m.emoji||'🏪')+' '+safe(m.name)+'</div><button class="ghost" data-me="'+safe(m.id)+'">تعديل</button><button class="danger" data-md="'+safe(m.id)+'">حذف</button></div>'}).join(''):'ما في تجار لسه';}
+function resetM(){mEdit=null;document.getElementById('mform').reset();document.getElementById('msave').textContent='إضافة تاجر';document.getElementById('mcancel').style.display='none';document.getElementById('memoji').value='🏪'}
 document.getElementById('mcancel').onclick=resetM;
 function saveMerchants(){busy=true;toast('جاري الحفظ...','info');return putFile('merchants.json',b64enc(JSON.stringify(merchants,null,1)),'update merchants',msha).then(function(j){msha=j.content.sha;renderMerchants();resetM();toast('تم الحفظ ✓','ok',5000)}).catch(function(e){toast('تعذر الحفظ، حدّث الصفحة وحاول مرة ثانية','err',6000);loadMerchants()}).then(function(){busy=false})}
-document.getElementById('mphoto').onchange=function(){var f=this.files[0],pv=document.getElementById('mpreview');pv.style.display=f?'block':'none';if(f)pv.src=URL.createObjectURL(f)};
-document.getElementById('mform').onsubmit=function(e){e.preventDefault();if(busy)return;var name=document.getElementById('mname').value.trim();if(!name)return;var ex=merchants.find(function(m){return m.id===mEdit}),item={id:mEdit||'m'+Date.now().toString(36),name:name,img:ex?ex.img||'':''},ix=merchants.findIndex(function(m){return m.id===mEdit}),f=document.getElementById('mphoto').files[0];busy=true;toast('جاري الحفظ...','info');var task=f?resizeImage(f).then(function(b64){var path='images/'+item.id+'-'+Date.now().toString(36)+'.jpg';return putFile(path,b64,'merchant photo').then(function(){item.img=path})}):Promise.resolve();task.then(function(){if(ix>=0)merchants[ix]=item;else merchants.push(item);return saveMerchants()}).catch(function(e){busy=false;toast(e.message||'تعذر الحفظ','err',6000)})};
-document.getElementById('mlist').onclick=function(e){var b=e.target.closest('button');if(!b||busy)return;var id=b.dataset.me||b.dataset.md,m=merchants.find(function(x){return x.id===id});if(!m)return;if(b.dataset.md){if(products.some(function(p){return p.merchantId===id})){toast('انقل منتجات التاجر لتاجر آخر قبل حذفه','err',6000);return}merchants=merchants.filter(function(x){return x.id!==id});saveMerchants();return}mEdit=id;document.getElementById('mname').value=m.name;document.getElementById('mphoto').value='';var pv=document.getElementById('mpreview');pv.style.display=m.img?'block':'none';if(m.img)pv.src=m.img;document.getElementById('msave').textContent='حفظ التعديل';document.getElementById('mcancel').style.display='block';document.getElementById('mform').scrollIntoView({behavior:'smooth'})};
+document.getElementById('mform').onsubmit=function(e){e.preventDefault();if(busy)return;var name=document.getElementById('mname').value.trim();if(!name)return;var item={id:mEdit||'m'+Date.now().toString(36),name:name,emoji:document.getElementById('memoji').value},ix=merchants.findIndex(function(m){return m.id===mEdit});if(ix>=0)merchants[ix]=item;else merchants.push(item);saveMerchants()};
+function renderMerchantFilters(){var all=[{id:'',name:'الكل',emoji:'🏪'},{id:'__none',name:'سوقك',emoji:'🛒'}].concat(merchants);document.getElementById('mfilter').innerHTML=all.map(function(m){var n=products.filter(function(p){return m.id===''||(m.id==='__none'?!p.merchantId:p.merchantId===m.id)}).length;return '<button type="button" class="mf '+(merchantFilter===m.id?'on':'')+'" data-mf="'+safe(m.id)+'"><span>'+safe(m.emoji||'🏪')+'</span><b>'+safe(m.name)+'</b><small>'+n+' منتج</small></button>'}).join('')}
+document.getElementById('mfilter').onclick=function(e){var b=e.target.closest('[data-mf]');if(!b)return;merchantFilter=b.getAttribute('data-mf');render()};
+document.getElementById('mlist').onclick=function(e){var b=e.target.closest('button');if(!b||busy)return;var id=b.dataset.me||b.dataset.md,m=merchants.find(function(x){return x.id===id});if(!m)return;if(b.dataset.md){if(products.some(function(p){return p.merchantId===id})){toast('انقل منتجات التاجر لتاجر آخر قبل حذفه','err',6000);return}merchants=merchants.filter(function(x){return x.id!==id});saveMerchants();return}mEdit=id;document.getElementById('mname').value=m.name;document.getElementById('memoji').value=m.emoji||'🏪';document.getElementById('msave').textContent='حفظ التعديل';document.getElementById('mcancel').style.display='block';document.getElementById('mform').scrollIntoView({behavior:'smooth'})};
 var areas = [], asha = '', aEdit = null;
 function loadAreas(){
 return fetch(API + 'areas.json?ref=' + BRANCH + '&t=' + Date.now(), {headers: hdr(), cache:'no-store'}).then(function(r){
