@@ -113,6 +113,17 @@ footer a.ph2{display:inline-block;margin-top:8px;color:var(--gold);font-family:v
 .ce .big{font-size:54px;display:block}
 .toast{position:fixed;bottom:92px;left:50%;transform:translateX(-50%);background:var(--navy);color:#fff;padding:9px 18px;border-radius:30px;font-weight:700;font-size:.9rem;z-index:80;opacity:0;pointer-events:none;transition:.25s}
 .toast.show{opacity:1}
+.cartfloat{position:fixed;bottom:16px;right:14px;z-index:20;width:54px;height:54px;border-radius:50%;background:var(--primary);display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(0,0,0,.28);border:0}
+.cartfloat svg{width:28px;height:28px;fill:#fff}.cartfloat .badge{top:-4px;left:-4px;right:auto}
+.deal{margin:8px 12px;max-width:876px;background:linear-gradient(120deg,var(--navy),var(--primary));color:#fff;border-radius:16px;padding:10px;display:none;gap:12px;align-items:center;cursor:pointer}
+.deal .dimg{width:84px;height:84px;border-radius:12px;background:#fff;flex:none;overflow:hidden}.deal .dimg img{width:100%;height:100%;object-fit:contain}
+.deal .dt{flex:1;min-width:0}.deal .dl{display:inline-block;background:var(--gold);color:var(--navy);font-family:var(--disp);font-weight:800;font-size:.8rem;padding:2px 10px;border-radius:20px}
+.deal .dn{font-weight:800;margin-top:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.deal .dp{color:var(--gold);font-family:var(--disp);font-weight:800;font-size:1.2rem}.deal .dp s{color:#cfe0f7;font-size:.8rem;font-weight:500;margin-inline-start:6px}
+.deal button{background:var(--gold);color:var(--navy);font-weight:800;border-radius:10px;padding:8px 12px;flex:none}
+.reorder{margin:8px 12px;max-width:876px;display:none;width:calc(100% - 24px);background:#fff;border:2px dashed var(--primary);color:var(--primary);font-weight:800;border-radius:14px;padding:10px;font-size:.95rem}
+.sent{position:fixed;inset:0;z-index:90;background:rgba(10,44,97,.7);display:none;align-items:center;justify-content:center;padding:20px}.sent.open{display:flex}
+.sent div{background:#fff;border-radius:20px;padding:22px;text-align:center;max-width:340px;width:100%}.sent h3{font-family:var(--disp);color:var(--navy);font-size:1.25rem;margin-bottom:8px}.sent p{color:var(--muted);font-size:.9rem;margin-bottom:14px}
+.sent button{width:100%;padding:12px;border-radius:12px;font-weight:800;margin-top:8px;background:#e8eefb;color:var(--navy)}.sent button.pri{background:var(--green);color:#fff}
 .wafloat{position:fixed;bottom:16px;left:14px;z-index:20;width:54px;height:54px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(0,0,0,.28)}
 .wafloat svg{width:30px;height:30px;fill:#fff}
 </style>
@@ -132,6 +143,8 @@ footer a.ph2{display:inline-block;margin-top:8px;color:var(--gold);font-family:v
 </div>
 </header>
 
+<div class="deal" id="deal"></div>
+<button class="reorder" id="reorder"></button>
 <div class="chips" id="chips"></div>
 <div class="wrap">
 <div class="promo">أسعار يوم السوق، محدّثة باستمرار <span>التوصيل لباب البيت</span></div>
@@ -144,6 +157,8 @@ footer a.ph2{display:inline-block;margin-top:8px;color:var(--gold);font-family:v
 <a class="ph2" id="footPhone" href="#">0115079683</a>
 <p class="info">🕖 الدوام: ٧ صباحاً إلى ٦ مساءً<br>💳 الدفع: بنكك / براقو / كاش عند الاستلام</p>
 </footer>
+<button class="cartfloat" id="cartFloat" aria-label="السلة"><svg viewBox="0 0 24 24"><path d="M7 18a2 2 0 100 4 2 2 0 000-4zm10 0a2 2 0 100 4 2 2 0 000-4zM7.16 14.26l.04-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.24-5.87A1 1 0 0019.7 4H5.21l-.94-2H1v2h2l3.6 7.59-1.35 2.44C4.52 15.37 5.48 17 7 17h12v-2H7.42c-.13 0-.25-.11-.26-.24z"/></svg><span class="badge" id="fbadge"></span></button>
+<div class="sent" id="sent"><div><h3>تم فتح واتساب ✅</h3><p>اضغط إرسال في واتساب لو ما أرسلتها.<br><b style="color:var(--navy)">استنى رسالة تأكيد مننا في واتساب 📲</b></p><button class="pri" id="sentClear">تم الإرسال، فضّي السلة</button><button id="sentKeep">رجوع للسلة</button></div></div>
 <a class="wafloat" id="waFloat" target="_blank" rel="noopener" aria-label="واتساب"></a>
 
 <div class="page" id="pDetail">
@@ -212,7 +227,7 @@ function curArea(){return AREAS.find(function(a){return a.id===AREA})}
 function feeNum(){var a=curArea();return a?(parseInt(String(a.fee).replace(/[٠-٩]/g,function(d){return"٠١٢٣٤٥٦٧٨٩".indexOf(d)}).replace(/[^\d]/g,""),10)||0):0}
 function grand(){return cartTotal()+feeNum()}
 function cartTotal(){return Object.keys(cart).reduce(function(s,k){var p=byId(k);return s+(p?priceNum(p)*cart[k]:0)},0)}
-function updateBadge(){var n=cartCount(),b=$("badge");b.textContent=toAr(n);b.style.display=n?"flex":"none"}
+function updateBadge(){var n=cartCount();["badge","fbadge"].forEach(function(i){var b=$(i);b.textContent=toAr(n);b.style.display=n?"flex":"none"});showReorder()}
 function addToCart(id,n){cart[id]=Math.min((cart[id]||0)+n,99);save();updateBadge();toast("تمت الإضافة للسلة ✓");if($("pCart").classList.contains("open"))renderCart()}
 function setQty(id,n){if(n<=0)delete cart[id];else cart[id]=Math.min(n,99);save();updateBadge();renderCart(true)}
 function renderCart(keep){
@@ -239,7 +254,13 @@ function checkout(){
 var nm=$("custName").value.trim(),ph=$("custPhone").value.trim();
 if(!nm||!ph||(AREAS.length&&!curArea())){$("hint").textContent=(AREAS.length&&!curArea())?"اختر منطقة التوصيل واكتب اسمك ورقم تلفونك":"اكتب اسمك ورقم تلفونك عشان نكمل الطلب";$("hint").style.display="block";return}
 window.__lastWa=waLink(orderMessage());
-window.open(window.__lastWa,"_blank","noopener")}
+try{localStorage.setItem("sooqak_last",JSON.stringify(cart))}catch(e){}
+window.open(window.__lastWa,"_blank","noopener");$("sent").classList.add("open")}
+$("sentKeep").onclick=function(){$("sent").classList.remove("open")};
+$("sentClear").onclick=function(){cart={};save();updateBadge();$("sent").classList.remove("open");closePages(true);toast("تمام، استنى تأكيدنا في واتساب")};
+function lastOrder(){try{return JSON.parse(localStorage.getItem("sooqak_last")||"{}")}catch(e){return{}}}
+function showReorder(){var l=lastOrder(),n=Object.keys(l).filter(byId).length,b=$("reorder");if(n){b.style.display="block";b.textContent="🔁 اطلب تاني بضغطة · آخر طلب ("+toAr(n)+" منتج)"}else b.style.display="none"}
+$("reorder").onclick=function(){var l=lastOrder();Object.keys(l).forEach(function(k){if(byId(k))cart[k]=Math.min(Math.max(1,parseInt(l[k],10)||1),99)});save();updateBadge();openCart()};
 
 /* detail */
 function openDetail(id){
@@ -254,17 +275,23 @@ if(location.hash!=="#p/"+id)history.pushState({v:"d"},"","#p/"+id)}
 $("dAdd").onclick=function(){if(curId){addToCart(curId,curQty);closePages(true)}};
 function openCart(){renderCart();$("pCart").classList.add("open");$("pCart").scrollTop=0;document.body.style.overflow="hidden";if(location.hash!=="#cart")history.pushState({v:"c"},"","#cart")}
 function closePages(fromBtn){$("pDetail").classList.remove("open");$("pCart").classList.remove("open");document.body.style.overflow="";if(location.hash&&fromBtn!==2)history.replaceState(null,"",location.pathname+location.search)}
-$("cartBtn").onclick=openCart;
+$("cartBtn").onclick=openCart;$("cartFloat").onclick=openCart;
 $("dBack").onclick=function(){closePages(true)};
 $("cBack").onclick=function(){closePages(true)};
 window.addEventListener("popstate",function(){var h=location.hash;if(h==="#cart"){renderCart();$("pDetail").classList.remove("open");$("pCart").classList.add("open")}else if(h.indexOf("#p/")===0){}else closePages(2)});
 
 /* load products */
-function applyProducts(list){PRODUCTS=(list||[]).filter(function(p){return p&&p.name});
+var RAWP=[],DEAL=null;try{DEAL=JSON.parse(localStorage.getItem("sooqak_deal")||"null")}catch(e){}
+function dealOn(){return DEAL&&DEAL.id&&RAWP.some(function(p){return p.id===DEAL.id})}
+function renderDeal(){var d=$("deal");if(!dealOn()){d.style.display="none";return}var p=byId(DEAL.id),lbl=DEAL.text||"عرض اليوم";
+d.style.display="flex";d.innerHTML='<div class="dimg">'+(p.img?'<img alt="" src="'+esc(p.img)+'">':'')+'</div><div class="dt"><span class="dl">🔥 '+esc(lbl)+'</span><div class="dn">'+esc(p.name)+'</div><div class="dp">'+esc(p.price)+' جنيه'+(p._old?'<s>'+esc(p._old)+'</s>':'')+'</div></div><button data-dadd="1">أضف</button>';d.onclick=function(e){if(e.target.closest("[data-dadd]"))addToCart(p.id,1);else openDetail(p.id)}}
+function applyProducts(list){RAWP=(list||[]).filter(function(p){return p&&p.name});
+PRODUCTS=RAWP.map(function(p){if(dealOn()&&p.id===DEAL.id){var q=Object.assign({},p);if(DEAL.price&&/\d/.test(String(DEAL.price))){q._old=p.price;q.price=String(DEAL.price)}q.badge=DEAL.text||"عرض اليوم";return q}return p});renderDeal();
 Object.keys(cart).forEach(function(k){if(!byId(k)&&PRODUCTS.length)delete cart[k]});
 renderChips();renderGrid();updateBadge();save()}
 try{var cached=JSON.parse(localStorage.getItem("sooqak_products")||"null");if(cached&&cached.length)applyProducts(cached)}catch(e){}
 fetch("products.json?v="+Date.now(),{cache:"no-store"}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(l){try{localStorage.setItem("sooqak_products",JSON.stringify(l))}catch(e){}applyProducts(l);var m=location.hash.match(/^#p\/(.+)$/);if(m)openDetail(decodeURIComponent(m[1]))}).catch(function(){if(!PRODUCTS.length){renderChips();$("grid").innerHTML='<div class="empty"><span class="big">📶</span>تعذّر تحميل المنتجات. تأكد من الشبكة وحدّث الصفحة.</div>'}});
+fetch("deal.json?v="+Date.now(),{cache:"no-store"}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(d){try{localStorage.setItem("sooqak_deal",JSON.stringify(d))}catch(e){}DEAL=d;applyProducts(RAWP)}).catch(function(){});
 function applyAreas(l){AREAS=(l||[]).filter(function(a){return a&&a.name});if(!curArea())AREA="";if($("pCart").classList.contains("open"))renderCart(true)}
 fetch("areas.json?v="+Date.now(),{cache:"no-store"}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(l){try{localStorage.setItem("sooqak_areas",JSON.stringify(l))}catch(e){}applyAreas(l)}).catch(function(){});
 var g=waLink("مرحباً سوقك، عندي استفسار");
