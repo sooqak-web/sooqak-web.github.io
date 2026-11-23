@@ -53,6 +53,8 @@ button{font:inherit;font-weight:800;border:0;border-radius:12px;padding:12px 18p
 <select id="cat"></select>
 <label for="badge">شارة فوق الصورة (اختياري)</label>
 <input id="badge" maxlength="20" placeholder="مثال: عرض اليوم">
+<label for="desc">وصف المنتج (اختياري)</label>
+<textarea id="desc" maxlength="400" rows="3" placeholder="مثال: 1 لتر، من الأفضل للطبخ والقلي" style="width:100%;border:1.5px solid #cdd9ee;border-radius:12px;padding:10px 12px;font-family:inherit;font-size:1rem;color:#0A2C61"></textarea>
 <label for="photo">صورة المنتج</label>
 <input id="photo" type="file" accept="image/*">
 <div class="hint">تقدر تصوّر في الحال أو تختار من المعرض. الصورة بتصغر لوحدها.</div>
@@ -151,6 +153,7 @@ document.getElementById('name').value = p.name;
 document.getElementById('price').value = String(p.price).replace(/[٠-٩]/g, function(d){ return '٠١٢٣٤٥٦٧٨٩'.indexOf(d); });
 fillCats(p.cat || ''); document.getElementById('cat').value = p.cat || CATS[0];
 document.getElementById('badge').value = p.badge || '';
+document.getElementById('desc').value = p.desc || '';
 document.getElementById('photo').value = '';
 var pv = document.getElementById('preview'); if (p.img){ pv.src = p.img; pv.style.display = 'block'; } else pv.style.display = 'none';
 document.getElementById('cancelBtn').style.display = 'block';
@@ -197,6 +200,7 @@ return putFile(path, b64, 'photo ' + id).then(function(){ return path; });
 }) : Promise.resolve(existing ? existing.img : '');
 imgPromise.then(function(imgPath){
 var item = {id: id, name: name, price: price, img: imgPath || '', cat: cat, badge: badge};
+var dsc = document.getElementById('desc').value.trim(); if (dsc) item.desc = dsc;
 if (existing) products[products.indexOf(existing)] = item; else products.push(item);
 return saveProducts((existing ? 'edit ' : 'add ') + id);
 }).then(function(){
