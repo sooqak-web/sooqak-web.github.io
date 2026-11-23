@@ -68,6 +68,18 @@ button{font:inherit;font-weight:800;border:0;border-radius:12px;padding:12px 18p
 <h2>المنتجات الحالية (<span id="count">0</span>)</h2>
 <div id="list">جاري التحميل...</div>
 </div>
+<div class="card">
+<h2>مناطق التوصيل (<span id="acount">0</span>)</h2>
+<div id="alist">جاري التحميل...</div>
+<form id="aform">
+<label for="aname">اسم المنطقة</label>
+<input id="aname" required maxlength="40" placeholder="مثال: فريق قدام">
+<label for="afee">سعر التوصيل بالجنيه</label>
+<input id="afee" required type="number" inputmode="numeric" min="0" step="1" placeholder="مثال: 1900">
+<button class="primary" id="asave" type="submit">إضافة منطقة</button>
+<button class="ghost" id="acancel" type="button" style="width:100%;margin-top:8px;display:none">إلغاء التعديل</button>
+</form>
+</div>
 <p class="hint">بعد الحفظ، التغيير بيظهر في الموقع خلال حوالي دقيقة. حدّث الصفحة في الموقع عشان تشوفو.</p>
 </div>
 </main>
@@ -87,6 +99,7 @@ if (!TOKEN){ document.getElementById('noKey').style.display = 'block'; return; }
 document.getElementById('app').style.display = 'block';
 fillCats('');
 load();
+loadAreas();
 })();
 
 function fillCats(extra){
@@ -218,6 +231,61 @@ products = products.filter(function(x){ return x.id !== id; });
 saveProducts('delete ' + id).then(function(){ toast('تم الحذف ✓', 'ok', 5000); render(); })
 .catch(function(e){ toast(e.message, 'err', 8000); load(); }).then(function(){ busy = false; });
 }
+var areas = [], asha = '', aEdit = null;
+function loadAreas(){
+return fetch(API + 'areas.json?ref=' + BRANCH + '&t=' + Date.now(), {headers: hdr(), cache:'no-store'}).then(function(r){
+if (r.status === 404){ asha = ''; areas = []; return null; }
+if (!r.ok) throw new Error('تعذر تحميل المناطق (' + r.status + ')');
+return r.json();
+}).then(function(j){ if (j){ asha = j.sha; areas = JSON.parse(b64dec(j.content)); } renderAreas(); })
+.catch(function(e){ document.getElementById('alist').textContent = e.message; });
+}
+function renderAreas(){
+document.getElementById('acount').textContent = areas.length;
+var el = document.getElementById('alist');
+if (!areas.length){ el.textContent = 'ما في مناطق لسه'; return; }
+el.innerHTML = areas.map(function(a){
+return '<div class="row"><div class="info"><div class="nm"></div><div class="sub"></div></div><button class="ghost" data-ae="' + a.id + '">تعديل</button><button class="danger" data-ad="' + a.id + '">حذف</button></div>';
+}).join('');
+var rows = el.querySelectorAll('.row');
+areas.forEach(function(a, i){ rows[i].querySelector('.nm').textContent = a.name; rows[i].querySelector('.sub').textContent = a.fee + ' جنيه'; });
+}
+function saveAreas(msg){
+return putFile('areas.json', b64enc(JSON.stringify(areas, null, 1)), msg, asha).then(function(j){ asha = j.content.sha; }).catch(function(e){
+if (e.status === 409 || e.status === 422) throw new Error('تغيّرت القائمة، حدّث الصفحة وحاول مرة ثانية');
+throw e;
+});
+}
+function resetA(){ aEdit = null; document.getElementById('aform').reset(); document.getElementById('asave').textContent = 'إضافة منطقة'; document.getElementById('acancel').style.display = 'none'; }
+document.getElementById('acancel').onclick = resetA;
+document.getElementById('alist').addEventListener('click', function(e){
+var b = e.target.closest('button'); if (!b) return;
+if (b.dataset.ae){
+var a = areas.find(function(x){ return x.id === b.dataset.ae; }); if (!a) return;
+aEdit = a.id; document.getElementById('aname').value = a.name; document.getElementById('afee').value = String(a.fee).replace(/[٠-٩]/g, function(d){ return '٠١٢٣٤٥٦٧٨٩'.indexOf(d); });
+document.getElementById('asave').textContent = 'حفظ التعديل'; document.getElementById('acancel').style.display = 'block';
+document.getElementById('aform').scrollIntoView({behavior:'smooth'});
+}
+if (b.dataset.ad){
+if (busy) return;
+var d = areas.find(function(x){ return x.id === b.dataset.ad; }); if (!d) return;
+if (!confirm('تحذف "' + d.name + '"؟')) return;
+busy = true; toast('جاري الحذف...', 'info');
+areas = areas.filter(function(x){ return x.id !== d.id; });
+saveAreas('delete area ' + d.id).then(function(){ toast('تم الحذف ✓', 'ok', 5000); renderAreas(); })
+.catch(function(er){ toast(er.message, 'err', 8000); loadAreas(); }).then(function(){ busy = false; });
+}
+});
+document.getElementById('aform').onsubmit = function(ev){
+ev.preventDefault(); if (busy) return; busy = true;
+var name = document.getElementById('aname').value.trim(), fee = String(parseInt(document.getElementById('afee').value, 10));
+var ex = aEdit ? areas.find(function(x){ return x.id === aEdit; }) : null;
+var item = {id: ex ? ex.id : 'a' + Date.now().toString(36), name: name, fee: fee};
+if (ex) areas[areas.indexOf(ex)] = item; else areas.push(item);
+toast('جاري الحفظ...', 'info');
+saveAreas((ex ? 'edit area ' : 'add area ') + item.id).then(function(){ toast('تم الحفظ ✓ بيظهر في الموقع خلال دقيقة', 'ok', 6000); resetA(); renderAreas(); })
+.catch(function(e){ toast(e.message || 'حصل خطأ', 'err', 8000); loadAreas(); }).then(function(){ busy = false; });
+};
 </script>
 </body>
 </html>
