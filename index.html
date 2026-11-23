@@ -127,6 +127,7 @@ footer a.ph2{display:inline-block;margin-top:8px;color:var(--gold);font-family:v
 .wafloat{position:fixed;bottom:16px;left:14px;z-index:20;width:54px;height:54px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(0,0,0,.28)}
 .wafloat svg{width:30px;height:30px;fill:#fff}
 .deal{padding:10px 0;overflow:hidden}.dealhead{padding:0 12px 8px;display:flex;justify-content:space-between;align-items:center}.dealhead span{font-size:.7rem;opacity:.8}.dealtrack{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;padding:0 12px 8px;touch-action:pan-x pan-y;scrollbar-width:thin;scrollbar-color:#ffc400 transparent}.dealitem{display:flex;align-items:center;gap:10px;flex:0 0 calc(100% - 22px);scroll-snap-align:start;min-width:0;padding:5px;border:1px solid #ffffff30;border-radius:14px}.dealitem .dimg{width:64px;height:72px}.dealitem .dp{font-size:1rem}.merchant{font-size:.7rem;color:var(--muted);margin:4px 0}.dealitem .dt{min-width:0}
+.stores{padding:8px 12px}.stores h2{font-family:var(--disp);font-size:1.05rem;margin-bottom:6px}.storetrack{display:flex;gap:12px;overflow-x:auto;padding:4px 0 8px}.store{flex:0 0 78px;display:flex;flex-direction:column;align-items:center;gap:5px;font-size:.72rem;font-weight:700;color:var(--navy);background:transparent;border:0}.storeicon{width:58px;height:58px;border:2px solid #d3e1f5;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:1.6rem;overflow:hidden}.storeicon img{width:100%;height:100%;object-fit:cover}.store.sel .storeicon{border:3px solid var(--primary);box-shadow:0 0 0 3px #1976d219}.store.sel{color:var(--primary)}
 </style>
 </head>
 <body>
@@ -146,6 +147,7 @@ footer a.ph2{display:inline-block;margin-top:8px;color:var(--gold);font-family:v
 
 <div class="deal" id="deal"></div>
 <button class="reorder" id="reorder"></button>
+<section class="stores"><h2>🏪 المتاجر</h2><div class="storetrack" id="stores"></div></section>
 <div class="chips" id="chips"></div>
 <div class="wrap">
 <div class="promo">أسعار يوم السوق، محدّثة باستمرار <span>التوصيل لباب البيت</span></div>
@@ -205,8 +207,8 @@ $("chips").addEventListener("click",function(e){var b=e.target.closest(".chip");
 /* grid */
 function renderGrid(){
 var q=norm(query).trim();
-var items=PRODUCTS.filter(function(p){return matchCat(p,activeCat)&&(!q||norm(p.name+" "+(p.cat||"")).indexOf(q)!==-1)});
-$("secT").textContent=activeCat||"كل المنتجات";
+var items=PRODUCTS.filter(function(p){return (!activeMerchant||p.merchantId===activeMerchant)&&matchCat(p,activeCat)&&(!q||norm(p.name+" "+(p.cat||"")).indexOf(q)!==-1)});
+$("secT").textContent=activeMerchant?(MERCHANTS.find(function(m){return m.id===activeMerchant})||{name:""}).name:(activeCat||"كل المنتجات");
 $("secC").textContent=toAr(items.length)+" منتج";
 if(!items.length){
 var msg=q?'ما لقينا "'+esc(query)+'"':'ما في منتجات في '+esc(activeCat)+' حالياً';
@@ -283,8 +285,10 @@ $("cBack").onclick=function(){closePages(true)};
 window.addEventListener("popstate",function(){var h=location.hash;if(h==="#cart"){renderCart();$("pDetail").classList.remove("open");$("pCart").classList.add("open")}else if(h.indexOf("#p/")===0){}else closePages(2)});
 
 /* load products */
-var RAWP=[],DEALS=[],MERCHANTS=[];
+var RAWP=[],DEALS=[],MERCHANTS=[],activeMerchant="";
 try{DEALS=JSON.parse(localStorage.getItem("sooqak_deals")||"[]");MERCHANTS=JSON.parse(localStorage.getItem("sooqak_merchants")||"[]")}catch(e){}
+function renderStores(){var all=[{id:"",name:"كل المنتجات"}].concat(MERCHANTS);$("stores").innerHTML=all.map(function(m){return '<button class="store '+(activeMerchant===m.id?'sel':'')+'" data-m="'+esc(m.id)+'"><span class="storeicon">'+(m.img?'<img loading="lazy" alt="" src="'+esc(m.img)+'">':esc(m.id?m.name.charAt(0):'🏪'))+'</span><span>'+esc(m.name)+'</span></button>'}).join('')}
+$("stores").onclick=function(e){var b=e.target.closest("[data-m]");if(!b)return;activeMerchant=b.getAttribute("data-m");activeCat="";query="";$("search").value="";renderStores();renderChips();renderGrid()};
 function merchant(p){var m=MERCHANTS.find(function(x){return x.id===p.merchantId});return m?m.name:"سوقك"}
 function merchantHtml(p){return p.merchantId&&merchant(p)!=="سوقك"?'<div class="merchant">من متجر: '+esc(merchant(p))+'</div>':""}
 function renderDeal(){var d=$("deal"),live=DEALS.filter(function(a){return byId(a.productId)});if(!live.length){d.style.display="none";return}
@@ -293,11 +297,11 @@ d.onclick=function(e){var item=e.target.closest(".dealitem");if(!item)return;var
 function applyProducts(list){RAWP=(list||[]).filter(function(p){return p&&p.name});
 PRODUCTS=RAWP.map(function(p){var a=DEALS.find(function(d){return d.productId===p.id});if(a){var q=Object.assign({},p);if(a.price!==""&&Number.isFinite(Number(a.price))&&Number(a.price)>=0){q._old=p.price;q.price=String(a.price)}q.badge=a.text||"عرض اليوم";return q}return p});renderDeal();
 Object.keys(cart).forEach(function(k){if(!byId(k)&&PRODUCTS.length)delete cart[k]});
-renderChips();renderGrid();updateBadge();save()}
+renderStores();renderChips();renderGrid();updateBadge();save()}
 try{var cached=JSON.parse(localStorage.getItem("sooqak_products")||"null");if(cached&&cached.length)applyProducts(cached)}catch(e){}
 fetch("products.json?v="+Date.now(),{cache:"no-store"}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(l){try{localStorage.setItem("sooqak_products",JSON.stringify(l))}catch(e){}applyProducts(l);var m=location.hash.match(/^#p\/(.+)$/);if(m)openDetail(decodeURIComponent(m[1]))}).catch(function(){if(!PRODUCTS.length){renderChips();$("grid").innerHTML='<div class="empty"><span class="big">📶</span>تعذّر تحميل المنتجات. تأكد من الشبكة وحدّث الصفحة.</div>'}});
 fetch("deals.json?v="+Date.now(),{cache:"no-store"}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(d){try{localStorage.setItem("sooqak_deals",JSON.stringify(d))}catch(e){}DEALS=d;applyProducts(RAWP);if($("pCart").classList.contains("open"))renderCart(true);if(curId&&$("pDetail").classList.contains("open"))openDetail(curId)}).catch(function(){});
-fetch("merchants.json?v="+Date.now(),{cache:"no-store"}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(d){MERCHANTS=d;try{localStorage.setItem("sooqak_merchants",JSON.stringify(d))}catch(e){}renderGrid();if(curId&&$("pDetail").classList.contains("open"))openDetail(curId)}).catch(function(){});
+fetch("merchants.json?v="+Date.now(),{cache:"no-store"}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(d){MERCHANTS=d;renderStores();try{localStorage.setItem("sooqak_merchants",JSON.stringify(d))}catch(e){}renderGrid();if(curId&&$("pDetail").classList.contains("open"))openDetail(curId)}).catch(function(){});
 function applyAreas(l){AREAS=(l||[]).filter(function(a){return a&&a.name});if(!curArea())AREA="";if($("pCart").classList.contains("open"))renderCart(true)}
 fetch("areas.json?v="+Date.now(),{cache:"no-store"}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(l){try{localStorage.setItem("sooqak_areas",JSON.stringify(l))}catch(e){}applyAreas(l)}).catch(function(){});
 var g=waLink("مرحباً سوقك، عندي استفسار");
