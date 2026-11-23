@@ -16,5 +16,16 @@
   "cat": "جملة",
   "badge": "",
   "merchantId": ""
+ },
+ {
+  "id": "pmwt98ftx",
+  "name": "اختبار مؤقت",
+  "price": "1",
+  "img": "",
+  "cat": "خضار",
+  "badge": "",
+  "weight": "0.5",
+  "unit": "كيلو",
+  "merchantId": ""
  }
 ]
