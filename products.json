@@ -6,5 +6,13 @@
   "img": "images/p1.jpg",
   "cat": "مستلزمات المطبخ",
   "badge": "عرض اليوم"
+ },
+ {
+  "id": "pmwt2vbkt",
+  "name": "منتج تجريبي",
+  "price": "123",
+  "img": "images/pmwt2vbkt-mwt2vblg.jpg",
+  "cat": "خضار",
+  "badge": ""
  }
 ]
