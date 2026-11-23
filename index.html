@@ -161,6 +161,11 @@ section{padding:56px 0}
 .head-cta{display:none}
 .logo{font-size:1.5rem}
 }
+.cat{cursor:pointer;-webkit-tap-highlight-color:transparent}.cat:active{transform:scale(.97)}
+.filter-bar{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;margin:-18px 0 26px;font-weight:700;color:var(--navy)}
+.filter-bar button{font:inherit;border:0;border-radius:999px;padding:8px 18px;background:var(--gold);color:var(--navy);cursor:pointer;font-weight:800}
+.empty-cat{grid-column:1/-1;text-align:center;padding:36px 18px;background:#fff;border-radius:20px;color:var(--navy);line-height:1.9}
+.empty-cat a{display:inline-block;margin-top:10px;padding:10px 22px;border-radius:999px;background:#25D366;color:#fff;font-weight:800;text-decoration:none}
 </style>
 </head>
 <body>
@@ -207,6 +212,7 @@ section{padding:56px 0}
 <h2>منتجاتنا</h2>
 <p>ضيف اللي يعجبك للسلة وأكّد طلبك في رسالة واحدة</p>
 </div>
+<div id="filterBar" class="filter-bar" style="display:none"></div>
 <div class="grid" id="productsGrid"></div>
 </div>
 </section>
@@ -319,7 +325,18 @@ function toAr(n){ return String(n).replace(/\d/g, d => "٠١٢٣٤٥٦٧٨٩"[d]
 function priceNum(p){ return parseInt(p.price.replace(/[٠-٩]/g, d => "٠١٢٣٤٥٦٧٨٩".indexOf(d)).replace(/[^\d]/g, ""), 10) || 0; }
 
 /* ---- products grid ---- */
-document.getElementById('productsGrid').innerHTML = PRODUCTS.map(function(p, i){
+/* ---- category filter ---- */
+var CAT_ALIASES = {"عطارة": ["مستلزمات المطبخ","بهارات","أعشاب"], "صيدلية": ["العناية","كريمات","منتجات العناية"]};
+var activeCat = '';
+function matchCat(p, c){
+if (!c) return true;
+var pc = p.cat || '';
+if (pc.indexOf(c) !== -1) return true;
+return (CAT_ALIASES[c] || []).some(function(a){ return pc.indexOf(a) !== -1; });
+}
+function renderProducts(){
+var html = PRODUCTS.map(function(p, i){
+if (!matchCat(p, activeCat)) return '';
 const img = p.img ? '<img src="' + p.img + '" alt="' + p.name + '" loading="lazy">' : '<span style="font-size:64px">📦</span>';
 const badge = p.badge ? '<span class="card-badge">' + p.badge + '</span>' : '';
 const cat = p.cat ? '<span class="card-cat">' + p.cat + '</span>' : '';
@@ -332,6 +349,31 @@ return '<div class="card">'
 + '<button class="add-btn" id="add-' + i + '" onclick="addToCart(' + i + ')">' + CART_ICON + ' أضف للسلة</button>'
 + '</div></div></div>';
 }).join('');
+if (!html.trim()){
+html = '<div class="empty-cat">منتجات <b>' + activeCat + '</b> جاية قريب 🌱<br>قول لنا شنو داير وبنجيبو ليك بالسعر والزمن.<br><a href="' + waLink('أهلاً سوقك، عايز منتجات من قسم ' + activeCat) + '" target="_blank" rel="noopener">اطلب عبر واتساب</a></div>';
+}
+document.getElementById('productsGrid').innerHTML = html;
+var bar = document.getElementById('filterBar');
+if (activeCat){
+bar.style.display = 'flex';
+bar.innerHTML = '<span>القسم: ' + activeCat + '</span><button type="button" onclick="selectCat(\'\')">عرض الكل ✕</button>';
+} else { bar.style.display = 'none'; bar.innerHTML = ''; }
+}
+function selectCat(c){
+activeCat = c;
+renderProducts();
+var el = document.getElementById('products');
+if (el) el.scrollIntoView({behavior:'smooth', block:'start'});
+}
+renderProducts();
+document.querySelectorAll('.cat').forEach(function(el){
+var h = el.querySelector('h3');
+if (!h) return;
+var name = h.textContent.trim();
+el.setAttribute('role','button'); el.setAttribute('tabindex','0');
+el.addEventListener('click', function(){ selectCat(name); });
+el.addEventListener('keydown', function(e){ if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); selectCat(name); } });
+});
 
 /* ---- cart state ---- */
 let cart = {};
