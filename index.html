@@ -66,9 +66,12 @@ header{position:sticky;top:0;z-index:30;background:linear-gradient(135deg,var(--
 .empty a{display:inline-block;margin-top:12px;background:var(--green);color:#fff;font-weight:800;padding:10px 20px;border-radius:30px}
 .skel{aspect-ratio:3/4;border-radius:14px;background:linear-gradient(90deg,#e8edf7,#f6f8fc,#e8edf7);background-size:200% 100%;animation:sk 1.2s infinite}
 @keyframes sk{to{background-position:-200% 0}}
+.frow{display:flex;justify-content:space-between;font-weight:700;margin-top:8px;color:#0a2c61}.frow.sm{font-weight:500;font-size:.8rem;color:#5b6b8c}
+#areaSel{width:100%;font:inherit;padding:12px;border:1.5px solid #c9d6ee;border-radius:12px;background:#fff;color:#0a2c61}
 footer{margin-top:26px;background:var(--navy);color:#fff;text-align:center;padding:22px 12px}
 footer .logo{font-size:1.8rem}
 footer p{opacity:.8;font-size:.85rem;margin-top:4px}
+footer p.info{font-size:.78rem;opacity:.7;margin-top:10px;line-height:1.8}
 footer a.ph2{display:inline-block;margin-top:8px;color:var(--gold);font-family:var(--disp);font-weight:800;font-size:1.3rem;direction:ltr}
 /* pages (detail, cart) */
 .page{position:fixed;inset:0;z-index:50;background:var(--bg);overflow-y:auto;display:none;-webkit-overflow-scrolling:touch}
@@ -139,6 +142,7 @@ footer a.ph2{display:inline-block;margin-top:8px;color:var(--gold);font-family:v
 <div class="logo">سوقك</div>
 <p>اطلب عبر واتساب وبنأكّد معاك الطلب والتوصيل</p>
 <a class="ph2" id="footPhone" href="#">0115079683</a>
+<p class="info">🕖 الدوام: ٧ صباحاً إلى ٦ مساءً<br>💳 الدفع: بنكك / براقو / كاش عند الاستلام</p>
 </footer>
 <a class="wafloat" id="waFloat" target="_blank" rel="noopener" aria-label="واتساب"></a>
 
@@ -203,6 +207,10 @@ $("clr").addEventListener("click",function(){$("q").value="";query="";this.style
 
 /* cart */
 function cartCount(){return Object.keys(cart).reduce(function(s,k){return s+(byId(k)?cart[k]:0)},0)}
+var AREAS=[],AREA="";try{AREA=localStorage.getItem("sooqak_area")||"";AREAS=JSON.parse(localStorage.getItem("sooqak_areas")||"[]")}catch(e){}
+function curArea(){return AREAS.find(function(a){return a.id===AREA})}
+function feeNum(){var a=curArea();return a?(parseInt(String(a.fee).replace(/[٠-٩]/g,function(d){return"٠١٢٣٤٥٦٧٨٩".indexOf(d)}).replace(/[^\d]/g,""),10)||0):0}
+function grand(){return cartTotal()+feeNum()}
 function cartTotal(){return Object.keys(cart).reduce(function(s,k){var p=byId(k);return s+(p?priceNum(p)*cart[k]:0)},0)}
 function updateBadge(){var n=cartCount(),b=$("badge");b.textContent=toAr(n);b.style.display=n?"flex":"none"}
 function addToCart(id,n){cart[id]=Math.min((cart[id]||0)+n,99);save();updateBadge();toast("تمت الإضافة للسلة ✓");if($("pCart").classList.contains("open"))renderCart()}
@@ -211,7 +219,7 @@ function renderCart(keep){
 var ids=Object.keys(cart).filter(byId),b=$("cBody"),nm=($("custName")||{}).value||"",ph=($("custPhone")||{}).value||"";
 if(!ids.length){b.innerHTML='<div class="ce"><span class="big">🛒</span>السلة فاضية<br>أضف منتجات من القائمة</div>';return}
 var h=ids.map(function(id){var p=byId(id);return'<div class="citem" data-id="'+esc(id)+'"><div class="ci">'+(p.img?'<img alt="" src="'+esc(p.img)+'">':'')+'</div><div class="cm"><div class="cn">'+esc(p.name)+'</div><div class="cp">'+toAr(priceNum(p)*cart[id])+' جنيه</div><div class="qty" style="margin-top:6px"><button data-m="1" aria-label="نقص">−</button><span>'+toAr(cart[id])+'</span><button data-p="1" aria-label="زيادة">+</button></div></div><button class="rm" data-r="1" aria-label="حذف">🗑</button></div>'}).join("");
-h+='<div class="cform"><div class="tot"><span>الإجمالي</span><span id="tot">'+toAr(cartTotal())+' جنيه</span></div><label for="custName">الاسم</label><input id="custName" autocomplete="name" value="'+esc(nm)+'"><label for="custPhone">رقم التلفون</label><input id="custPhone" type="tel" inputmode="tel" autocomplete="tel" value="'+esc(ph)+'"><div class="hint" id="hint">اكتب اسمك ورقم تلفونك عشان نكمل الطلب</div><button class="wa" id="checkout" style="margin-top:12px">'+WA+'أكّد الطلب عبر واتساب</button></div>';
+h+='<div class="cform"><div class="frow sm"><span>المنتجات</span><span>'+toAr(cartTotal())+' جنيه</span></div>'+(AREAS.length?'<label for="areaSel">منطقة التوصيل</label><select id="areaSel"><option value="">اختر منطقتك...</option>'+AREAS.map(function(a){return'<option value="'+esc(a.id)+'"'+(a.id===AREA?" selected":"")+'>'+esc(a.name)+" - "+toAr(a.fee)+" جنيه</option>"}).join("")+'</select>':"")+'<div class="frow"><span>رسوم التوصيل</span><span id="feeV">'+(curArea()?toAr(feeNum())+" جنيه":"اختر المنطقة")+'</span></div><div class="tot"><span>الإجمالي</span><span id="tot">'+toAr(grand())+' جنيه</span></div><label for="custName">الاسم</label><input id="custName" autocomplete="name" value="'+esc(nm)+'"><label for="custPhone">رقم التلفون</label><input id="custPhone" type="tel" inputmode="tel" autocomplete="tel" value="'+esc(ph)+'"><div class="hint" id="hint">اكتب اسمك ورقم تلفونك عشان نكمل الطلب</div><div class="frow sm" style="display:block;margin-top:10px;line-height:1.7">🕖 الدوام: ٧ صباحاً إلى ٦ مساءً<br>💳 الدفع: بنكك / براقو / كاش عند الاستلام</div><button class="wa" id="checkout" style="margin-top:12px">'+WA+'أكّد الطلب عبر واتساب</button></div>';
 b.innerHTML=h}
 $("cBody").addEventListener("click",function(e){
 var it=e.target.closest(".citem");
@@ -220,15 +228,16 @@ if(e.target.closest("[data-p]"))setQty(id,cart[id]+1);
 else if(e.target.closest("[data-m]"))setQty(id,cart[id]-1);
 else if(e.target.closest("[data-r]"))setQty(id,0)}
 if(e.target.closest("#checkout"))checkout()});
+$("cBody").addEventListener("change",function(e){if(e.target.id==="areaSel"){AREA=e.target.value;try{localStorage.setItem("sooqak_area",AREA)}catch(x){}var f=$("feeV");f.textContent=curArea()?toAr(feeNum())+" جنيه":"اختر المنطقة";$("tot").textContent=toAr(grand())+" جنيه";var h=$("hint");if(h)h.style.display="none"}});
 $("cBody").addEventListener("input",function(){var h=$("hint");if(h)h.style.display="none"});
 function orderMessage(){
 var nm=($("custName")||{}).value||"",ph=($("custPhone")||{}).value||"";
 var L=["طلب جديد من موقع سوقك 🛒",""];
 Object.keys(cart).forEach(function(i){var p=byId(i);if(!p)return;L.push("• "+p.name+" × "+toAr(cart[i])+" = "+toAr(priceNum(p)*cart[i])+" جنيه")});
-L.push("");L.push("الإجمالي: "+toAr(cartTotal())+" جنيه");L.push("الاسم: "+(nm||"..."));L.push("رقم التلفون: "+(ph||"..."));return L.join("\n")}
+L.push("");var ar=curArea();L.push("المنتجات: "+toAr(cartTotal())+" جنيه");if(ar){L.push("منطقة التوصيل: "+ar.name);L.push("رسوم التوصيل: "+toAr(feeNum())+" جنيه")}L.push("الإجمالي: "+toAr(grand())+" جنيه");L.push("الاسم: "+(nm||"..."));L.push("رقم التلفون: "+(ph||"..."));return L.join("\n")}
 function checkout(){
 var nm=$("custName").value.trim(),ph=$("custPhone").value.trim();
-if(!nm||!ph){$("hint").style.display="block";return}
+if(!nm||!ph||(AREAS.length&&!curArea())){$("hint").textContent=(AREAS.length&&!curArea())?"اختر منطقة التوصيل واكتب اسمك ورقم تلفونك":"اكتب اسمك ورقم تلفونك عشان نكمل الطلب";$("hint").style.display="block";return}
 window.__lastWa=waLink(orderMessage());
 window.open(window.__lastWa,"_blank","noopener")}
 
@@ -256,6 +265,8 @@ Object.keys(cart).forEach(function(k){if(!byId(k)&&PRODUCTS.length)delete cart[k
 renderChips();renderGrid();updateBadge();save()}
 try{var cached=JSON.parse(localStorage.getItem("sooqak_products")||"null");if(cached&&cached.length)applyProducts(cached)}catch(e){}
 fetch("products.json?v="+Date.now(),{cache:"no-store"}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(l){try{localStorage.setItem("sooqak_products",JSON.stringify(l))}catch(e){}applyProducts(l);var m=location.hash.match(/^#p\/(.+)$/);if(m)openDetail(decodeURIComponent(m[1]))}).catch(function(){if(!PRODUCTS.length){renderChips();$("grid").innerHTML='<div class="empty"><span class="big">📶</span>تعذّر تحميل المنتجات. تأكد من الشبكة وحدّث الصفحة.</div>'}});
+function applyAreas(l){AREAS=(l||[]).filter(function(a){return a&&a.name});if(!curArea())AREA="";if($("pCart").classList.contains("open"))renderCart(true)}
+fetch("areas.json?v="+Date.now(),{cache:"no-store"}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(l){try{localStorage.setItem("sooqak_areas",JSON.stringify(l))}catch(e){}applyAreas(l)}).catch(function(){});
 var g=waLink("مرحباً سوقك، عندي استفسار");
 $("waFloat").href=g;$("waFloat").innerHTML=WA;$("footPhone").href=g;$("footPhone").textContent=DISPLAY_PHONE;
 renderChips();updateBadge();
