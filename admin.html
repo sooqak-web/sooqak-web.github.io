@@ -44,7 +44,7 @@ button{font:inherit;font-weight:800;border:0;border-radius:12px;padding:12px 18p
 </div>
 
 <div id="app" style="display:none">
-<div id="adminHome"><h1>إدارة سوقك</h1><p class="hint">اختار القسم العايز تعدّله</p><div class="tiles"><button class="tile" data-page="products"><i>🛍️</i><b>المنتجات</b><small>حسب التاجر</small></button><button class="tile" data-page="merchants"><i>🏪</i><b>التجار</b><small>اسم وأيقونة</small></button><button class="tile" data-page="deals"><i>🔥</i><b>العروض</b><small>أضف عرض جديد</small></button><button class="tile" data-page="areas"><i>🗺️</i><b>مناطق التوصيل</b><small>المناطق والأسعار</small></button></div></div><section class="pg" id="pg-products" hidden><button class="back" type="button" data-home>→ رجوع</button><div class="card">
+<div id="adminHome"><h1>إدارة سوقك</h1><p class="hint">اختار القسم العايز تعدّله</p><div class="tiles"><button class="tile" data-page="products"><i>🛍️</i><b>المنتجات</b><small>حسب التاجر</small></button><button class="tile" data-page="merchants"><i>🏪</i><b>التجار</b><small>اسم وأيقونة</small></button><button class="tile" data-page="deals"><i>🔥</i><b>العروض</b><small>أضف عرض جديد</small></button><button class="tile" data-page="areas"><i>🗺️</i><b>مناطق التوصيل</b><small>المناطق والأسعار</small></button><button class="tile" data-page="units"><i>⚖️</i><b>الأوزان والوحدات</b><small>كيلو، رطل، قطعة...</small></button></div></div><section class="pg" id="pg-products" hidden><button class="back" type="button" data-home>→ رجوع</button><div class="card">
 <h2>المنتجات الحالية (<span id="count">0</span>)</h2>
 <div class="mfilters" id="mfilter"></div><div id="list">جاري التحميل...</div>
 </div><button class="primary" id="newProduct">+ إضافة منتج جديد</button></section><section class="pg" id="pg-productForm" hidden><button class="back" data-page="products">→ رجوع للمنتجات</button><div class="card">
@@ -52,7 +52,7 @@ button{font:inherit;font-weight:800;border:0;border-radius:12px;padding:12px 18p
 <form id="form">
 <label for="name">اسم المنتج</label>
 <input id="name" maxlength="80" placeholder="مثال: سكر سنيدة 1 كيلو" required=""/>
-<label for="price">السعر بالجنيه (أرقام فقط)</label>
+<label for="weight">الوزن / الحجم (اختياري)</label><input id="weight" inputmode="decimal" maxlength="20" placeholder="مثال: 1 أو 0.5"><label for="unit">الوحدة</label><select id="unit"><option value="">بدون وحدة</option></select><p class="hint">مثال: الاسم طماطم، الوزن 1، الوحدة كيلو. لو الوزن مكتوب في الاسم القديم، اترك الحقول دي فاضية لتجنب التكرار.</p><label for="price">السعر بالجنيه (أرقام فقط)</label>
 <input id="price" inputmode="numeric" min="0" placeholder="مثال: 2500" required="" step="1" type="number"/>
 <label for="cat">القسم</label>
 <select id="cat"></select>
@@ -85,7 +85,7 @@ button{font:inherit;font-weight:800;border:0;border-radius:12px;padding:12px 18p
 <button class="primary" id="asave" type="submit">إضافة منطقة</button>
 <button class="ghost" id="acancel" style="width:100%;margin-top:8px;display:none" type="button">إلغاء التعديل</button>
 </form>
-</div></section><p class="hint">بعد الحفظ، التغيير بيظهر في الموقع خلال حوالي دقيقة. حدّث الصفحة في الموقع عشان تشوفو.</p>
+</div></section><section class="pg" id="pg-units" hidden><button class="back" data-home>→ رجوع</button><div class="card"><h2>الأوزان والوحدات</h2><div id="ulist"></div><form id="uform"><label for="uname">اسم الوحدة</label><input id="uname" required maxlength="25" placeholder="كيلو، رطل، قطعة"><label for="uemoji">الإيموجي</label><input id="uemoji" value="⚖️" maxlength="16"><button class="primary" id="usave">+ إضافة</button><button class="ghost" type="button" id="ucancel" hidden>إلغاء التعديل</button></form></div></section><p class="hint">بعد الحفظ، التغيير بيظهر في الموقع خلال حوالي دقيقة. حدّث الصفحة في الموقع عشان تشوفو.</p>
 </div>
 </main>
 <div id="msg"></div>
@@ -105,7 +105,7 @@ document.getElementById('app').style.display = 'block';
 fillCats('');
 load();
 loadAreas();
-loadDeal();loadMerchants();
+loadDeal();loadMerchants();loadUnits();
 })();
 
 function fillCats(extra){
@@ -169,7 +169,7 @@ var p = products.find(function(x){ return x.id === id; }); if (!p) return;
 editId = id;
 document.getElementById('formTitle').textContent = 'تعديل المنتج';
 document.getElementById('name').value = p.name;
-document.getElementById('price').value = String(p.price).replace(/[٠-٩]/g, function(d){ return '٠١٢٣٤٥٦٧٨٩'.indexOf(d); });
+document.getElementById('weight').value=p.weight||'';fillUnits(p.unit||'');document.getElementById('price').value = String(p.price).replace(/[٠-٩]/g, function(d){ return '٠١٢٣٤٥٦٧٨٩'.indexOf(d); });
 fillCats(p.cat || ''); document.getElementById('cat').value = p.cat || CATS[0];
 document.getElementById('badge').value = p.badge || ''; fillMerchants(p.merchantId || '');
 document.getElementById('desc').value = p.desc || '';
@@ -179,7 +179,7 @@ document.getElementById('cancelBtn').style.display = 'block';
 window.scrollTo({top:0, behavior:'smooth'});
 }
 function resetForm(){
-editId = null; document.getElementById('form').reset(); fillCats('');fillMerchants('');
+editId = null; document.getElementById('form').reset(); fillCats('');fillMerchants('');fillUnits('');
 document.getElementById('formTitle').textContent = 'إضافة منتج جديد';
 document.getElementById('preview').style.display = 'none';
 document.getElementById('cancelBtn').style.display = 'none';
@@ -219,7 +219,7 @@ return putFile(path, b64, 'photo ' + id).then(function(){ return path; });
 }) : Promise.resolve(existing ? existing.img : '');
 imgPromise.then(function(imgPath){
 var item = {id: id, name: name, price: price, img: imgPath || '', cat: cat, badge: badge};
-item.merchantId = document.getElementById('merchantId').value; var dsc = document.getElementById('desc').value.trim(); if (dsc) item.desc = dsc;
+item.weight=document.getElementById('weight').value.trim();item.unit=document.getElementById('unit').value;item.merchantId = document.getElementById('merchantId').value; var dsc = document.getElementById('desc').value.trim(); if (dsc) item.desc = dsc;
 if (existing) products[products.indexOf(existing)] = item; else products.push(item);
 return saveProducts((existing ? 'edit ' : 'add ') + id);
 }).then(function(){
@@ -316,6 +316,15 @@ saveAreas((ex ? 'edit area ' : 'add area ') + item.id).then(function(){ toast('�
 function openAdmin(key){document.getElementById('adminHome').hidden=!!key;document.querySelectorAll('.pg').forEach(function(p){p.hidden=p.id!=='pg-'+key});window.scrollTo(0,0)}
 document.getElementById('app').addEventListener('click',function(e){var b=e.target.closest('[data-page],[data-home]');if(!b)return;openAdmin(b.hasAttribute('data-home')?'':b.getAttribute('data-page'))});
 document.getElementById('newProduct').onclick=function(){resetForm();if(merchantFilter&&merchantFilter!=='__none')fillMerchants(merchantFilter);openAdmin('productForm')};
+var units=[],usha='',uEdit=null;
+function fillUnits(value){var sel=document.getElementById('unit');value=value===undefined?sel.value:value;sel.innerHTML='<option value="">بدون وحدة</option>'+units.map(function(u){return '<option value="'+safe(u.name)+'">'+safe(u.emoji||'⚖️')+' '+safe(u.name)+'</option>'}).join('');if(value&&!units.some(function(u){return u.name===value})){var op=document.createElement('option');op.value=value;op.textContent=value;sel.appendChild(op)}sel.value=value||''}
+function loadUnits(){return jsonLoad('units.json').then(function(j){usha=j.sha;units=JSON.parse(b64dec(j.content));renderUnits()}).catch(function(e){document.getElementById('ulist').textContent=e.message})}
+function renderUnits(){fillUnits();document.getElementById('ulist').innerHTML=units.map(function(u){return '<div class="row"><div class="info">'+safe(u.emoji||'⚖️')+' '+safe(u.name)+'</div><button class="ghost" data-ue="'+safe(u.id)+'">تعديل</button><button class="danger" data-ud="'+safe(u.id)+'">حذف</button></div>'}).join('')}
+function resetU(){uEdit=null;document.getElementById('uform').reset();document.getElementById('uemoji').value='⚖️';document.getElementById('ucancel').hidden=true;document.getElementById('usave').textContent='+ إضافة'}
+document.getElementById('ucancel').onclick=resetU;
+function saveUnits(){busy=true;return putFile('units.json',b64enc(JSON.stringify(units,null,1)),'update units',usha).then(function(j){usha=j.content.sha;renderUnits();resetU();toast('تم الحفظ ✓','ok',5000)}).catch(function(){toast('تعذر الحفظ، حدّث الصفحة وحاول مرة ثانية','err',6000);loadUnits()}).then(function(){busy=false})}
+document.getElementById('uform').onsubmit=function(e){e.preventDefault();if(busy)return;var name=document.getElementById('uname').value.trim();if(!name)return;if(units.some(function(u){return u.name===name&&u.id!==uEdit})){toast('الوحدة موجودة','err',4000);return}var old=units.find(function(u){return u.id===uEdit});if(old&&old.name!==name&&products.some(function(p){return p.unit===old.name})){toast('الوحدة مستخدمة، أضف وحدة جديدة بدل تغييرها','err',5000);return}var item={id:uEdit||'u'+Date.now().toString(36),name:name,emoji:document.getElementById('uemoji').value.trim()||'⚖️'},ix=units.findIndex(function(u){return u.id===uEdit});if(ix>=0)units[ix]=item;else units.push(item);saveUnits()};
+document.getElementById('ulist').onclick=function(e){var b=e.target.closest('button');if(!b||busy)return;var id=b.dataset.ue||b.dataset.ud,u=units.find(function(u){return u.id===id});if(!u)return;if(b.dataset.ud){if(products.some(function(p){return p.unit===u.name})){toast('الوحدة مستخدمة في منتج، غيّره أولاً','err',5000);return}units=units.filter(function(u){return u.id!==id});saveUnits();return}uEdit=id;document.getElementById('uname').value=u.name;document.getElementById('uemoji').value=u.emoji;document.getElementById('usave').textContent='حفظ التعديل';document.getElementById('ucancel').hidden=false};
 </script>
 </body>
 </html>
