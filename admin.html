@@ -80,6 +80,18 @@ button{font:inherit;font-weight:800;border:0;border-radius:12px;padding:12px 18p
 <button class="ghost" id="acancel" type="button" style="width:100%;margin-top:8px;display:none">إلغاء التعديل</button>
 </form>
 </div>
+<div class="card">
+<h2>عرض اليوم / الأسبوع</h2>
+<div class="hint" id="dstate">جاري التحميل...</div>
+<label for="dprod">المنتج</label>
+<select id="dprod"></select>
+<label for="dprice">سعر العرض بالجنيه (اختياري، لو فاضي يبقى سعره العادي)</label>
+<input id="dprice" type="number" inputmode="numeric" min="0" step="1" placeholder="مثال: 9000">
+<label for="dtext">عنوان العرض</label>
+<select id="dtext"><option>عرض اليوم</option><option>عرض الأسبوع</option></select>
+<button class="primary" id="dsave" type="button">نشر العرض</button>
+<button class="danger" id="dclear" type="button" style="width:100%;margin-top:8px">إلغاء العرض (إخفاؤه)</button>
+</div>
 <p class="hint">بعد الحفظ، التغيير بيظهر في الموقع خلال حوالي دقيقة. حدّث الصفحة في الموقع عشان تشوفو.</p>
 </div>
 </main>
@@ -100,6 +112,7 @@ document.getElementById('app').style.display = 'block';
 fillCats('');
 load();
 loadAreas();
+loadDeal();
 })();
 
 function fillCats(extra){
@@ -122,7 +135,7 @@ if (r.status === 401 || r.status === 403) throw new Error('الرابط غير �
 if (!r.ok) throw new Error('تعذر التحميل (' + r.status + ')');
 return r.json();
 }).then(function(j){
-sha = j.sha; products = JSON.parse(b64dec(j.content)); render();
+sha = j.sha; products = JSON.parse(b64dec(j.content)); render(); if (document.getElementById('dprod')) renderDeal();
 }).catch(function(e){ document.getElementById('list').textContent = e.message; toast(e.message, 'err'); });
 }
 function putFile(path, content, message, curSha){
@@ -231,6 +244,36 @@ products = products.filter(function(x){ return x.id !== id; });
 saveProducts('delete ' + id).then(function(){ toast('تم الحذف ✓', 'ok', 5000); render(); })
 .catch(function(e){ toast(e.message, 'err', 8000); load(); }).then(function(){ busy = false; });
 }
+var deal = {id:'',price:'',text:'عرض اليوم'}, dsha = '';
+function loadDeal(){
+return fetch(API + 'deal.json?ref=' + BRANCH + '&t=' + Date.now(), {headers: hdr(), cache:'no-store'}).then(function(r){
+if (r.status === 404) return null; if (!r.ok) throw new Error('تعذر تحميل العرض');
+return r.json();
+}).then(function(j){ if (j){ dsha = j.sha; deal = JSON.parse(b64dec(j.content)); } renderDeal(); }).catch(function(e){ document.getElementById('dstate').textContent = e.message; });
+}
+function renderDeal(){
+var sel = document.getElementById('dprod');
+sel.innerHTML = products.map(function(p){ return '<option value="' + p.id + '"></option>'; }).join('');
+products.forEach(function(p, i){ sel.options[i].textContent = p.name + ' - ' + p.price; });
+var cur = products.find(function(p){ return p.id === deal.id; });
+if (cur){ sel.value = deal.id; document.getElementById('dprice').value = deal.price || ''; document.getElementById('dtext').value = deal.text || 'عرض اليوم'; }
+document.getElementById('dstate').textContent = cur ? ('العرض الحالي: ' + cur.name + (deal.price ? ' بسعر ' + deal.price + ' جنيه' : '')) : 'ما في عرض حالياً (القسم مخفي في الموقع)';
+}
+function putDeal(msg){
+return putFile('deal.json', b64enc(JSON.stringify(deal, null, 1)), msg, dsha).then(function(j){ dsha = j.content.sha; renderDeal(); toast('تم الحفظ ✓ بيظهر في الموقع خلال دقيقة', 'ok', 6000); })
+.catch(function(e){ toast(e.status === 409 || e.status === 422 ? 'تغيّر العرض، حدّث الصفحة وحاول مرة ثانية' : (e.message || 'حصل خطأ'), 'err', 8000); loadDeal(); }).then(function(){ busy = false; });
+}
+document.getElementById('dsave').onclick = function(){
+if (busy) return; var id = document.getElementById('dprod').value; if (!id){ toast('اختر منتج', 'err', 4000); return; }
+busy = true; toast('جاري الحفظ...', 'info');
+var pr = document.getElementById('dprice').value.trim();
+deal = {id: id, price: pr ? String(parseInt(pr, 10)) : '', text: document.getElementById('dtext').value};
+putDeal('set deal');
+};
+document.getElementById('dclear').onclick = function(){
+if (busy) return; busy = true; toast('جاري الحفظ...', 'info');
+deal = {id:'', price:'', text:'عرض اليوم'}; putDeal('clear deal');
+};
 var areas = [], asha = '', aEdit = null;
 function loadAreas(){
 return fetch(API + 'areas.json?ref=' + BRANCH + '&t=' + Date.now(), {headers: hdr(), cache:'no-store'}).then(function(r){
