@@ -51,6 +51,7 @@ button{font:inherit;font-weight:800;border:0;border-radius:12px;padding:12px 18p
 <input id="price" required type="number" inputmode="numeric" min="0" step="1" placeholder="مثال: 2500">
 <label for="cat">القسم</label>
 <select id="cat"></select>
+<label for="merchantId">التاجر</label><select id="merchantId"><option value="">سوقك (بدون تاجر)</option></select>
 <label for="badge">شارة فوق الصورة (اختياري)</label>
 <input id="badge" maxlength="20" placeholder="مثال: عرض اليوم">
 <label for="desc">وصف المنتج (اختياري)</label>
@@ -81,17 +82,13 @@ button{font:inherit;font-weight:800;border:0;border-radius:12px;padding:12px 18p
 </form>
 </div>
 <div class="card">
-<h2>عرض اليوم / الأسبوع</h2>
-<div class="hint" id="dstate">جاري التحميل...</div>
-<label for="dprod">المنتج</label>
-<select id="dprod"></select>
-<label for="dprice">سعر العرض بالجنيه (اختياري، لو فاضي يبقى سعره العادي)</label>
-<input id="dprice" type="number" inputmode="numeric" min="0" step="1" placeholder="مثال: 9000">
-<label for="dtext">عنوان العرض</label>
-<select id="dtext"><option>عرض اليوم</option><option>عرض الأسبوع</option></select>
-<button class="primary" id="dsave" type="button">نشر العرض</button>
-<button class="danger" id="dclear" type="button" style="width:100%;margin-top:8px">إلغاء العرض (إخفاؤه)</button>
-</div>
+<h2>عروض اليوم / الأسبوع</h2>
+<div id="dlist">جاري التحميل...</div><form id="dform">
+<label for="dprod">المنتج</label><select id="dprod"></select>
+<label for="dprice">سعر العرض بالجنيه (اختياري)</label><input id="dprice" type="number" min="0" step="1" inputmode="numeric">
+<label for="dtext">عنوان العرض</label><select id="dtext"><option>عرض اليوم</option><option>عرض الأسبوع</option></select>
+<button class="primary" id="dsave" type="submit">إضافة عرض جديد</button><button class="ghost" id="dcancel" type="button" style="display:none;width:100%;margin-top:8px">إلغاء التعديل</button></form></div>
+<div class="card"><h2>التجار</h2><div id="mlist">جاري التحميل...</div><form id="mform"><label for="mname">اسم التاجر / المتجر</label><input id="mname" required maxlength="60"><button class="primary" id="msave" type="submit">إضافة تاجر</button><button class="ghost" id="mcancel" type="button" style="display:none;width:100%;margin-top:8px">إلغاء التعديل</button></form><p class="hint">أضف التاجر هنا، وبعدها اختاره عند إضافة أو تعديل المنتج. لا يمكن حذف تاجر مربوط بمنتجات حتى تنقلها لتاجر آخر.</p></div>
 <p class="hint">بعد الحفظ، التغيير بيظهر في الموقع خلال حوالي دقيقة. حدّث الصفحة في الموقع عشان تشوفو.</p>
 </div>
 </main>
@@ -112,7 +109,7 @@ document.getElementById('app').style.display = 'block';
 fillCats('');
 load();
 loadAreas();
-loadDeal();
+loadDeal();loadMerchants();
 })();
 
 function fillCats(extra){
@@ -178,7 +175,7 @@ document.getElementById('formTitle').textContent = 'تعديل المنتج';
 document.getElementById('name').value = p.name;
 document.getElementById('price').value = String(p.price).replace(/[٠-٩]/g, function(d){ return '٠١٢٣٤٥٦٧٨٩'.indexOf(d); });
 fillCats(p.cat || ''); document.getElementById('cat').value = p.cat || CATS[0];
-document.getElementById('badge').value = p.badge || '';
+document.getElementById('badge').value = p.badge || ''; fillMerchants(p.merchantId || '');
 document.getElementById('desc').value = p.desc || '';
 document.getElementById('photo').value = '';
 var pv = document.getElementById('preview'); if (p.img){ pv.src = p.img; pv.style.display = 'block'; } else pv.style.display = 'none';
@@ -186,7 +183,7 @@ document.getElementById('cancelBtn').style.display = 'block';
 window.scrollTo({top:0, behavior:'smooth'});
 }
 function resetForm(){
-editId = null; document.getElementById('form').reset(); fillCats('');
+editId = null; document.getElementById('form').reset(); fillCats('');fillMerchants('');
 document.getElementById('formTitle').textContent = 'إضافة منتج جديد';
 document.getElementById('preview').style.display = 'none';
 document.getElementById('cancelBtn').style.display = 'none';
@@ -226,7 +223,7 @@ return putFile(path, b64, 'photo ' + id).then(function(){ return path; });
 }) : Promise.resolve(existing ? existing.img : '');
 imgPromise.then(function(imgPath){
 var item = {id: id, name: name, price: price, img: imgPath || '', cat: cat, badge: badge};
-var dsc = document.getElementById('desc').value.trim(); if (dsc) item.desc = dsc;
+item.merchantId = document.getElementById('merchantId').value; var dsc = document.getElementById('desc').value.trim(); if (dsc) item.desc = dsc;
 if (existing) products[products.indexOf(existing)] = item; else products.push(item);
 return saveProducts((existing ? 'edit ' : 'add ') + id);
 }).then(function(){
@@ -244,36 +241,25 @@ products = products.filter(function(x){ return x.id !== id; });
 saveProducts('delete ' + id).then(function(){ toast('تم الحذف ✓', 'ok', 5000); render(); })
 .catch(function(e){ toast(e.message, 'err', 8000); load(); }).then(function(){ busy = false; });
 }
-var deal = {id:'',price:'',text:'عرض اليوم'}, dsha = '';
-function loadDeal(){
-return fetch(API + 'deal.json?ref=' + BRANCH + '&t=' + Date.now(), {headers: hdr(), cache:'no-store'}).then(function(r){
-if (r.status === 404) return null; if (!r.ok) throw new Error('تعذر تحميل العرض');
-return r.json();
-}).then(function(j){ if (j){ dsha = j.sha; deal = JSON.parse(b64dec(j.content)); } renderDeal(); }).catch(function(e){ document.getElementById('dstate').textContent = e.message; });
-}
-function renderDeal(){
-var sel = document.getElementById('dprod');
-sel.innerHTML = products.map(function(p){ return '<option value="' + p.id + '"></option>'; }).join('');
-products.forEach(function(p, i){ sel.options[i].textContent = p.name + ' - ' + p.price; });
-var cur = products.find(function(p){ return p.id === deal.id; });
-if (cur){ sel.value = deal.id; document.getElementById('dprice').value = deal.price || ''; document.getElementById('dtext').value = deal.text || 'عرض اليوم'; }
-document.getElementById('dstate').textContent = cur ? ('العرض الحالي: ' + cur.name + (deal.price ? ' بسعر ' + deal.price + ' جنيه' : '')) : 'ما في عرض حالياً (القسم مخفي في الموقع)';
-}
-function putDeal(msg){
-return putFile('deal.json', b64enc(JSON.stringify(deal, null, 1)), msg, dsha).then(function(j){ dsha = j.content.sha; renderDeal(); toast('تم الحفظ ✓ بيظهر في الموقع خلال دقيقة', 'ok', 6000); })
-.catch(function(e){ toast(e.status === 409 || e.status === 422 ? 'تغيّر العرض، حدّث الصفحة وحاول مرة ثانية' : (e.message || 'حصل خطأ'), 'err', 8000); loadDeal(); }).then(function(){ busy = false; });
-}
-document.getElementById('dsave').onclick = function(){
-if (busy) return; var id = document.getElementById('dprod').value; if (!id){ toast('اختر منتج', 'err', 4000); return; }
-busy = true; toast('جاري الحفظ...', 'info');
-var pr = document.getElementById('dprice').value.trim();
-deal = {id: id, price: pr ? String(parseInt(pr, 10)) : '', text: document.getElementById('dtext').value};
-putDeal('set deal');
-};
-document.getElementById('dclear').onclick = function(){
-if (busy) return; busy = true; toast('جاري الحفظ...', 'info');
-deal = {id:'', price:'', text:'عرض اليوم'}; putDeal('clear deal');
-};
+var deals=[],dsha='',dEdit=null,merchants=[],msha='',mEdit=null;
+function safe(s){return String(s||'').replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function jsonLoad(path){return fetch(API+path+'?ref='+BRANCH+'&t='+Date.now(),{headers:hdr(),cache:'no-store'}).then(function(r){if(!r.ok)throw new Error('تعذر التحميل ('+r.status+')');return r.json()})}
+function loadDeal(){return jsonLoad('deals.json').then(function(j){dsha=j.sha;deals=JSON.parse(b64dec(j.content));renderDeal()}).catch(function(e){document.getElementById('dlist').textContent=e.message})}
+function renderDeal(){var sel=document.getElementById('dprod'),old=sel.value;sel.innerHTML=products.map(function(p){return '<option value="'+safe(p.id)+'">'+safe(p.name)+'</option>'}).join('');if(old)sel.value=old;
+document.getElementById('dlist').innerHTML=deals.length?deals.map(function(d){var p=products.find(function(p){return p.id===d.productId});return '<div class="row"><div class="info"><div class="nm">'+safe(p?p.name:'منتج محذوف')+'</div><div class="sub">'+safe(d.text)+' · '+safe(d.price!==''?d.price+' جنيه':'السعر العادي')+'</div></div><button class="ghost" data-de="'+safe(d.id)+'">تعديل</button><button class="danger" data-dd="'+safe(d.id)+'">حذف</button></div>'}).join(''):'ما في عروض حالياً';}
+function resetD(){dEdit=null;document.getElementById('dform').reset();document.getElementById('dsave').textContent='إضافة عرض جديد';document.getElementById('dcancel').style.display='none'}
+document.getElementById('dcancel').onclick=resetD;
+function saveDeals(){busy=true;toast('جاري الحفظ...','info');return putFile('deals.json',b64enc(JSON.stringify(deals,null,1)),'update deals',dsha).then(function(j){dsha=j.content.sha;renderDeal();resetD();toast('تم الحفظ ✓','ok',5000)}).catch(function(e){toast('تعذر الحفظ، حدّث الصفحة وحاول مرة ثانية','err',6000);loadDeal()}).then(function(){busy=false})}
+document.getElementById('dform').onsubmit=function(e){e.preventDefault();if(busy)return;var id=document.getElementById('dprod').value,pr=document.getElementById('dprice').value.trim();if(!id)return;if(deals.some(function(d){return d.productId===id&&d.id!==dEdit})){toast('هذا المنتج عنده عرض، عدّل عرضه الموجود','err',5000);return}var item={id:dEdit||'d'+Date.now().toString(36),productId:id,price:pr===''?'':String(Math.max(0,parseInt(pr,10))),text:document.getElementById('dtext').value};var ix=deals.findIndex(function(d){return d.id===dEdit});if(ix>=0)deals[ix]=item;else deals.push(item);saveDeals()};
+document.getElementById('dlist').onclick=function(e){var b=e.target.closest('button');if(!b||busy)return;var id=b.dataset.de||b.dataset.dd,d=deals.find(function(x){return x.id===id});if(!d)return;if(b.dataset.dd){deals=deals.filter(function(x){return x.id!==id});saveDeals();return}dEdit=id;document.getElementById('dprod').value=d.productId;document.getElementById('dprice').value=d.price;document.getElementById('dtext').value=d.text;document.getElementById('dsave').textContent='حفظ التعديل';document.getElementById('dcancel').style.display='block';document.getElementById('dform').scrollIntoView({behavior:'smooth'})};
+function loadMerchants(){return jsonLoad('merchants.json').then(function(j){msha=j.sha;merchants=JSON.parse(b64dec(j.content));renderMerchants()}).catch(function(e){document.getElementById('mlist').textContent=e.message})}
+function fillMerchants(id){var sel=document.getElementById('merchantId');id=id===undefined?sel.value:id;sel.innerHTML='<option value="">سوقك (بدون تاجر)</option>'+merchants.map(function(m){return '<option value="'+safe(m.id)+'">'+safe(m.name)+'</option>'}).join('');sel.value=id||''}
+function renderMerchants(){fillMerchants();document.getElementById('mlist').innerHTML=merchants.length?merchants.map(function(m){return '<div class="row"><div class="info nm">'+safe(m.name)+'</div><button class="ghost" data-me="'+safe(m.id)+'">تعديل</button><button class="danger" data-md="'+safe(m.id)+'">حذف</button></div>'}).join(''):'ما في تجار لسه';}
+function resetM(){mEdit=null;document.getElementById('mform').reset();document.getElementById('msave').textContent='إضافة تاجر';document.getElementById('mcancel').style.display='none'}
+document.getElementById('mcancel').onclick=resetM;
+function saveMerchants(){busy=true;toast('جاري الحفظ...','info');return putFile('merchants.json',b64enc(JSON.stringify(merchants,null,1)),'update merchants',msha).then(function(j){msha=j.content.sha;renderMerchants();resetM();toast('تم الحفظ ✓','ok',5000)}).catch(function(e){toast('تعذر الحفظ، حدّث الصفحة وحاول مرة ثانية','err',6000);loadMerchants()}).then(function(){busy=false})}
+document.getElementById('mform').onsubmit=function(e){e.preventDefault();if(busy)return;var name=document.getElementById('mname').value.trim();if(!name)return;var item={id:mEdit||'m'+Date.now().toString(36),name:name},ix=merchants.findIndex(function(m){return m.id===mEdit});if(ix>=0)merchants[ix]=item;else merchants.push(item);saveMerchants()};
+document.getElementById('mlist').onclick=function(e){var b=e.target.closest('button');if(!b||busy)return;var id=b.dataset.me||b.dataset.md,m=merchants.find(function(x){return x.id===id});if(!m)return;if(b.dataset.md){if(products.some(function(p){return p.merchantId===id})){toast('انقل منتجات التاجر لتاجر آخر قبل حذفه','err',6000);return}merchants=merchants.filter(function(x){return x.id!==id});saveMerchants();return}mEdit=id;document.getElementById('mname').value=m.name;document.getElementById('msave').textContent='حفظ التعديل';document.getElementById('mcancel').style.display='block';document.getElementById('mform').scrollIntoView({behavior:'smooth'})};
 var areas = [], asha = '', aEdit = null;
 function loadAreas(){
 return fetch(API + 'areas.json?ref=' + BRANCH + '&t=' + Date.now(), {headers: hdr(), cache:'no-store'}).then(function(r){
