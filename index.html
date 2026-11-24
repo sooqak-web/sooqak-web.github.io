@@ -333,7 +333,7 @@ function imgTag(p,eager){if(!p.img)return'<div class="noimg">🛍️</div>';retu
 function categoryIcon(name){return /صيدل|دواء/.test(name)?'pharmacy':/خضار|فاكه/.test(name)?'vegetables':/بوتيك|ملابس/.test(name)?'clothes':/جملة/.test(name)?'wholesale':'store'}
 /* chips */
 function renderChips(){
-var list=[["","الكل","🏪"]].concat((MERCHANTS||[]).map(function(m){return[m.id,m.name,shopIcon(m.icon||categoryIcon(m.name),esc(m.emoji||"🏪"))]}));
+var list=[["","الكل",shopIcon("store")]].concat((MERCHANTS||[]).map(function(m){return[m.id,m.name,shopIcon(m.icon||categoryIcon(m.name),esc(m.emoji||"🏪"))]}));
 $("chips").innerHTML=list.map(function(c){return'<button class="chip'+(c[0]===activeCat?" on":"")+'" data-c="'+esc(c[0])+'"><span class="em">'+c[2]+'</span>'+esc(c[1])+'</button>'}).join("");renderSubchips();
 }
 $('categoryAll').onclick=function(){activeCat='';activeSub='';query='';$('q').value='';$('clr').style.display='none';renderChips();renderGrid()};
