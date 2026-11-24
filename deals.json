@@ -10,5 +10,26 @@
   "productId": "pmwt8u2pk",
   "price": "",
   "text": "عرض اليوم"
+ },
+ {
+  "id": "bmwuak98z",
+  "type": "bundle",
+  "text": "باقة الباقة",
+  "price": "85000",
+  "photoProductId": "",
+  "items": [
+   {
+    "productId": "pmwu83wva",
+    "qty": 1
+   },
+   {
+    "productId": "pmwt8uryx",
+    "qty": 1
+   },
+   {
+    "productId": "pmwt8u2pk",
+    "qty": 1
+   }
+  ]
  }
 ]
