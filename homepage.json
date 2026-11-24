@@ -1,11 +1,11 @@
 {
  "banner": {
   "enabled": false,
-  "title": "",
-  "subtitle": "",
+  "title": "افضل الملابس",
+  "subtitle": "الافضل اسبوعي",
   "buttonText": "تصفح القسم",
-  "merchantId": "",
+  "merchantId": "mmwt9rw3z",
   "image": "images/banner-mwubtvy8-os5au.jpg",
-  "until": ""
+  "until": "2026-11-30"
  }
 }
