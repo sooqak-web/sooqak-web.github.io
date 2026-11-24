@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>سوقك | كل السوق في رسالة</title>
+<title>سوقك</title>
 <meta name="description" content="سوقك: تسوّق من أسعار السوق اليومية وأكّد طلبك عبر واتساب.">
 <meta name="theme-color" content="#1976D2">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛒</text></svg>">
@@ -135,7 +135,7 @@ footer a.ph2{display:inline-block;margin-top:8px;color:var(--gold);font-family:v
 <header>
 <div class="wrap">
 <div class="top">
-<div class="logo">سوقك<small>كل السوق في رسالة</small></div>
+<div class="logo">سوقك</div>
 
 </div>
 <div class="search">
@@ -150,7 +150,7 @@ footer a.ph2{display:inline-block;margin-top:8px;color:var(--gold);font-family:v
 <button class="reorder" id="reorder"></button>
 <div class="chips" id="chips"></div><div class="chips" id="subchips" hidden aria-label="التصنيفات الفرعية"></div>
 <div class="wrap">
-<div class="promo">أسعار يوم السوق، محدّثة باستمرار <span>التوصيل لباب البيت</span></div>
+
 <div class="sec"><h2 id="secT">كل المنتجات</h2><div class="cnt" id="secC"></div></div>
 <div class="grid" id="grid"><div class="skel"></div><div class="skel"></div></div>
 </div>
@@ -288,7 +288,7 @@ $("reorder").onclick=function(){var l=lastOrder();Object.keys(l).forEach(functio
 /* detail */
 function openDetail(id){
 var p=byId(id);if(!p)return;curId=id;curQty=1;
-var desc=p.desc||("منتج من قسم "+(p.cat||"سوقك")+". السعر محدّث يوم بيوم، وبنأكّد معاك التوفّر والتوصيل عبر واتساب.");
+var desc=p.desc||("منتج من قسم "+(p.cat||"سوقك")+". بنأكّد معاك التوفّر والتوصيل عبر واتساب.");
 $("dBody").innerHTML='<div class="dph">'+productBadges(p)+(p.img?'<img alt="'+esc(productName(p))+'" src="'+esc(p.img)+'">':'')+'</div><div class="dbody"><div class="dcat">'+esc(p.cat||"")+(p.badge?' · '+esc(p.badge):'')+'</div><div class="dname">'+esc(productName(p))+'</div>'+merchantHtml(p)+'<div class="dprice">'+priceHtml(p)+'</div><div class="ddesc">'+esc(desc)+'</div>'+reviewDetails(p)+'<div class="qrow"><b>الكمية</b><div class="qty"><button id="qm" aria-label="نقص">−</button><span id="qv">١</span><button id="qp" aria-label="زيادة">+</button></div></div></div>';
 $("qm").onclick=function(){curQty=Math.max(1,curQty-1);$("qv").textContent=toAr(curQty);upd()};
 $("qp").onclick=function(){curQty=Math.min(99,curQty+1);$("qv").textContent=toAr(curQty);upd()};
