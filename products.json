@@ -2,16 +2,16 @@
  {
   "id": "pmwt8u2pk",
   "name": "طماطم",
-  "price": "7000",
+  "price": "8000",
   "img": "images/pmwt8u2pk-mwt8u2t9.jpg",
   "cat": "خضار",
   "badge": "",
-  "oldPrice": "8000",
   "discountUntil": "2026-11-25",
   "weight": "",
   "unit": "كيلو",
   "merchantId": "mmwt9ple4",
-  "subcategoryId": ""
+  "subcategoryId": "",
+  "salePrice": "7000"
  },
  {
   "id": "pmwt8uryx",
