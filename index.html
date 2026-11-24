@@ -228,6 +228,11 @@ footer a.ph2{display:inline-block;margin-top:8px;color:var(--gold);font-family:v
 #deal button[data-dadd]{min-height:36px;min-width:70px;padding:6px 10px;font-size:12px;border-radius:9px}
 #deal .dealfoot{padding-bottom:8px}
 
+
+#grid.has-card-discounts{--old-row:18px}
+#grid .oldprice{font-size:12px;line-height:18px;font-weight:600;color:#7b899e}
+.dprice .oldprice{font-size:19px;font-weight:600;color:#7b899e}
+.priceunit{direction:rtl}
 </style>
 </head>
 <body>
@@ -319,7 +324,7 @@ function reviewDetails(p){var rs=realReviews(p);if(!rs.length)return '';return '
 function badgeActive(until){if(!until)return true;var t=Date.parse(until+"T23:59:59.999+02:00");return Number.isFinite(t)&&Date.now()<=t}
 function discountInfo(p){if(!badgeActive(p.discountUntil))return null;var old=Number(p._old||p.oldPrice),now=priceNum(p);return Number.isFinite(old)&&old>now?{old:old,saving:old-now}:null}
 function productBadges(p){var d=discountInfo(p),list=[];if(p.isNew&&badgeActive(p.newUntil))list.push('<span class="productbadge newbadge">✦ جديد</span>');if(d)list.push('<span class="productbadge discountbadge">خصم '+Math.round(d.saving/d.old*1000)/10+'٪</span>');if(p.badge&&!(p.isNew&&badgeActive(p.newUntil)&&p.badge.trim()==='جديد'))list.push('<span class="productbadge textbadge">'+esc(p.badge)+'</span>');return list.length?'<div class="productbadges">'+list.join('')+'</div>':''}
-function priceHtml(p){var amount=priceNum(p).toLocaleString("en-US");var unit=p.unit?'<bdi class="priceunit" dir="ltr"> / <bdi dir="rtl">'+esc([p.weight,p.unit].filter(Boolean).join(' '))+'</bdi></bdi>':'';var d=discountInfo(p);return (d?'<s class="oldprice" dir="ltr">'+d.old.toLocaleString('en-US')+'</s> ':'')+'<span class="currentprice"><span dir="ltr">'+amount+'</span> <small>جنيه</small></span>'+unit}
+function priceHtml(p){var amount=priceNum(p).toLocaleString("en-US");var unit=p.unit?'<span class="priceunit" dir="rtl">لكل <bdi dir="auto">'+esc([p.weight,p.unit].filter(Boolean).join(' '))+'</bdi></span>':'';var d=discountInfo(p);return (d?'<s class="oldprice" dir="ltr">'+d.old.toLocaleString('en-US')+'</s> ':'')+'<span class="currentprice"><span dir="ltr">'+amount+'</span> <small>جنيه</small></span>'+unit}
 function cardControl(p){var n=cart[p.id]||0;return n?'<div class="cardcounter"><button type="button" data-card-minus="1" aria-label="نقص '+esc(p.name)+'">−</button><span aria-live="polite">'+toAr(n)+'</span><button type="button" data-card-plus="1" aria-label="زيادة '+esc(p.name)+'">+</button></div>':'<button class="add" data-add="1">+ أضف للسلة</button>'}
 function syncCardControls(){document.querySelectorAll('#grid .card').forEach(function(el){var p=byId(el.dataset.id),control=el.querySelector('.add,.cardcounter');if(p&&control)control.outerHTML=cardControl(p)})}
 function renderGrid(){
