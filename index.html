@@ -169,6 +169,11 @@ footer a.ph2{display:inline-block;margin-top:8px;color:var(--gold);font-family:v
 #grid .oldprice{line-height:16px;font-size:10px}
 #grid .priceunit{line-height:18px;font-size:10px}
 #grid .add,#grid .cardcounter{height:36px;min-height:36px}
+
+.dprice{display:flex;flex-direction:column;align-items:flex-start;gap:3px;line-height:1.6}
+.dprice .currentprice{display:block;white-space:nowrap}
+.dprice .priceunit{display:block;font-size:14px;line-height:1.7;margin:0;clear:both}
+.dprice .oldprice{line-height:1.5;margin:0}
 </style>
 </head>
 <body>
@@ -333,8 +338,8 @@ $("reorder").onclick=function(){var l=lastOrder();Object.keys(l).forEach(functio
 /* detail */
 function openDetail(id){
 var p=byId(id);if(!p)return;curId=id;curQty=1;
-var desc=p.desc||("منتج من قسم "+(p.cat||"سوقك")+". بنأكّد معاك التوفّر والتوصيل عبر واتساب.");
-$("dBody").innerHTML='<div class="dph">'+productBadges(p)+(p.img?'<img alt="'+esc(productName(p))+'" src="'+esc(p.img)+'">':'')+'</div><div class="dbody"><div class="dcat">'+esc(p.cat||"")+(p.badge?' · '+esc(p.badge):'')+'</div><div class="dname">'+esc(productName(p))+'</div>'+merchantHtml(p)+'<div class="dprice">'+priceHtml(p)+'</div><div class="ddesc">'+esc(desc)+'</div>'+reviewDetails(p)+'<div class="qrow"><b>الكمية</b><div class="qty"><button id="qm" aria-label="نقص">−</button><span id="qv">١</span><button id="qp" aria-label="زيادة">+</button></div></div></div>';
+var desc=p.desc||"";
+$("dBody").innerHTML='<div class="dph">'+productBadges(p)+(p.img?'<img alt="'+esc(productName(p))+'" src="'+esc(p.img)+'">':'')+'</div><div class="dbody"><div class="dcat">'+esc(p.cat||"")+(p.badge?' · '+esc(p.badge):'')+'</div><div class="dname">'+esc(productName(p))+'</div>'+merchantHtml(p)+'<div class="dprice">'+priceHtml(p)+'</div>'+(desc?'<div class="ddesc">'+esc(desc)+'</div>':'')+reviewDetails(p)+'<div class="qrow"><b>الكمية</b><div class="qty"><button id="qm" aria-label="نقص">−</button><span id="qv">١</span><button id="qp" aria-label="زيادة">+</button></div></div></div>';
 $("qm").onclick=function(){curQty=Math.max(1,curQty-1);$("qv").textContent=toAr(curQty);upd()};
 $("qp").onclick=function(){curQty=Math.min(99,curQty+1);$("qv").textContent=toAr(curQty);upd()};
 function upd(){$("dAdd").textContent="أضف للسلة · "+toAr(priceNum(p)*curQty)+" جنيه"}
