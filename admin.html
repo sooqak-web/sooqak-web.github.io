@@ -312,7 +312,7 @@ saveAreas((ex ? 'edit area ' : 'add area ') + item.id).then(function(){ toast('�
 .catch(function(e){ toast(e.message || 'حصل خطأ', 'err', 8000); loadAreas(); }).then(function(){ busy = false; });
 };
 function openAdmin(key){document.getElementById('adminHome').hidden=!!key;document.querySelectorAll('.pg').forEach(function(p){p.hidden=p.id!=='pg-'+key});window.scrollTo(0,0)}
-document.getElementById('app').addEventListener('click',function(e){var b=e.target.closest('[data-page],[data-home]');if(!b)return;openAdmin(b.hasAttribute('data-home')?'':b.getAttribute('data-page'))});
+document.addEventListener('click',function(e){var b=e.target.closest('[data-page],[data-home]');if(!b)return;e.preventDefault();openAdmin(b.hasAttribute('data-home')?'':b.getAttribute('data-page'))});
 document.getElementById('newProduct').onclick=function(){resetForm();if(merchantFilter&&merchantFilter!=='__none')fillMerchants(merchantFilter);openAdmin('productForm')};
 var units=[],usha='',uEdit=null;
 function fillUnits(value){var sel=document.getElementById('unit');value=value===undefined?sel.value:value;sel.innerHTML='<option value="">بدون وحدة</option>'+units.map(function(u){return '<option value="'+safe(u.name)+'">'+safe(u.emoji||'⚖️')+' '+safe(u.name)+'</option>'}).join('');if(value&&!units.some(function(u){return u.name===value})){var op=document.createElement('option');op.value=value;op.textContent=value;sel.appendChild(op)}sel.value=value||''}
