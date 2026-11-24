@@ -254,6 +254,19 @@ footer a.ph2{display:inline-block;margin-top:8px;color:var(--gold);font-family:v
 @media(min-width:900px){.categorysection{margin-inline:auto}}
 
 .sectionbanner[hidden]{display:none!important}.sectionbanner{margin:16px 12px 0;border-radius:20px;overflow:hidden;background:#eaf3ff;display:grid;grid-template-columns:1fr 46%;min-height:195px;max-width:876px;border:1px solid #d5e5fb;position:relative}.sectionbanner .bannertext{padding:23px 19px;align-self:center;min-width:0}.sectionbanner h2{color:#0A2C61;font-size:24px;line-height:1.5;margin:0 0 7px;overflow-wrap:anywhere}.sectionbanner p{color:#48627f;font-size:14px;line-height:1.8;margin:0 0 14px;overflow-wrap:anywhere}.sectionbanner button{background:#1976D2;color:white;border:0;border-radius:12px;padding:11px 16px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer}.sectionbanner img{width:100%;height:100%;min-height:195px;object-fit:cover;display:block}.chips .chip .em img{width:52px;height:52px;border-radius:15px;object-fit:cover;display:block}.chips .chip:has(.em img){padding-top:9px}.chips .chip .em:has(img){height:52px;width:52px}@media(min-width:900px){.sectionbanner{margin-inline:auto}}@media(max-width:349px){.sectionbanner h2{font-size:20px}.sectionbanner .bannertext{padding:17px 12px}.sectionbanner p{font-size:12px}}
+
+/* Full-width section hero, with readable text over a soft backdrop. */
+.sectionbanner{margin:0;max-width:none;min-height:260px;border:0;border-radius:0;background:#f4ede2;display:flex;align-items:center;isolation:isolate;overflow:hidden}
+.sectionbanner img{position:absolute;inset:0 auto 0 0;width:57%;height:100%;min-height:0;object-fit:cover;object-position:center;z-index:-2}
+.sectionbanner:after{content:"";position:absolute;inset:0;background:linear-gradient(to left,#f4ede2 0%,#f4ede2 44%,rgba(244,237,226,.88) 51%,rgba(244,237,226,0) 65%);z-index:-1;pointer-events:none}
+.sectionbanner .bannertext{width:59%;box-sizing:border-box;margin:0 0 0 auto;padding:30px 20px 30px 12px;align-self:center;text-align:right}
+.sectionbanner .bannercategory{display:block;color:#4b4945;font-size:12px;font-weight:700;margin-bottom:9px}
+.sectionbanner h2{font-size:27px;font-weight:900;line-height:1.5;color:#15263c;margin:0 0 8px}
+.sectionbanner p{font-size:14px;line-height:1.8;color:#494949;margin:0 0 18px}
+.sectionbanner button{background:#1976d2;border-radius:30px;padding:12px 19px;font-size:14px;box-shadow:0 8px 17px #1976d22b;min-height:45px;color:#fff}
+@media(max-width:349px){.sectionbanner{min-height:235px}.sectionbanner .bannertext{padding:24px 14px 24px 8px;width:61%}.sectionbanner h2{font-size:23px}.sectionbanner p{font-size:12px}.sectionbanner button{padding:11px 15px;font-size:13px}}
+@media(min-width:640px){.sectionbanner{min-height:340px}.sectionbanner .bannertext{padding:42px max(32px,calc((100vw - 1100px)/2));padding-left:30px;width:58%}.sectionbanner h2{font-size:42px}.sectionbanner p{font-size:20px}.sectionbanner .bannercategory{font-size:16px}.sectionbanner button{font-size:18px;padding:15px 28px}}
+
 </style>
 </head>
 <body>
@@ -493,7 +506,7 @@ function checkout(){if(checkoutBusy)return;var before=grand(),discount=couponDis
 
 
 var SECTION_BANNER=null;
-function renderSectionBanner(){var el=$('sectionBanner'),b=SECTION_BANNER,m=b&&MERCHANTS.find(function(m){return m.id===b.merchantId});if(!b||!b.enabled||!b.image||!b.title||!m||!badgeActive(b.until)){el.hidden=true;el.innerHTML='';return}el.innerHTML='<div class="bannertext"><h2>'+esc(b.title)+'</h2>'+(b.subtitle?'<p>'+esc(b.subtitle)+'</p>':'')+'<button type="button">'+esc(b.buttonText||'تصفح القسم')+' ‹</button></div><img src="'+esc(b.image)+'" alt="'+esc(m.name)+'">';el.hidden=false;el.querySelector('img').onerror=function(){el.hidden=true};el.querySelector('button').onclick=function(){activeCat=b.merchantId;activeSub='';query='';$('q').value='';$('clr').style.display='none';renderChips();renderGrid();$('categoryTitle').scrollIntoView({behavior:'smooth',block:'start'})}}
+function renderSectionBanner(){var el=$('sectionBanner'),b=SECTION_BANNER,m=b&&MERCHANTS.find(function(m){return m.id===b.merchantId});if(!b||!b.enabled||!b.image||!b.title||!m||!badgeActive(b.until)){el.hidden=true;el.innerHTML='';return}el.innerHTML='<div class="bannertext"><span class="bannercategory">'+esc(m.name)+'</span><h2>'+esc(b.title)+'</h2>'+(b.subtitle?'<p>'+esc(b.subtitle)+'</p>':'')+'<button type="button">'+esc(b.buttonText||'تصفح القسم')+' ←</button></div><img src="'+esc(b.image)+'" alt="'+esc(m.name)+'">';el.hidden=false;el.querySelector('img').onerror=function(){el.hidden=true};el.querySelector('button').onclick=function(){activeCat=b.merchantId;activeSub='';query='';$('q').value='';$('clr').style.display='none';renderChips();renderGrid();$('categoryTitle').scrollIntoView({behavior:'smooth',block:'start'})}}
 fetch('homepage.json?v='+Date.now(),{cache:'no-store'}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(d){SECTION_BANNER=d.banner||null;renderSectionBanner()}).catch(function(){});
 setInterval(renderSectionBanner,60000);document.addEventListener('visibilitychange',function(){if(!document.hidden)renderSectionBanner()});
 </script>
