@@ -154,6 +154,21 @@ footer a.ph2{display:inline-block;margin-top:8px;color:var(--gold);font-family:v
 #floatSummary,#floatSummary b,#floatSummary small{color:#fff;-webkit-text-fill-color:#fff}
 #floatTotal{unicode-bidi:plaintext;font-variant-numeric:tabular-nums}
 #cartFloat .badge{color:#0A2C61;-webkit-text-fill-color:#0A2C61;min-width:22px;width:auto;padding:0 5px;white-space:nowrap}
+
+/* Compact shared rows: reserve optional space only when this grid uses it. */
+#grid{--merchant-row:0px;--review-row:0px;--old-row:0px;--unit-row:0px}
+#grid.has-card-merchants{--merchant-row:17px}
+#grid.has-card-reviews{--review-row:22px}
+#grid.has-card-discounts{--old-row:16px}
+#grid.has-card-units{--unit-row:18px}
+#grid .info{padding:7px 10px 9px;grid-template-rows:36px var(--merchant-row) var(--review-row) calc(27px + var(--old-row) + var(--unit-row)) 36px;gap:2px}
+#grid .nm{height:36px;line-height:18px}
+#grid .cardmerchant>*{font-size:10px;line-height:17px}
+#grid .reviewsummary{font-size:11px;line-height:22px}
+#grid .price{grid-template-rows:var(--old-row) 27px var(--unit-row);line-height:27px;overflow:hidden}
+#grid .oldprice{line-height:16px;font-size:10px}
+#grid .priceunit{line-height:18px;font-size:10px}
+#grid .add,#grid .cardcounter{height:36px;min-height:36px}
 </style>
 </head>
 <body>
@@ -255,6 +270,11 @@ $("secC").textContent=toAr(items.length)+" منتج";
 if(!items.length){
 var sectionName=(MERCHANTS.find(function(m){return m.id===activeCat})||{}).name||"القسم";var msg=q?'ما لقينا "'+esc(query)+'"':'ما في منتجات في '+esc(sectionName)+' حالياً';
 $("grid").innerHTML='<div class="empty"><span class="big">🔍</span>'+msg+'<br>اطلبه منا ونوفّره ليك<br><a target="_blank" rel="noopener" href="'+waLink("مرحباً سوقك، أبحث عن: "+(query||activeCat))+'">اطلب عبر واتساب</a></div>';return}
+['has-card-reviews','has-card-discounts','has-card-units','has-card-merchants'].forEach(function(c){$("grid").classList.remove(c)});
+if(items.some(function(p){return realReviews(p).length}))$("grid").classList.add('has-card-reviews');
+if(items.some(discountInfo))$("grid").classList.add('has-card-discounts');
+if(items.some(function(p){return !!p.unit}))$("grid").classList.add('has-card-units');
+if(items.some(function(p){return !!merchant(p)}))$("grid").classList.add('has-card-merchants');
 $("grid").innerHTML=items.map(function(p){
 return'<div class="card" data-id="'+esc(p.id)+'">'+productBadges(p)+'<div class="ph" data-open="1">'+imgTag(p)+'</div><div class="info"><div class="nm" data-open="1">'+esc(productName(p))+'</div>'+'<div class="cardmerchant">'+merchantHtml(p)+'</div><div class="cardreviews">'+reviewSummary(p)+'</div><div class="price">'+priceHtml(p)+'</div>'+cardControl(p)+'</div></div>'}).join("");
 }
