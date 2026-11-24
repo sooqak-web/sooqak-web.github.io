@@ -1,1 +1,11 @@
-{"banner":null}
+{
+ "banner": {
+  "enabled": false,
+  "title": "",
+  "subtitle": "",
+  "buttonText": "تصفح القسم",
+  "merchantId": "",
+  "image": "images/banner-mwubtvy8-os5au.jpg",
+  "until": ""
+ }
+}
