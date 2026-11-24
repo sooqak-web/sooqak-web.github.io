@@ -252,6 +252,8 @@ footer a.ph2{display:inline-block;margin-top:8px;color:var(--gold);font-family:v
 @media(max-width:349px){#chips{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(min-width:640px){#chips{grid-template-columns:repeat(6,minmax(0,1fr))}}
 @media(min-width:900px){.categorysection{margin-inline:auto}}
+
+.sectionbanner[hidden]{display:none!important}.sectionbanner{margin:16px 12px 0;border-radius:20px;overflow:hidden;background:#eaf3ff;display:grid;grid-template-columns:1fr 46%;min-height:195px;max-width:876px;border:1px solid #d5e5fb;position:relative}.sectionbanner .bannertext{padding:23px 19px;align-self:center;min-width:0}.sectionbanner h2{color:#0A2C61;font-size:24px;line-height:1.5;margin:0 0 7px;overflow-wrap:anywhere}.sectionbanner p{color:#48627f;font-size:14px;line-height:1.8;margin:0 0 14px;overflow-wrap:anywhere}.sectionbanner button{background:#1976D2;color:white;border:0;border-radius:12px;padding:11px 16px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer}.sectionbanner img{width:100%;height:100%;min-height:195px;object-fit:cover;display:block}.chips .chip .em img{width:52px;height:52px;border-radius:15px;object-fit:cover;display:block}.chips .chip:has(.em img){padding-top:9px}.chips .chip .em:has(img){height:52px;width:52px}@media(min-width:900px){.sectionbanner{margin-inline:auto}}@media(max-width:349px){.sectionbanner h2{font-size:20px}.sectionbanner .bannertext{padding:17px 12px}.sectionbanner p{font-size:12px}}
 </style>
 </head>
 <body>
@@ -269,6 +271,7 @@ footer a.ph2{display:inline-block;margin-top:8px;color:var(--gold);font-family:v
 </div>
 </header>
 
+<section id="sectionBanner" class="sectionbanner" hidden aria-label="إعلان القسم"></section>
 <div class="deal" id="deal"></div>
 <button class="reorder" id="reorder"></button>
 <section class="categorysection" aria-labelledby="categoryTitle"><div class="categoryhead"><h2 id="categoryTitle">تصفح حسب الفئة</h2><button type="button" id="categoryAll">عرض الكل ‹</button></div><div class="chips" id="chips"></div></section><div class="chips" id="subchips" hidden aria-label="التصنيفات الفرعية"></div>
@@ -333,7 +336,7 @@ function imgTag(p,eager){if(!p.img)return'<div class="noimg">🛍️</div>';retu
 function categoryIcon(name){return /صيدل|دواء/.test(name)?'pharmacy':/خضار|فاكه/.test(name)?'vegetables':/بوتيك|ملابس/.test(name)?'clothes':/جملة/.test(name)?'wholesale':'store'}
 /* chips */
 function renderChips(){
-var list=[["","الكل",shopIcon("store")]].concat((MERCHANTS||[]).map(function(m){return[m.id,m.name,shopIcon(m.icon||categoryIcon(m.name),esc(m.emoji||"🏪"))]}));
+var list=[["","الكل",shopIcon("store")]].concat((MERCHANTS||[]).map(function(m){return[m.id,m.name,m.image?'<img loading="lazy" src="'+esc(m.image)+'" alt="" onerror="this.replaceWith(document.createTextNode(\'◈\'))">':shopIcon(m.icon||categoryIcon(m.name),esc(m.emoji||"🏪"))]}));
 $("chips").innerHTML=list.map(function(c){return'<button class="chip'+(c[0]===activeCat?" on":"")+'" data-c="'+esc(c[0])+'"><span class="em">'+c[2]+'</span>'+esc(c[1])+'</button>'}).join("");renderSubchips();
 }
 $('categoryAll').onclick=function(){activeCat='';activeSub='';query='';$('q').value='';$('clr').style.display='none';renderChips();renderGrid()};
@@ -467,7 +470,7 @@ renderChips();renderGrid();updateBadge();save()}
 try{var cached=JSON.parse(localStorage.getItem("sooqak_products")||"null");if(cached&&cached.length)applyProducts(cached)}catch(e){}
 fetch("products.json?v="+Date.now(),{cache:"no-store"}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(l){try{localStorage.setItem("sooqak_products",JSON.stringify(l))}catch(e){}applyProducts(l);var m=location.hash.match(/^#p\/(.+)$/);if(m)openDetail(decodeURIComponent(m[1]))}).catch(function(){if(!PRODUCTS.length){renderChips();$("grid").innerHTML='<div class="empty"><span class="big">📶</span>تعذّر تحميل المنتجات. تأكد من الشبكة وحدّث الصفحة.</div>'}});
 fetch("deals.json?v="+Date.now(),{cache:"no-store"}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(d){try{localStorage.setItem("sooqak_deals",JSON.stringify(d))}catch(e){}DEALS=d;dealsLoaded=true;applyProducts(RAWP);if($("pCart").classList.contains("open"))renderCart(true);if(curId&&$("pDetail").classList.contains("open"))openDetail(curId)}).catch(function(){});
-fetch("merchants.json?v="+Date.now(),{cache:"no-store"}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(d){MERCHANTS=d;renderChips();try{localStorage.setItem("sooqak_merchants",JSON.stringify(d))}catch(e){}renderGrid();if(curId&&$("pDetail").classList.contains("open"))openDetail(curId)}).catch(function(){});
+fetch("merchants.json?v="+Date.now(),{cache:"no-store"}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(d){MERCHANTS=d;renderChips();renderSectionBanner();try{localStorage.setItem("sooqak_merchants",JSON.stringify(d))}catch(e){}renderGrid();if(curId&&$("pDetail").classList.contains("open"))openDetail(curId)}).catch(function(){});
 fetch("subcategories.json?v="+Date.now(),{cache:"no-store"}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(d){SUBCATEGORIES=d;renderSubchips();renderGrid()}).catch(function(){});
 function applyAreas(l){AREAS=(l||[]).filter(function(a){return a&&a.name});if(!curArea())AREA="";if($("pCart").classList.contains("open"))renderCart(true)}
 fetch("areas.json?v="+Date.now(),{cache:"no-store"}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(l){try{localStorage.setItem("sooqak_areas",JSON.stringify(l))}catch(e){}applyAreas(l)}).catch(function(){});
@@ -488,6 +491,11 @@ fetchCoupons().then(function(){if($('pCart').classList.contains('open'))renderCa
 var checkoutBusy=false;
 function checkout(){if(checkoutBusy)return;var before=grand(),discount=couponDiscount();checkoutBusy=true;var btn=$('checkout');if(btn){btn.disabled=true;btn.textContent='جاري تحديث السعر والخصم...'}Promise.all([fetchCoupons(),fetch('products.json?v='+Date.now(),{cache:'no-store'}).then(function(r){if(!r.ok)throw Error();return r.json()}),fetch('deals.json?v='+Date.now(),{cache:'no-store'}).then(function(r){if(!r.ok)throw Error();return r.json()})]).then(function(v){DEALS=v[2];applyProducts(v[1]);renderCart(true);if(before!==grand()||discount!==couponDiscount()){toast('اتحدث السعر أو الخصم. راجع الإجمالي واضغط تأكيد تاني');return}checkoutReady()}).catch(function(){toast('تعذر التحقق من السعر والخصم. تأكد من الشبكة وحاول تاني')}).then(function(){checkoutBusy=false;var btn=$('checkout');if(btn){btn.disabled=false;btn.innerHTML=WA+'أكّد الطلب عبر واتساب'}})}
 
+
+var SECTION_BANNER=null;
+function renderSectionBanner(){var el=$('sectionBanner'),b=SECTION_BANNER,m=b&&MERCHANTS.find(function(m){return m.id===b.merchantId});if(!b||!b.enabled||!b.image||!b.title||!m||!badgeActive(b.until)){el.hidden=true;el.innerHTML='';return}el.innerHTML='<div class="bannertext"><h2>'+esc(b.title)+'</h2>'+(b.subtitle?'<p>'+esc(b.subtitle)+'</p>':'')+'<button type="button">'+esc(b.buttonText||'تصفح القسم')+' ‹</button></div><img src="'+esc(b.image)+'" alt="'+esc(m.name)+'">';el.hidden=false;el.querySelector('img').onerror=function(){el.hidden=true};el.querySelector('button').onclick=function(){activeCat=b.merchantId;activeSub='';query='';$('q').value='';$('clr').style.display='none';renderChips();renderGrid();$('categoryTitle').scrollIntoView({behavior:'smooth',block:'start'})}}
+fetch('homepage.json?v='+Date.now(),{cache:'no-store'}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(d){SECTION_BANNER=d.banner||null;renderSectionBanner()}).catch(function(){});
+setInterval(renderSectionBanner,60000);document.addEventListener('visibilitychange',function(){if(!document.hidden)renderSectionBanner()});
 </script>
 </body>
 </html>
