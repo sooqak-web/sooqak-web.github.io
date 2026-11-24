@@ -6,7 +6,10 @@
   "img": "images/pmwt8u2pk-mwt8u2t9.jpg",
   "cat": "خضار",
   "badge": "",
-  "merchantId": "mmwt9ple4"
+  "weight": "1",
+  "unit": "كيلو",
+  "merchantId": "mmwt9ple4",
+  "subcategoryId": ""
  },
  {
   "id": "pmwt8uryx",
