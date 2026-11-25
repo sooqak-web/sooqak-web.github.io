@@ -147,5 +147,19 @@
   "unit": "",
   "merchantId": "mmwt9rw3z",
   "subcategoryId": ""
+ },
+ {
+  "id": "pmwvldgdq",
+  "name": "مزيل دوف شمعي",
+  "price": "20300",
+  "img": "images/pmwvldgdq-mwvldggh.jpg",
+  "cat": "بوتيك",
+  "badge": "",
+  "isNew": true,
+  "newUntil": "2026-11-30",
+  "weight": "",
+  "unit": "",
+  "merchantId": "mmwt9rw3z",
+  "subcategoryId": ""
  }
 ]
