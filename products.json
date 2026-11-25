@@ -91,5 +91,19 @@
   "unit": "",
   "merchantId": "mmwt9rw3z",
   "subcategoryId": ""
+ },
+ {
+  "id": "pmwvlaxip",
+  "name": "لوشن نيفيا",
+  "price": "40900",
+  "img": "images/pmwvlaxip-mwvlaxlo.jpg",
+  "cat": "بوتيك",
+  "badge": "",
+  "isNew": true,
+  "newUntil": "2026-11-30",
+  "weight": "",
+  "unit": "",
+  "merchantId": "mmwt9rw3z",
+  "subcategoryId": ""
  }
 ]
