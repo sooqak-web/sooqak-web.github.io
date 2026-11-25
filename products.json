@@ -175,5 +175,19 @@
   "unit": "",
   "merchantId": "mmwt9rw3z",
   "subcategoryId": ""
+ },
+ {
+  "id": "pmwvlespf",
+  "name": "كريم دوف كبير",
+  "price": "40700",
+  "img": "images/pmwvlespf-mwvlesst.jpg",
+  "cat": "بوتيك",
+  "badge": "",
+  "isNew": true,
+  "newUntil": "2026-11-30",
+  "weight": "",
+  "unit": "",
+  "merchantId": "mmwt9rw3z",
+  "subcategoryId": ""
  }
 ]
