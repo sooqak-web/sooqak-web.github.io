@@ -1,16 +1,16 @@
 [
  {
-  "code": "SD40",
-  "type": "percent",
-  "value": 50,
-  "until": "2026-11-30",
-  "enabled": true
- },
- {
   "code": "SD15",
   "type": "percent",
   "value": 15,
   "until": "",
+  "enabled": false
+ },
+ {
+  "code": "SD40",
+  "type": "percent",
+  "value": 50,
+  "until": "2026-11-30",
   "enabled": false
  }
 ]
