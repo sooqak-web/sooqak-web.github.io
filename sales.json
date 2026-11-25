@@ -1,0 +1,13 @@
+{
+ "orders": [
+  {
+   "code": "TEST-001",
+   "day": "2026-11-25",
+   "items": {
+    "pmwvlcust": 1,
+    "pmwvlhgw0": 1
+   },
+   "total": 56800
+  }
+ ]
+}
