@@ -74,6 +74,62 @@ button:active{transform:scale(.97)}
 .costep button{width:34px;height:34px;padding:0;background:#fff;border:1px solid #d3e0f2;color:#1265b8;font-size:1.15rem;border-radius:10px;line-height:1}
 .costep span{min-width:26px;text-align:center;font-weight:800}
 .coTotal{margin-top:12px;background:#eef5ff;border:1px dashed #b1cff2;border-radius:12px;padding:11px 12px;font-weight:800;text-align:center}
+
+/* ===== redesign v3: clean dashboard ===== */
+:root{--ink:#0b1f3f;--mut:#64748b;--blue:#1976d2;--blue2:#1259a8;--line:#e3e9f2;--bg:#f4f6fa}
+body{background:var(--bg)!important;color:var(--ink);font-size:15px}
+header{background:var(--ink)!important;padding:10px 16px!important;box-shadow:none!important;display:flex;align-items:center;justify-content:space-between;gap:10px;border-bottom:3px solid var(--blue)}
+.brandmark{gap:10px!important}.brandmark img{height:38px;width:auto}
+.brandmark span{background:#ffffff1c!important;font-size:.78rem!important;padding:4px 12px!important}
+header small{font-size:.72rem!important;color:#9db4d6!important;font-weight:500;display:block}
+main{max-width:1080px!important;padding:20px 16px 56px!important}
+.homehead{margin:4px 0 18px}.homehead h1{font-size:1.5rem;margin:0}.homehead .hint{font-size:.95rem;margin:2px 0 0;color:var(--mut)}
+.tgroups{display:grid;grid-template-columns:1fr;gap:20px}
+.tgroup h3{margin:0 0 8px;font-size:.78rem;letter-spacing:.04em;color:var(--mut);font-weight:700;display:flex;align-items:center;gap:8px}
+.tgroup h3:after{content:'';flex:1;height:1px;background:var(--line)}
+.tiles{display:grid!important;grid-template-columns:1fr!important;gap:8px!important;margin:0!important}
+.tile{display:flex!important;align-items:center;gap:14px;text-align:right;background:#fff!important;border:1px solid var(--line)!important;border-radius:16px!important;padding:12px 14px!important;box-shadow:0 1px 2px #0b1f3f0a!important;overflow:visible!important;color:var(--ink)!important;transition:border-color .15s,box-shadow .15s,transform .1s}
+.tile:before{display:none!important}
+.tile:hover{transform:none!important;border-color:#b9d3f3!important;box-shadow:0 4px 14px #0b1f3f12!important}
+.tile i{flex:none;width:46px!important;height:46px!important;line-height:0!important;margin:0!important;border-radius:14px!important;display:grid!important;place-items:center;box-shadow:none!important;background:#e8f1fc!important;color:var(--blue)}
+.tile i svg{width:24px;height:24px}
+.tile.c2 i{background:#fff3d6!important;color:#a86f00}.tile.c3 i{background:#e3f6ec!important;color:#15803d}.tile.c4 i{background:#eceff5!important;color:#475569}
+.tile .tt{flex:1;min-width:0}.tile b{display:block!important;font-size:1rem!important;font-weight:700}.tile small{display:block!important;font-size:.78rem!important;margin:0!important;color:var(--mut)!important}
+.tile em{font-style:normal;font-size:1.6rem;color:#a7b4c8;line-height:1}
+.pg{max-width:760px;margin:0 auto}
+.card{background:#fff;border:1px solid var(--line)!important;border-radius:18px!important;box-shadow:0 1px 3px #0b1f3f0d!important;padding:20px!important}
+.card h2{font-size:1.12rem!important}
+.card h2:before{width:4px!important;height:20px!important;background:var(--blue)!important}
+.back{display:inline-flex;align-items:center;gap:6px;background:#fff!important;border:1px solid var(--line)!important;border-radius:12px!important;padding:8px 14px!important;font-size:.88rem;box-shadow:none!important;color:var(--ink)}
+label{font-size:.86rem!important;color:#27395a}
+input,select,textarea{background:#fff!important;border:1.5px solid #d5deeb!important;border-radius:12px!important}
+input:focus,select:focus,textarea:focus{border-color:var(--blue)!important;box-shadow:0 0 0 4px #1976d21a!important}
+.primary{background:var(--blue)!important;color:#fff!important;border-radius:13px!important;box-shadow:none!important}
+.primary:hover{background:var(--blue2)!important}
+.ghost{background:#eef3fa!important;border:0!important;color:var(--ink)}
+.danger{background:#fff!important;color:#b3261e!important;border:1px solid #f0c4c1!important}
+.row{border-top:1px solid #edf1f7!important}
+.row img{border:1px solid var(--line);background:#fff}
+.hint{color:var(--mut)!important}
+.mf{background:#fff!important;border:1.5px solid var(--line)!important;border-radius:14px!important}.mf.on{border-color:var(--blue)!important;background:#eaf3ff!important;border-bottom:1.5px solid var(--blue)!important}
+.salestat{background:#f7f9fd!important;border:1px solid var(--line)!important;border-radius:14px!important}
+#msg{border-radius:12px!important;font-size:.9rem}
+@media(min-width:760px){
+ .tgroups{grid-template-columns:1fr 1fr;gap:26px 24px}
+ header{padding:12px 32px!important}
+ .salesummary{gap:14px}
+}
+
+
+.bulkopen{width:100%;margin-top:10px;min-height:48px}
+.bulkpick{min-height:110px}
+.bulkrow{display:flex;gap:10px;align-items:center;border:1px solid var(--line);border-radius:14px;padding:10px;margin-top:10px;background:#fbfcfe}
+.bulkrow img{width:78px;height:78px;object-fit:cover;border-radius:12px;flex:none;background:#fff;border:1px solid var(--line)}
+.bulkrow .bf{flex:1;min-width:0;display:grid;gap:8px}.bulkrow .bf input{min-height:44px;margin:0}
+.bulkrow .bx{width:38px;height:38px;padding:0;flex:none;border-radius:50%!important}
+body>.pg{max-width:792px;margin:0 auto;padding:20px 16px 56px}
+main{padding-bottom:0!important}#app{padding-bottom:56px}#noKey{margin-bottom:56px}
+.primary:disabled{background:#c5d3e8!important;color:#fff!important;cursor:not-allowed}
 </style>
 </head>
 <body>
@@ -85,10 +141,16 @@ button:active{transform:scale(.97)}
 </div>
 
 <div id="app" style="display:none">
-<div id="adminHome"><h1>إدارة سوقك</h1><p class="hint">اختار القسم العايز تعدّله</p><div class="tiles"><button class="tile" data-page="products"><i>🛍️</i><b>المنتجات</b><small>حسب التاجر</small></button><button class="tile" data-page="merchants"><i>🏪</i><b>الأقسام</b><small>اسم وصورة وأيقونة</small></button><button class="tile" data-page="deals"><i>🔥</i><b>العروض</b><small>أضف عرض جديد</small></button><button class="tile" data-page="homepage"><i>▧</i><b>إعلان الرئيسية</b><small>صورة وزر للقسم</small></button><button class="tile" data-page="coupons"><i>🎟️</i><b>أكواد الخصم</b><small>نسبة أو مبلغ</small></button><button class="tile" data-page="areas"><i>🗺️</i><b>مناطق التوصيل</b><small>المناطق والأسعار</small></button><button class="tile" data-page="units"><i>⚖️</i><b>الأوزان والوحدات</b><small>كيلو، رطل، قطعة...</small></button><button class="tile" data-page="stats"><i>📊</i><b>الزوار والطلبات</b><small>أرقام الموقع الحية</small></button><button class="tile" data-page="confirm"><i>✅</i><b>تأكيد طلب</b><small>سجّل طلب اتأكد</small></button><button class="tile" data-page="sales"><i>📈</i><b>المبيعات</b><small>المباع من كل منتج</small></button><button class="tile" data-page="ordercode"><i>🔢</i><b>كود الطلب</b><small>البادئة والترقيم</small></button></div><p class="hint" style="text-align:center;margin-top:18px">بعد الحفظ، التغيير بيظهر في الموقع خلال حوالي دقيقة. حدّث الصفحة في الموقع عشان تشوفو.</p></div><section class="pg" id="pg-products" hidden><button class="back" type="button" data-home>→ رجوع</button><div class="card">
+<div id="adminHome"><div class="homehead"><h1>إدارة سوقك</h1><p class="hint">اختار القسم العايز تديره</p></div><div class="tgroups"><div class="tgroup"><h3>المتجر</h3><div class="tiles"><button class="tile c1" data-page="products"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7l2-3h12l2 3v2a2 2 0 01-2 2 2 2 0 01-2-1.5A2 2 0 0112 11a2 2 0 01-2-1.5A2 2 0 018 11a2 2 0 01-2-2 2 2 0 01-2-2zM5 12v8h14v-8"/></svg></i><span class="tt"><b>المنتجات</b><small>حسب التاجر</small></span><em>‹</em></button><button class="tile c1" data-page="merchants"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z"/></svg></i><span class="tt"><b>الأقسام</b><small>اسم وصورة وأيقونة</small></span><em>‹</em></button><button class="tile c1" data-page="units"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v16M6 20h12M5 7h14M5 7l-2 6a3 3 0 006 0zM19 7l-2 6a3 3 0 006 0z"/></svg></i><span class="tt"><b>الأوزان والوحدات</b><small>كيلو، رطل، قطعة</small></span><em>‹</em></button></div></div><div class="tgroup"><h3>التسويق</h3><div class="tiles"><button class="tile c2" data-page="deals"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c1 3 4 4.5 4 8a4 4 0 01-8 0c0-1.5.5-2.500 1.500-3.500C10 9 11 8 11 6c0-1 .5-2 1-3zM12 21a6 6 0 006-6"/></svg></i><span class="tt"><b>العروض</b><small>أضف عرض جديد</small></span><em>‹</em></button><button class="tile c2" data-page="homepage"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="12" rx="2"/><path d="M3 14l5-4 4 3 3-2 6 4M8 20h8"/></svg></i><span class="tt"><b>إعلان الرئيسية</b><small>صورة وزر للقسم</small></span><em>‹</em></button><button class="tile c2" data-page="coupons"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8a2 2 0 002-2h12a2 2 0 002 2v2a2 2 0 000 4v2a2 2 0 00-2 2H6a2 2 0 00-2-2v-2a2 2 0 000-4zM10 9l4 6M10 15h.01M14 9h.01"/></svg></i><span class="tt"><b>أكواد الخصم</b><small>نسبة أو مبلغ</small></span><em>‹</em></button></div></div><div class="tgroup"><h3>الطلبات والأرقام</h3><div class="tiles"><button class="tile c3" data-page="confirm"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l4.500 4.500L19 7"/><rect x="3" y="3" width="18" height="18" rx="4"/></svg></i><span class="tt"><b>تأكيد طلب</b><small>سجّل طلب اتأكد</small></span><em>‹</em></button><button class="tile c3" data-page="sales"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8M15 7h6v6"/></svg></i><span class="tt"><b>المبيعات</b><small>المباع من كل منتج</small></span><em>‹</em></button><button class="tile c3" data-page="stats"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-8M22 20H2"/></svg></i><span class="tt"><b>الزوار والطلبات</b><small>أرقام الموقع الحية</small></span><em>‹</em></button></div></div><div class="tgroup"><h3>الإعدادات</h3><div class="tiles"><button class="tile c4" data-page="areas"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6 7-11a7 7 0 00-14 0c0 5 7 11 7 11z"/><circle cx="12" cy="10" r="2.500"/></svg></i><span class="tt"><b>مناطق التوصيل</b><small>المناطق والأسعار</small></span><em>‹</em></button><button class="tile c4" data-page="ordercode"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4L7 20M17 4l-2 16M4 9h16M3 15h16"/></svg></i><span class="tt"><b>كود الطلب</b><small>البادئة والترقيم</small></span><em>‹</em></button></div></div></div><p class="hint" style="text-align:center;margin-top:18px">بعد الحفظ، التغيير بيظهر في الموقع خلال حوالي دقيقة. حدّث الصفحة في الموقع عشان تشوفو.</p></div><section class="pg" id="pg-products" hidden><button class="back" type="button" data-home>→ رجوع</button><div class="card">
 <h2>المنتجات الحالية (<span id="count">0</span>)</h2>
 <div class="mfilters" id="mfilter"></div><div id="list">جاري التحميل...</div>
-</div><button class="primary" id="newProduct">+ إضافة منتج جديد</button></section><section class="pg" id="pg-productForm" hidden><button class="back" data-page="products">→ رجوع للمنتجات</button><div class="card">
+</div><button class="primary" id="newProduct">+ إضافة منتج جديد</button><button class="ghost bulkopen" id="bulkOpen" type="button">🖼️ إضافة عدة منتجات بصور دفعة واحدة</button></section><section class="pg" id="pg-bulk" hidden><button class="back" type="button" data-page="products">→ رجوع للمنتجات</button><div class="card"><h2>إضافة عدة منتجات</h2><p class="hint">اختار كل الصور مرة واحدة، اكتب اسم وسعر كل صورة، وارفعهم كلهم بضغطة وحدة.</p>
+<label for="bulkMerchant">القسم <small>مطلوب</small></label><select id="bulkMerchant"></select>
+<label for="bulkUnit">السعر مقابل <small>اختياري، لكل المنتجات</small></label><select id="bulkUnit"></select>
+<label for="bulkFiles" class="photopick bulkpick"><span><svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 7h5l2-3h4l2 3h5v14H3z"/><circle cx="12" cy="13" r="4"/></svg><b>اختار الصور</b><small>تقدر تختار أكثر من صورة، ومرة ثانية تضيف عليها</small></span></label><input accept="image/*" id="bulkFiles" type="file" multiple class="visuallyhidden">
+<div id="bulkList"></div><div class="coTotal" id="bulkCount" hidden></div>
+<button class="primary" id="bulkSave" type="button" disabled>✓ رفع كل المنتجات</button></div></section>
+<section class="pg" id="pg-productForm" hidden><button class="back" data-page="products">→ رجوع للمنتجات</button><div class="card">
 <h2 id="formTitle">إضافة منتج جديد</h2>
 <p class="editorintro">صورة، اسم، سعر... ومنتجك جاهز</p><form id="form">
 <label for="photo" class="photopick"><span id="photoPrompt"><svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 7h5l2-3h4l2 3h5v14H3z"/><circle cx="12" cy="13" r="4"/></svg><b>أضف صورة المنتج</b><small>من المعرض أو الكاميرا · اختياري</small></span><img alt="معاينة صورة المنتج" id="preview"/></label><input accept="image/*" id="photo" type="file" class="visuallyhidden"><button type="button" class="photoreplace" id="changePhoto" hidden>تغيير الصورة</button>
@@ -468,6 +530,24 @@ document.getElementById('salesOrders').addEventListener('click',function(e){var 
 document.getElementById('salesRefresh').onclick=function(){salesLoaded=false;loadSales(true);toast('جاري التحديث...','info')};
 document.querySelector('[data-page="sales"]').addEventListener('click',function(){loadSales()});
 document.querySelector('[data-page="confirm"]').addEventListener('click',function(){loadSales();coRenderItems()});
+
+var bulkItems=[];
+function bulkRender(){var el=document.getElementById('bulkList');el.innerHTML=bulkItems.map(function(b,i){return '<div class="bulkrow"><img src="'+b.url+'" alt=""><div class="bf"><input data-bn="'+i+'" value="'+safe(b.name)+'" maxlength="80" placeholder="اسم المنتج"><div class="pricefield"><input data-bp="'+i+'" value="'+safe(b.price)+'" inputmode="numeric" type="number" min="0" step="1" placeholder="السعر"><span>جنيه</span></div></div><button type="button" class="danger bx" data-bd="'+i+'" aria-label="حذف">✕</button></div>'}).join('');var c=document.getElementById('bulkCount');c.hidden=!bulkItems.length;c.textContent=bulkItems.length+' منتج جاهز للرفع';document.getElementById('bulkSave').disabled=!bulkItems.length}
+function bulkOpenPage(){bulkItems=[];bulkRender();document.getElementById('bulkFiles').value='';var m=document.getElementById('bulkMerchant');m.innerHTML='<option value="">اختر القسم</option>'+merchants.map(function(x){return '<option value="'+safe(x.id)+'">'+safe(x.emoji||'🏪')+' '+safe(x.name)+'</option>'}).join('');if(merchantFilter&&merchantFilter!=='__none')m.value=merchantFilter;document.getElementById('bulkUnit').innerHTML='<option value="">بدون وحدة</option>'+units.map(function(u){return '<option value="'+safe(u.name)+'">'+safe(u.name)+'</option>'}).join('');openAdmin('bulk')}
+document.getElementById('bulkOpen').onclick=bulkOpenPage;
+document.getElementById('bulkFiles').onchange=function(){Array.prototype.forEach.call(this.files,function(f){if(bulkItems.length<30&&!bulkItems.some(function(x){return x.file.name===f.name&&x.file.size===f.size&&x.file.lastModified===f.lastModified}))bulkItems.push({file:f,url:URL.createObjectURL(f),name:'',price:''})});this.value='';bulkRender()};
+document.getElementById('bulkList').addEventListener('input',function(e){var t=e.target;if(t.hasAttribute('data-bn'))bulkItems[+t.getAttribute('data-bn')].name=t.value;if(t.hasAttribute('data-bp'))bulkItems[+t.getAttribute('data-bp')].price=t.value});
+document.getElementById('bulkList').addEventListener('click',function(e){var b=e.target.closest('[data-bd]');if(!b)return;bulkItems.splice(+b.getAttribute('data-bd'),1);bulkRender()});
+document.getElementById('bulkSave').onclick=function(){
+if(busy)return;var mid=document.getElementById('bulkMerchant').value;
+if(!mid){toast('اختار القسم أولاً','err',5000);return}
+for(var i=0;i<bulkItems.length;i++){var b=bulkItems[i];if(!b.name.trim()||b.price===''||!/^\d+$/.test(String(b.price).trim())){toast('اكمل اسم وسعر الصورة رقم '+(i+1)+' (السعر أرقام فقط)','err',6000);return}}
+var m=merchants.find(function(x){return x.id===mid}),unit=document.getElementById('bulkUnit').value,btn=document.getElementById('bulkSave'),stamp=Date.now().toString(36),list=bulkItems.slice();
+busy=true;btn.disabled=true;var added=[],n=0;
+function step(k){if(k>=list.length)return Promise.resolve();toast('جاري رفع الصورة '+(k+1)+' من '+list.length+'...','info');btn.textContent='جاري الرفع '+(k+1)+'/'+list.length;
+return resizeImage(list[k].file).then(function(b64){var id='p'+stamp+k,path='images/'+id+'-'+Date.now().toString(36)+'.jpg';return putFile(path,b64,'photo '+id).then(function(){added.push({id:id,name:list[k].name.trim(),price:String(parseInt(list[k].price,10)),img:path,cat:m?m.name:'',badge:'',weight:'',unit:unit,merchantId:mid,subcategoryId:''})})}).then(function(){return step(k+1)})}
+step(0).then(function(){added.forEach(function(p){products.push(p)});return saveProducts('bulk add '+added.length)}).then(function(){toast('تم رفع '+added.length+' منتج ✓ بتظهر في الموقع خلال دقيقة','ok',7000);bulkItems=[];bulkRender();render();openAdmin('products')}).catch(function(e){toast((e.message||'حصل خطأ')+' (لو وقف في النص، حدّث الصفحة وراجع المنتجات)','err',9000);load()}).then(function(){busy=false;btn.textContent='✓ رفع كل المنتجات';btn.disabled=!bulkItems.length});
+};
 </script>
 </body>
 </html>
