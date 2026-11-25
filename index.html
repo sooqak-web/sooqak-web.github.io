@@ -135,7 +135,7 @@ footer a.ph2{display:inline-block;margin-top:8px;color:var(--gold);font-family:v
 #grid{grid-template-columns:repeat(2,minmax(0,1fr))}
 @media(min-width:700px){#grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
 #grid .card{min-width:0}
-#grid .ph{aspect-ratio:4/3;flex:none;overflow:hidden;background:#fff}
+#grid .ph{aspect-ratio:1/1;flex:none;overflow:hidden;background:#fff}
 #grid .ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
 #grid .info{display:grid;grid-template-rows:40px 22px 26px 72px 38px;gap:3px;flex:none}
 #grid .nm{min-height:0;height:40px;line-height:20px;overflow-wrap:anywhere}
@@ -146,7 +146,7 @@ footer a.ph2{display:inline-block;margin-top:8px;color:var(--gold);font-family:v
 #grid .price{display:grid;grid-template-rows:18px 32px 22px;line-height:32px;min-width:0}
 #grid .price:before{content:'';grid-row:1;grid-column:1}
 #grid .oldprice{grid-row:1;grid-column:1;line-height:18px}
-#grid .currentprice{grid-row:2;grid-column:1;white-space:nowrap;font-size:clamp(15px,4.6vw,20px)}
+#grid .currentprice{grid-row:2;grid-column:1;white-space:nowrap;font-size:clamp(13px,4vw,18px)}
 #grid .priceunit{grid-row:3;grid-column:1;line-height:22px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
 #grid .add,#grid .cardcounter{margin:0;height:38px;min-height:38px;width:100%}
 
@@ -162,14 +162,14 @@ footer a.ph2{display:inline-block;margin-top:8px;color:var(--gold);font-family:v
 #grid.has-card-reviews{--review-row:22px}
 #grid.has-card-discounts{--old-row:16px}
 #grid.has-card-units{--unit-row:18px}
-#grid .info{padding:6px 9px 8px;grid-template-rows:40px var(--merchant-row) var(--review-row) calc(30px + var(--old-row) + var(--unit-row)) 36px;gap:2px}
-#grid .nm{height:40px;line-height:20px;font-size:15.5px}
-#grid .cardmerchant>*{font-size:11px;line-height:17px}
-#grid .reviewsummary{font-size:12px;line-height:22px}
-#grid .price{grid-template-rows:var(--old-row) 30px var(--unit-row);line-height:30px;overflow:hidden}
-#grid .oldprice{line-height:16px;font-size:11px}
-#grid .priceunit{line-height:18px;font-size:11px}
-#grid .add,#grid .cardcounter{height:36px;min-height:36px;font-size:15px}
+#grid .info{padding:7px 10px 9px;grid-template-rows:36px var(--merchant-row) var(--review-row) calc(27px + var(--old-row) + var(--unit-row)) 36px;gap:2px}
+#grid .nm{height:36px;line-height:18px}
+#grid .cardmerchant>*{font-size:10px;line-height:17px}
+#grid .reviewsummary{font-size:11px;line-height:22px}
+#grid .price{grid-template-rows:var(--old-row) 27px var(--unit-row);line-height:27px;overflow:hidden}
+#grid .oldprice{line-height:16px;font-size:10px}
+#grid .priceunit{line-height:18px;font-size:10px}
+#grid .add,#grid .cardcounter{height:36px;min-height:36px}
 
 .dprice{display:flex;flex-direction:column;align-items:flex-start;gap:3px;line-height:1.6}
 .dprice .currentprice{display:block;white-space:nowrap}
