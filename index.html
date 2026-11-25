@@ -460,13 +460,13 @@ $("qp").onclick=function(){curQty=Math.min(99,curQty+1);$("qv").textContent=toAr
 function upd(){$("dAdd").textContent="أضف للسلة · "+toAr(priceNum(p)*curQty)+" جنيه"}
 upd();$("pDetail").classList.add("open");$("pDetail").scrollTop=0;document.body.style.overflow="hidden";
 if(location.hash!=="#p/"+id)history.pushState({v:"d"},"","#p/"+id)}
-$("dAdd").onclick=function(){if(curId){addToCart(curId,curQty);closePages(true)}};
+$("dAdd").onclick=function(){if(curId){addToCart(curId,curQty);if(location.hash)history.back();else closePages(true)}};
 function openCart(){renderCart();$("pCart").classList.add("open");$("pCart").scrollTop=0;document.body.style.overflow="hidden";if(location.hash!=="#cart")history.pushState({v:"c"},"","#cart")}
 function closePages(fromBtn){$("pDetail").classList.remove("open");$("pCart").classList.remove("open");document.body.style.overflow="";if(location.hash&&fromBtn!==2)history.replaceState(null,"",location.pathname+location.search)}
 $("cartFloat").onclick=openCart;
-$("dBack").onclick=function(){closePages(true)};
-$("cBack").onclick=function(){closePages(true)};
-window.addEventListener("popstate",function(){var h=location.hash;if(h==="#cart"){renderCart();$("pDetail").classList.remove("open");$("pCart").classList.add("open")}else if(h.indexOf("#p/")===0){}else closePages(2)});
+$("dBack").onclick=function(){if(location.hash)history.back();else closePages(true)};
+$("cBack").onclick=function(){if(location.hash)history.back();else closePages(true)};
+window.addEventListener("popstate",function(){var h=location.hash;if(h==="#cart"){renderCart();$("pDetail").classList.remove("open");$("pCart").classList.add("open")}else if(h.indexOf("#p/")===0){$("pCart").classList.remove("open");openDetail(decodeURIComponent(h.slice(3)))}else closePages(2)});
 
 /* load products */
 var RAWP=[],DEALS=[],dealsLoaded=false,activeMerchant="";
