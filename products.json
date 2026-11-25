@@ -1,19 +1,5 @@
 [
  {
-  "id": "pmwt8u2pk",
-  "name": "طماطم",
-  "price": "8000",
-  "img": "images/pmwt8u2pk-mwt8u2t9.jpg",
-  "cat": "خضار",
-  "badge": "",
-  "discountUntil": "2026-11-25",
-  "weight": "",
-  "unit": "كيلو",
-  "merchantId": "mmwt9ple4",
-  "subcategoryId": "",
-  "salePrice": "7000"
- },
- {
   "id": "pmwt8uryx",
   "name": "دقيق سيقا",
   "price": "9500",
