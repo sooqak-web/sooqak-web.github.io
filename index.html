@@ -349,7 +349,7 @@ function imgTag(p,eager){if(!p.img)return'<div class="noimg">🛍️</div>';retu
 function categoryIcon(name){return /صيدل|دواء/.test(name)?'pharmacy':/خضار|فاكه/.test(name)?'vegetables':/بوتيك|ملابس/.test(name)?'clothes':/جملة/.test(name)?'wholesale':'store'}
 /* chips */
 function renderChips(){
-var list=[["","الكل",shopIcon("store")]].concat((MERCHANTS||[]).map(function(m){return[m.id,m.name,m.image?'<img loading="lazy" src="'+esc(m.image)+'" alt="" onerror="this.replaceWith(document.createTextNode(\'◈\'))">':shopIcon(m.icon||categoryIcon(m.name),esc(m.emoji||"🏪"))]}));
+var list=[["","الكل",ALL_IMAGE?'<img loading="lazy" src="'+esc(ALL_IMAGE)+'" alt="" onerror="this.replaceWith(document.createTextNode(\'◈\'))">':shopIcon("store")]].concat((MERCHANTS||[]).map(function(m){return[m.id,m.name,m.image?'<img loading="lazy" src="'+esc(m.image)+'" alt="" onerror="this.replaceWith(document.createTextNode(\'◈\'))">':shopIcon(m.icon||categoryIcon(m.name),esc(m.emoji||"🏪"))]}));
 $("chips").innerHTML=list.map(function(c){return'<button class="chip'+(c[0]===activeCat?" on":"")+'" data-c="'+esc(c[0])+'"><span class="em">'+c[2]+'</span>'+esc(c[1])+'</button>'}).join("");renderSubchips();
 }
 $('categoryAll').onclick=function(){activeCat='';activeSub='';query='';$('q').value='';$('clr').style.display='none';renderChips();renderGrid()};
@@ -505,9 +505,9 @@ var checkoutBusy=false;
 function checkout(){if(checkoutBusy)return;var before=grand(),discount=couponDiscount();checkoutBusy=true;var btn=$('checkout');if(btn){btn.disabled=true;btn.textContent='جاري تحديث السعر والخصم...'}Promise.all([fetchCoupons(),fetch('products.json?v='+Date.now(),{cache:'no-store'}).then(function(r){if(!r.ok)throw Error();return r.json()}),fetch('deals.json?v='+Date.now(),{cache:'no-store'}).then(function(r){if(!r.ok)throw Error();return r.json()})]).then(function(v){DEALS=v[2];applyProducts(v[1]);renderCart(true);if(before!==grand()||discount!==couponDiscount()){toast('اتحدث السعر أو الخصم. راجع الإجمالي واضغط تأكيد تاني');return}checkoutReady()}).catch(function(){toast('تعذر التحقق من السعر والخصم. تأكد من الشبكة وحاول تاني')}).then(function(){checkoutBusy=false;var btn=$('checkout');if(btn){btn.disabled=false;btn.innerHTML=WA+'أكّد الطلب عبر واتساب'}})}
 
 
-var SECTION_BANNER=null;
+var SECTION_BANNER=null,ALL_IMAGE=null;
 function renderSectionBanner(){var el=$('sectionBanner'),b=SECTION_BANNER,m=b&&MERCHANTS.find(function(m){return m.id===b.merchantId});if(!b||!b.enabled||!b.image||!b.title||!m||!badgeActive(b.until)){el.hidden=true;el.innerHTML='';return}el.innerHTML='<div class="bannertext"><span class="bannercategory">'+esc(m.name)+'</span><h2>'+esc(b.title)+'</h2>'+(b.subtitle?'<p>'+esc(b.subtitle)+'</p>':'')+'<button type="button">'+esc(b.buttonText||'تصفح القسم')+' ←</button></div><img src="'+esc(b.image)+'" alt="'+esc(m.name)+'">';el.hidden=false;el.querySelector('img').onerror=function(){el.hidden=true};el.querySelector('button').onclick=function(){activeCat=b.merchantId;activeSub='';query='';$('q').value='';$('clr').style.display='none';renderChips();renderGrid();$('categoryTitle').scrollIntoView({behavior:'smooth',block:'start'})}}
-fetch('homepage.json?v='+Date.now(),{cache:'no-store'}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(d){SECTION_BANNER=d.banner||null;renderSectionBanner()}).catch(function(){});
+fetch('homepage.json?v='+Date.now(),{cache:'no-store'}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(d){SECTION_BANNER=d.banner||null;ALL_IMAGE=d.allImage||null;renderSectionBanner();renderChips()}).catch(function(){});
 setInterval(renderSectionBanner,60000);document.addEventListener('visibilitychange',function(){if(!document.hidden)renderSectionBanner()});
 </script>
 </body>
