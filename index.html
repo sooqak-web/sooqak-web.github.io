@@ -296,7 +296,7 @@ footer a.ph2{display:inline-block;margin-top:8px;color:var(--gold);font-family:v
 </div>
 <div class="search">
 <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.47 6.47 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
-<input id="q" type="search" placeholder="ابحث عن منتج..." autocomplete="off" enterkeyhint="search">
+<input id="q" type="search" placeholder="دوّر على منتج..." autocomplete="off" enterkeyhint="search">
 <button class="clr" id="clr" aria-label="مسح">✕</button>
 </div>
 </div>
@@ -314,8 +314,8 @@ footer a.ph2{display:inline-block;margin-top:8px;color:var(--gold);font-family:v
 <footer>
 <div class="logo"><img class="sooqak-logo" src="images/sooqak-logo-filled.png" alt="سوقك" width="174" height="74"></div>
 <p>اطلب عبر واتساب وبنأكّد معاك الطلب والتوصيل</p>
-<a class="ph2" id="footPhone" href="#">0115079683</a>
-<p class="info">🕖 الدوام: ٧ صباحاً إلى ٦ مساءً<br>💳 الدفع: بنكك / براقو / كاش عند الاستلام</p>
+<a class="ph2" id="footPhone" href="tel:+2490115079683">0115079683</a>
+<p class="info">🕖 الدوام: من ٧ الصباح لـ ٦ المساء<br>💳 الدفع: بنكك / براقو / كاش عند الاستلام</p>
 </footer>
 <button class="cartfloat" id="cartFloat" aria-label="السلة"><svg viewBox="0 0 24 24"><path d="M7 18a2 2 0 100 4 2 2 0 000-4zm10 0a2 2 0 100 4 2 2 0 000-4zM7.16 14.26l.04-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.24-5.87A1 1 0 0019.7 4H5.21l-.94-2H1v2h2l3.6 7.59-1.35 2.44C4.52 15.37 5.48 17 7 17h12v-2H7.42c-.13 0-.25-.11-.26-.24z"/></svg><span class="badge" id="fbadge"></span><span id="floatSummary" hidden><small>مجموع المنتجات</small><b id="floatTotal"></b></span></button>
 <div class="sent" id="sent"><div><h3>تم فتح واتساب ✅</h3><div class="orderref">كود طلبك <b id="orderCode" dir="ltr"></b></div><p>اضغط إرسال في واتساب لو ما أرسلتها.<br><b style="color:var(--navy)">استنى رسالة تأكيد مننا في واتساب 📲</b></p><button class="pri" id="sentClear">تم الإرسال، فضّي السلة</button><button id="sentKeep">رجوع للسلة</button></div></div>
@@ -380,7 +380,7 @@ $("subchips").onclick=function(e){var b=e.target.closest('[data-sub]');if(b){act
 
 function realReviews(p){return (Array.isArray(p.reviews)?p.reviews:[]).filter(function(r){return r&&Number.isInteger(Number(r.stars))&&Number(r.stars)>=1&&Number(r.stars)<=5&&typeof r.text==='string'&&r.text.trim()})}
 function reviewSummary(p){var rs=realReviews(p);if(!rs.length)return '';var avg=rs.reduce(function(t,r){return t+Number(r.stars)},0)/rs.length;return '<div class="reviewsummary"><span aria-hidden="true">★</span> '+avg.toFixed(1)+' <small>('+toAr(rs.length)+' آراء)</small></div>'}
-function reviewDetails(p){var rs=realReviews(p);if(!rs.length)return '';return '<section class="customerreviews"><h3>آراء الزبائن '+reviewSummary(p)+'</h3><p class="reviewnotice">آراء ينشرها المتجر بموافقة أصحابها، وليست مشتريات موثّقة آلياً.</p>'+rs.map(function(r){var image=String(r.image||'');if(!/^images\/review-[a-zA-Z0-9._-]+\.(jpg|jpeg|png|webp)$/.test(image))image='';return '<article class="customerreview"><b aria-label="'+Number(r.stars)+' من 5">'+Array(Number(r.stars)+1).join('★')+'</b><p>'+esc(r.text)+'</p>'+(image?'<a href="'+esc(image)+'" target="_blank" rel="noopener"><img loading="lazy" src="'+esc(image)+'" alt="صورة رأي زبون، منشورة بواسطة المتجر"><small>افتح الصورة</small></a>':'')+'</article>'}).join('')+'</section>'}
+function reviewDetails(p){var rs=realReviews(p);if(!rs.length)return '';return '<section class="customerreviews"><h3>آراء الزبائن '+reviewSummary(p)+'</h3><p class="reviewnotice">آراء ينشرها المتجر بموافقة أصحابها، ومش مشتريات موثّقة تلقائياً.</p>'+rs.map(function(r){var image=String(r.image||'');if(!/^images\/review-[a-zA-Z0-9._-]+\.(jpg|jpeg|png|webp)$/.test(image))image='';return '<article class="customerreview"><b aria-label="'+Number(r.stars)+' من 5">'+Array(Number(r.stars)+1).join('★')+'</b><p>'+esc(r.text)+'</p>'+(image?'<a href="'+esc(image)+'" target="_blank" rel="noopener"><img loading="lazy" src="'+esc(image)+'" alt="صورة رأي زبون، نشرها المتجر"><small>افتح الصورة</small></a>':'')+'</article>'}).join('')+'</section>'}
 function badgeActive(until){if(!until)return true;var t=Date.parse(until+"T23:59:59.999+02:00");return Number.isFinite(t)&&Date.now()<=t}
 function discountInfo(p){if(!badgeActive(p.discountUntil))return null;var old=Number(p._old||regularPrice(p)),now=priceNum(p);return Number.isFinite(old)&&old>now?{old:old,saving:old-now}:null}
 function productBadges(p){var d=discountInfo(p),list=[];if(p.isNew&&badgeActive(p.newUntil))list.push('<span class="productbadge newbadge">✦ جديد</span>');if(d)list.push('<span class="productbadge discountbadge">خصم '+Math.round(d.saving/d.old*1000)/10+'٪</span>');if(p.badge&&!(p.isNew&&badgeActive(p.newUntil)&&p.badge.trim()==='جديد'))list.push('<span class="productbadge textbadge">'+esc(p.badge)+'</span>');return list.length?'<div class="productbadges">'+list.join('')+'</div>':''}
@@ -395,7 +395,7 @@ $("secT").textContent=activeMerchant?(MERCHANTS.find(function(m){return m.id===a
 $("secC").textContent=toAr(items.length)+" منتج";
 if(!items.length){
 var sectionName=(MERCHANTS.find(function(m){return m.id===activeCat})||{}).name||"القسم";var msg=q?'ما لقينا "'+esc(query)+'"':'ما في منتجات في '+esc(sectionName)+' حالياً';
-$("grid").innerHTML='<div class="empty"><span class="big">🔍</span>'+msg+'<br>اطلبه منا ونوفّره ليك<br><a target="_blank" rel="noopener" href="'+waLink("مرحباً سوقك، أبحث عن: "+(query||activeCat))+'">اطلب عبر واتساب</a></div>';return}
+$("grid").innerHTML='<div class="empty"><span class="big">🔍</span>'+msg+'<br>اطلبه منا ونوفّره ليك<br><a target="_blank" rel="noopener" href="'+waLink("أهلاً سوقك، بدوّر على: "+(query||activeCat))+'">اطلب عبر واتساب</a></div>';return}
 ['has-card-reviews','has-card-discounts','has-card-units','has-card-merchants'].forEach(function(c){$("grid").classList.remove(c)});
 if(items.some(function(p){return realReviews(p).length}))$("grid").classList.add('has-card-reviews');
 if(items.some(discountInfo))$("grid").classList.add('has-card-discounts');
@@ -419,13 +419,13 @@ function feeNum(){var a=curArea();return a?(parseInt(String(a.fee).replace(/[٠-
 function grand(){return cartTotal()-couponDiscount()+feeNum()}
 function cartTotal(){return Object.keys(cart).reduce(function(s,k){var p=byId(k);return s+(p?priceNum(p)*cart[k]:0)},0)}
 function updateBadge(){var n=cartCount();["fbadge"].forEach(function(i){var b=$(i);b.textContent=toAr(n);b.style.display=n?"flex":"none"});var summary=$("floatSummary");summary.hidden=!n;$("floatTotal").textContent=toAr(cartTotal())+" جنيه";$("cartFloat").classList.toggle("hasitems",!!n);$("cartFloat").setAttribute("aria-label",n?"السلة: "+toAr(n)+" أصناف، مجموع المنتجات "+toAr(cartTotal())+" جنيه":"السلة");syncCardControls();showReorder()}
-function addToCart(id,n){if(!byId(id)){toast("العرض غير متاح حالياً");return}cart[id]=Math.min((cart[id]||0)+n,99);save();updateBadge();toast("تمت الإضافة للسلة ✓");if($("pCart").classList.contains("open"))renderCart()}
+function addToCart(id,n){if(!byId(id)){toast("العرض ما متاح هسه");return}cart[id]=Math.min((cart[id]||0)+n,99);save();updateBadge();toast("اتضافت للسلة ✓");if($("pCart").classList.contains("open"))renderCart()}
 function setQty(id,n){if(n<=0)delete cart[id];else cart[id]=Math.min(n,99);save();updateBadge();renderCart(true)}
 function renderCart(keep){
 var ids=Object.keys(cart).filter(byId),b=$("cBody"),nm=($("custName")||{}).value||"",ph=($("custPhone")||{}).value||"";
-if(!ids.length){b.innerHTML='<div class="ce"><span class="big">🛒</span>السلة فاضية<br>أضف منتجات من القائمة</div>';return}
+if(!ids.length){b.innerHTML='<div class="ce"><span class="big">🛒</span>السلة فاضية<br>ضيف منتجات من القائمة</div>';return}
 var h=ids.map(function(id){var p=byId(id);return'<div class="citem" data-id="'+esc(id)+'"><div class="ci">'+(p.img?'<img alt="" src="'+esc(p.img)+'">':'')+'</div><div class="cm"><div class="cn">'+esc(productName(p))+'</div>'+(p._bundle?'<div class="bundleparts">'+esc(p.desc)+'</div>':merchantHtml(p))+'<div class="cp">'+toAr(priceNum(p)*cart[id])+' جنيه</div><div class="qty" style="margin-top:6px"><button data-m="1" aria-label="نقص">−</button><span>'+toAr(cart[id])+'</span><button data-p="1" aria-label="زيادة">+</button></div></div><button class="rm" data-r="1" aria-label="حذف">🗑</button></div>'}).join("");
-h+='<div class="cform"><div class="frow sm"><span>المنتجات</span><span>'+toAr(cartTotal())+' جنيه</span></div>'+(AREAS.length?'<label for="areaSel">منطقة التوصيل</label><select id="areaSel"><option value="">اختر منطقتك...</option>'+AREAS.map(function(a){return'<option value="'+esc(a.id)+'"'+(a.id===AREA?" selected":"")+'>'+esc(a.name)+" - "+toAr(a.fee)+" جنيه</option>"}).join("")+'</select>':"")+'<div class="frow"><span>رسوم التوصيل</span><span id="feeV">'+(curArea()?toAr(feeNum())+" جنيه":"اختر المنطقة")+'</span></div>'+couponBox()+'<div class="tot"><span>الإجمالي</span><span id="tot">'+toAr(grand())+' جنيه</span></div><label for="custName">الاسم</label><input id="custName" autocomplete="name" enterkeyhint="next" value="'+esc(nm)+'"><label for="custPhone">رقم التلفون</label><input id="custPhone" type="tel" inputmode="tel" autocomplete="tel" enterkeyhint="done" value="'+esc(ph)+'"><div class="hint" id="hint">اكتب اسمك ورقم تلفونك عشان نكمل الطلب</div><button class="wa" id="checkout" style="margin-top:12px">'+WA+'أكّد الطلب عبر واتساب</button><div class="hint" style="text-align:center;margin-top:10px">🕖 الدوام: ٧ صباحاً إلى ٦ مساءً · 💳 بنكك / براقو / كاش عند الاستلام</div></div>';
+h+='<div class="cform"><div class="frow sm"><span>المنتجات</span><span>'+toAr(cartTotal())+' جنيه</span></div>'+(AREAS.length?'<label for="areaSel">منطقة التوصيل</label><select id="areaSel"><option value="">اختار منطقتك...</option>'+AREAS.map(function(a){return'<option value="'+esc(a.id)+'"'+(a.id===AREA?" selected":"")+'>'+esc(a.name)+" - "+toAr(a.fee)+" جنيه</option>"}).join("")+'</select>':"")+'<div class="frow"><span>رسوم التوصيل</span><span id="feeV">'+(curArea()?toAr(feeNum())+" جنيه":"اختار المنطقة")+'</span></div>'+couponBox()+'<div class="tot"><span>الإجمالي</span><span id="tot">'+toAr(grand())+' جنيه</span></div><label for="custName">الاسم</label><input id="custName" autocomplete="name" enterkeyhint="next" value="'+esc(nm)+'"><label for="custPhone">رقم التلفون</label><input id="custPhone" type="tel" inputmode="tel" autocomplete="tel" enterkeyhint="done" value="'+esc(ph)+'"><div class="hint" id="hint">اكتب اسمك ورقم تلفونك عشان نكمل الطلب</div><button class="wa" id="checkout" style="margin-top:12px">'+WA+'أكّد الطلب عبر واتساب</button><div class="hint" style="text-align:center;margin-top:10px">🕖 الدوام: من ٧ الصباح لـ ٦ المساء · 💳 بنكك / براقو / كاش عند الاستلام</div></div>';
 b.innerHTML=h}
 $("cBody").addEventListener("click",function(e){
 var it=e.target.closest(".citem");
@@ -434,7 +434,7 @@ if(e.target.closest("[data-p]"))setQty(id,cart[id]+1);
 else if(e.target.closest("[data-m]"))setQty(id,cart[id]-1);
 else if(e.target.closest("[data-r]"))setQty(id,0)}
 if(e.target.closest('#couponApply')){couponSelected=($('cartCoupon').value||'').trim().toUpperCase();try{localStorage.setItem('sooqak_coupon',couponSelected)}catch(x){}renderCart(true);return}if(e.target.closest('#couponRemove')){couponSelected='';try{localStorage.removeItem('sooqak_coupon')}catch(x){}renderCart(true);return}if(e.target.closest("#checkout"))checkout()});
-$("cBody").addEventListener("change",function(e){if(e.target.id==="areaSel"){AREA=e.target.value;try{localStorage.setItem("sooqak_area",AREA)}catch(x){}var f=$("feeV");f.textContent=curArea()?toAr(feeNum())+" جنيه":"اختر المنطقة";$("tot").textContent=toAr(grand())+" جنيه";var h=$("hint");if(h)h.style.display="none"}});
+$("cBody").addEventListener("change",function(e){if(e.target.id==="areaSel"){AREA=e.target.value;try{localStorage.setItem("sooqak_area",AREA)}catch(x){}var f=$("feeV");f.textContent=curArea()?toAr(feeNum())+" جنيه":"اختار المنطقة";$("tot").textContent=toAr(grand())+" جنيه";var h=$("hint");if(h)h.style.display="none"}});
 $("cBody").addEventListener("input",function(){var h=$("hint");if(h)h.style.display="none"});
 var currentOrderCode="";
 var ORDER_CFG=null,orderOpening=false,COUNTER_API="https://abacus.jasoncameron.dev",COUNTER_NS="sooqak-store";
@@ -450,14 +450,14 @@ var groups={};Object.keys(cart).forEach(function(i){var p=byId(i);if(!p)return;v
 Object.keys(groups).forEach(function(m){if(m)L.push("من متجر: "+m);groups[m].forEach(function(i){var p=byId(i);L.push("• "+productName(p)+" × "+toAr(cart[i])+" = "+toAr(priceNum(p)*cart[i])+" جنيه");if(p._bundle){L.push("  سعر الباقة الواحدة: "+toAr(priceNum(p))+" جنيه");p._parts.forEach(function(x){L.push("  - "+productName(x.p)+" × "+toAr(x.qty*cart[i]))})}});L.push("")});
 L.push("");var ar=curArea();L.push("المنتجات: "+toAr(cartTotal())+" جنيه");if(couponDiscount()>0)L.push('كود الخصم: '+couponSelected+' · خصم '+toAr(couponDiscount())+' جنيه');if(ar){L.push("منطقة التوصيل: "+ar.name);L.push("رسوم التوصيل: "+toAr(feeNum())+" جنيه")}L.push("الإجمالي: "+toAr(grand())+" جنيه");L.push("الاسم: "+(nm||"..."));L.push("رقم التلفون: "+(ph||"..."));return L.join("\n")}
 function openOrder(){
-window.__lastWa=waLink(orderMessage());$("orderCode").textContent=currentOrderCode;
+window.__lastWa=waLink(orderMessage());$("orderCode").textContent=currentOrderCode||ensureOrderCode();
 try{localStorage.setItem("sooqak_last",JSON.stringify(cart))}catch(e){}
 window.open(window.__lastWa,"_blank","noopener");$("sent").classList.add("open")}
 function checkoutReady(){
 var nm=$("custName").value.trim(),ph=$("custPhone").value.trim();
-if(!nm||!ph||(AREAS.length&&!curArea())){$("hint").textContent=(AREAS.length&&!curArea())?"اختر منطقة التوصيل واكتب اسمك ورقم تلفونك":"اكتب اسمك ورقم تلفونك عشان نكمل الطلب";$("hint").style.display="block";return}
+if(!nm||!ph||(AREAS.length&&!curArea())){$("hint").textContent=(AREAS.length&&!curArea())?"اختار منطقة التوصيل واكتب اسمك ورقم تلفونك":"اكتب اسمك ورقم تلفونك عشان نكمل الطلب";$("hint").style.display="block";return}
 if(cachedOrderCode()){openOrder();return}
-orderOpening=true;var btn=$("checkout");if(btn){btn.disabled=true;btn.textContent="جاري تجهيز كود الطلب..."}
+orderOpening=true;var btn=$("checkout");if(btn){btn.disabled=true;btn.textContent="بنجهّز كود الطلب..."}
 try{counterHit("orders-"+new Date().toLocaleDateString("en-CA",{timeZone:"Africa/Khartoum"})).catch(function(){})}catch(e){}
 fetchOrderSeq().then(function(seq){ensureOrderCode(seq)}).catch(function(){ensureOrderCode()}).then(function(){orderOpening=false;if(btn){btn.disabled=false;btn.innerHTML=WA+"أكّد الطلب عبر واتساب"}openOrder()})}
 $("sentKeep").onclick=function(){$("sent").classList.remove("open")};
@@ -473,7 +473,7 @@ var desc=p.desc||"";
 $("dBody").innerHTML='<div class="dph">'+productBadges(p)+(p.img?'<img alt="'+esc(productName(p))+'" src="'+esc(p.img)+'">':'')+'</div><div class="dbody"><div class="dcat">'+esc(p.cat||"")+(p.badge?' · '+esc(p.badge):'')+'</div><div class="dname">'+esc(productName(p))+'</div>'+merchantHtml(p)+'<div class="dprice">'+priceHtml(p)+'</div>'+(desc?'<div class="ddesc">'+esc(desc)+'</div>':'')+reviewDetails(p)+'<div class="qrow"><b>الكمية</b><div class="qty"><button id="qm" aria-label="نقص">−</button><span id="qv">١</span><button id="qp" aria-label="زيادة">+</button></div></div></div>';
 $("qm").onclick=function(){curQty=Math.max(1,curQty-1);$("qv").textContent=toAr(curQty);upd()};
 $("qp").onclick=function(){curQty=Math.min(99,curQty+1);$("qv").textContent=toAr(curQty);upd()};
-function upd(){$("dAdd").textContent="أضف للسلة · "+toAr(priceNum(p)*curQty)+" جنيه"}
+function upd(){$("dAdd").textContent="ضيف للسلة · "+toAr(priceNum(p)*curQty)+" جنيه"}
 upd();$("pDetail").classList.add("open");$("pDetail").scrollTop=0;document.body.style.overflow="hidden";
 if(location.hash!=="#p/"+id)history.pushState({v:"d"},"","#p/"+id)}
 $("dAdd").onclick=function(){if(curId){addToCart(curId,curQty);if(location.hash)history.back();else closePages(true)}};
@@ -510,15 +510,15 @@ PRODUCTS=RAWP.map(function(p){var a=DEALS.find(function(d){return d.productId===
 Object.keys(cart).forEach(function(k){if(!byId(k)&&PRODUCTS.length&&(String(k).indexOf("bundle:")!==0||dealsLoaded))delete cart[k]});
 renderChips();renderGrid();updateBadge();save()}
 try{var cached=JSON.parse(localStorage.getItem("sooqak_products")||"null");if(cached&&cached.length)applyProducts(cached)}catch(e){}
-fetch("products.json?v="+Date.now(),{cache:"no-store"}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(l){try{localStorage.setItem("sooqak_products",JSON.stringify(l))}catch(e){}applyProducts(l);var m=location.hash.match(/^#p\/(.+)$/);if(m)openDetail(decodeURIComponent(m[1]))}).catch(function(){if(!PRODUCTS.length){renderChips();$("grid").innerHTML='<div class="empty"><span class="big">📶</span>تعذّر تحميل المنتجات. تأكد من الشبكة وحدّث الصفحة.</div>'}});
+fetch("products.json?v="+Date.now(),{cache:"no-store"}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(l){try{localStorage.setItem("sooqak_products",JSON.stringify(l))}catch(e){}applyProducts(l);var m=location.hash.match(/^#p\/(.+)$/);if(m)openDetail(decodeURIComponent(m[1]))}).catch(function(){if(!PRODUCTS.length){renderChips();$("grid").innerHTML='<div class="empty"><span class="big">📶</span>ما قدرنا نحمّل المنتجات. اتأكد من النت وحدّث الصفحة.</div>'}});
 fetch("deals.json?v="+Date.now(),{cache:"no-store"}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(d){try{localStorage.setItem("sooqak_deals",JSON.stringify(d))}catch(e){}DEALS=d;dealsLoaded=true;applyProducts(RAWP);if($("pCart").classList.contains("open"))renderCart(true);if(curId&&$("pDetail").classList.contains("open"))openDetail(curId)}).catch(function(){});
 fetch("merchants.json?v="+Date.now(),{cache:"no-store"}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(d){MERCHANTS=d;renderChips();renderSectionBanner();try{localStorage.setItem("sooqak_merchants",JSON.stringify(d))}catch(e){}renderGrid();if(curId&&$("pDetail").classList.contains("open"))openDetail(curId)}).catch(function(){});
 fetch("subcategories.json?v="+Date.now(),{cache:"no-store"}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(d){SUBCATEGORIES=d;renderSubchips();renderGrid()}).catch(function(){});
 function applyAreas(l){AREAS=(l||[]).filter(function(a){return a&&a.name});if(!curArea())AREA="";if($("pCart").classList.contains("open"))renderCart(true)}
 fetch("areas.json?v="+Date.now(),{cache:"no-store"}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(l){try{localStorage.setItem("sooqak_areas",JSON.stringify(l))}catch(e){}applyAreas(l)}).catch(function(){});
-var g=waLink("مرحباً سوقك، عندي استفسار");
-$("waFloat").href=g;$("waFloat").innerHTML=WA;$("footPhone").href=g;$("footPhone").textContent=DISPLAY_PHONE;
-function refreshBadgeTimers(){renderGrid();updateBadge();if($("pCart").classList.contains("open"))renderCart(true);if(curId&&$("pDetail").classList.contains("open")){var p=byId(curId);if(p){var ph=$("dBody").querySelector('.dph'),badges=ph.querySelector('.productbadges');if(badges)badges.remove();ph.insertAdjacentHTML('afterbegin',productBadges(p));$("dBody").querySelector('.dprice').innerHTML=priceHtml(p);$("dAdd").textContent="أضف للسلة · "+toAr(priceNum(p)*curQty)+" جنيه"}}}
+var g=waLink("أهلاً سوقك، عندي استفسار");
+$("waFloat").href=g;$("waFloat").innerHTML=WA;$("footPhone").href="tel:+249"+DISPLAY_PHONE.replace(/^0/,"");$("footPhone").textContent=DISPLAY_PHONE;
+function refreshBadgeTimers(){renderGrid();updateBadge();if($("pCart").classList.contains("open"))renderCart(true);if(curId&&$("pDetail").classList.contains("open")){var p=byId(curId);if(p){var ph=$("dBody").querySelector('.dph'),badges=ph.querySelector('.productbadges');if(badges)badges.remove();ph.insertAdjacentHTML('afterbegin',productBadges(p));$("dBody").querySelector('.dprice').innerHTML=priceHtml(p);$("dAdd").textContent="ضيف للسلة · "+toAr(priceNum(p)*curQty)+" جنيه"}}}
 setInterval(refreshBadgeTimers,60000);
 document.addEventListener("visibilitychange",function(){if(!document.hidden)refreshBadgeTimers()});
 renderChips();updateBadge();
@@ -527,11 +527,11 @@ renderChips();updateBadge();
 try{couponSelected=localStorage.getItem('sooqak_coupon')||''}catch(e){}
 function activeCoupon(){return COUPONS.find(function(c){return c.enabled===true&&String(c.code).toUpperCase()===couponSelected&&badgeActive(c.until)&&Number.isFinite(Number(c.value))&&Number(c.value)>0&&(c.type==='fixed'||c.type==='percent'&&Number(c.value)<=100)})}
 function couponDiscount(){var c=activeCoupon();return c?Math.min(cartTotal(),Math.max(0,Math.floor(c.type==='percent'?cartTotal()*Number(c.value)/100:Number(c.value)))):0}
-function couponBox(){var c=activeCoupon();return '<details class="ctoggle"'+(couponSelected?' open':'')+'><summary>🎟️ عندك كود خصم؟</summary><div class="couponbox"><div class="couponentry"><input id="cartCoupon" autocomplete="off" maxlength="40" value="'+esc(couponSelected)+'" placeholder="اكتب الكود"><button id="couponApply" type="button">تطبيق</button></div><small>'+(c?'تم تطبيق الكود على المنتجات، بدون التوصيل':couponSelected?(couponsReady?'الكود غير صالح أو متوقف أو انتهى':'جاري التحقق من الكود'):'كود واحد لكل طلب، يشمل المنتجات بعد عروضها')+'</small>'+(c?'<div class="frow"><span>خصم '+esc(couponSelected)+'</span><b>− '+toAr(couponDiscount())+' جنيه</b><button id="couponRemove" type="button">إزالة</button></div>':'')+'</div></details>'}
-function fetchCoupons(){return fetch('coupons.json?v='+Date.now(),{cache:'no-store'}).then(function(r){if(!r.ok)throw Error('تعذر التحقق من الأكواد');return r.json()}).then(function(l){COUPONS=Array.isArray(l)?l:[];couponsReady=true})}
+function couponBox(){var c=activeCoupon();return '<details class="ctoggle"'+(couponSelected?' open':'')+'><summary>🎟️ عندك كود خصم؟</summary><div class="couponbox"><div class="couponentry"><input id="cartCoupon" autocomplete="off" maxlength="40" value="'+esc(couponSelected)+'" placeholder="اكتب الكود"><button id="couponApply" type="button">تطبيق</button></div><small>'+(c?'الكود اتطبّق على المنتجات، من غير التوصيل':couponSelected?(couponsReady?'الكود ما صالح أو متوقف أو انتهى':'بنتحقق من الكود'):'كود واحد لكل طلب، وبينطبق على المنتجات بعد خصم عروضها')+'</small>'+(c?'<div class="frow"><span>خصم '+esc(couponSelected)+'</span><b>− '+toAr(couponDiscount())+' جنيه</b><button id="couponRemove" type="button">شيل</button></div>':'')+'</div></details>'}
+function fetchCoupons(){return fetch('coupons.json?v='+Date.now(),{cache:'no-store'}).then(function(r){if(!r.ok)throw Error('ما قدرنا نتحقق من الكود');return r.json()}).then(function(l){COUPONS=Array.isArray(l)?l:[];couponsReady=true})}
 fetchCoupons().then(function(){if($('pCart').classList.contains('open'))renderCart(true)}).catch(function(){couponsReady=false});
 var checkoutBusy=false;
-function checkout(){if(checkoutBusy||orderOpening)return;var before=grand(),discount=couponDiscount();checkoutBusy=true;var btn=$('checkout');if(btn){btn.disabled=true;btn.textContent='جاري تحديث السعر والخصم...'}Promise.all([fetchCoupons(),fetch('products.json?v='+Date.now(),{cache:'no-store'}).then(function(r){if(!r.ok)throw Error();return r.json()}),fetch('deals.json?v='+Date.now(),{cache:'no-store'}).then(function(r){if(!r.ok)throw Error();return r.json()})]).then(function(v){DEALS=v[2];applyProducts(v[1]);renderCart(true);if(before!==grand()||discount!==couponDiscount()){toast('اتحدث السعر أو الخصم. راجع الإجمالي واضغط تأكيد تاني');return}checkoutReady()}).catch(function(){toast('تعذر التحقق من السعر والخصم. تأكد من الشبكة وحاول تاني')}).then(function(){checkoutBusy=false;var btn=$('checkout');if(btn){btn.disabled=false;btn.innerHTML=WA+'أكّد الطلب عبر واتساب'}})}
+function checkout(){if(checkoutBusy||orderOpening)return;var before=grand(),discount=couponDiscount();checkoutBusy=true;var btn=$('checkout');if(btn){btn.disabled=true;btn.textContent='بنحدّث السعر والخصم...'}Promise.all([fetchCoupons(),fetch('products.json?v='+Date.now(),{cache:'no-store'}).then(function(r){if(!r.ok)throw Error();return r.json()}),fetch('deals.json?v='+Date.now(),{cache:'no-store'}).then(function(r){if(!r.ok)throw Error();return r.json()})]).then(function(v){DEALS=v[2];applyProducts(v[1]);renderCart(true);if(before!==grand()||discount!==couponDiscount()){toast('اتحدث السعر أو الخصم. راجع الإجمالي واضغط تأكيد تاني');return}checkoutReady()}).catch(function(){toast('ما قدرنا نتحقق من السعر والخصم. اتأكد من النت وجرّب تاني')}).then(function(){checkoutBusy=false;var btn=$('checkout');if(btn){btn.disabled=false;btn.innerHTML=WA+'أكّد الطلب عبر واتساب'}})}
 
 
 var SECTION_BANNER=null,ALL_IMAGE=null;
