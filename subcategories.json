@@ -22,5 +22,11 @@
   "merchantId": "mmwt9rw3z",
   "name": "كريم شعر",
   "icon": "skincare"
+ },
+ {
+  "id": "smwx5i4me",
+  "merchantId": "mmwt9rw3z",
+  "name": "صابون",
+  "icon": "soap"
  }
 ]
