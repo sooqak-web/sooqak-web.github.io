@@ -286,14 +286,125 @@ footer a.ph2{display:inline-block;margin-top:8px;color:var(--gold);font-family:v
 #subchips .subtile.on .shopicon{color:#fff}
 #subchips .subtile .em.allem{font-weight:800;font-size:15px}
 </style>
+<style>
+
+header{padding:7px 0 8px}
+.top2{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.top2 .logo{flex:0 0 auto;line-height:0}
+.top2 .sooqak-logo{width:86px;height:37px}
+.top2 .search{flex:1;min-width:0}
+.top2 .search input{height:42px;border-radius:21px;font-size:.92rem}
+.top2 .search svg{top:10px}
+.top2 .search .clr{top:7px}
+
+</style>
+<style>
+
+#chips{display:flex;flex-wrap:wrap;overflow-x:visible;gap:4px;padding:2px 8px 8px;justify-content:space-between}
+#chips::-webkit-scrollbar{display:none}
+#chips .chip{flex:0 0 65px;padding:8px 0 6px;gap:4px;border-radius:12px;background:transparent;border:none;box-shadow:none;font-size:10.5px}
+#chips .chip .em{width:50px;height:50px;border-radius:50%;background:#fff;box-shadow:0 2px 8px rgba(10,44,97,.10);border:2px solid transparent}
+#chips .chip .em img{width:100%!important;height:100%!important;border-radius:50%}
+#chips .chip.on{background:transparent;border:none;box-shadow:none;color:#1976d2}
+#chips .chip.on .em{background:#1976d2;box-shadow:0 0 0 3px #d6e8ff}
+@media(max-width:349px){#chips{display:flex}}
+@media(min-width:640px){#chips{display:flex}}
+
+</style>
+<style>
+
+.card{border-radius:16px;border:1px solid #e8edf6;box-shadow:0 2px 8px rgba(10,44,97,.06)}
+.ph{background:#fff;padding:10px}
+.ph img{border-radius:10px}
+.info{padding:10px 12px 12px;gap:5px}
+.nm{font-size:.87rem}
+.price{color:var(--navy);font-size:1.08rem}
+.price small{font-size:.72rem;color:#5d6b8c;font-weight:600}
+.oldprice{display:inline;margin-right:6px;font-size:.72rem}
+.add{height:40px;border-radius:12px;font-size:.86rem}
+.cardcounter{border-radius:12px}
+
+</style>
+<style>
+
+#pCart .dwrap{padding-bottom:110px}
+#pCart #checkout{position:fixed;bottom:12px;left:16px;right:16px;z-index:60;width:auto;max-width:528px;margin:0 auto!important;box-shadow:0 8px 22px rgba(31,170,83,.35)}
+#pCart .citem{padding:8px;margin:6px 12px}
+#pCart .citem .ci{background:#fff;border:1px solid #eef2f8}
+#pCart .tot{margin-bottom:2px}
+.cktot{font-family:Estedad;font-weight:800}
+
+</style>
+<style>
+
+.dfoot button{background:var(--primary);color:#fff;box-shadow:0 8px 18px rgba(25,118,210,.30)}
+.dbody .dprice{color:var(--navy)}
+.qty{border-radius:12px}
+
+</style>
+<style>
+
+.sectionbanner{display:flex;flex-direction:column;background:transparent;border:none;min-height:0;gap:9px}
+.sectionbanner img{order:-1;position:static;width:100%;height:150px;min-height:0;border-radius:18px;object-fit:cover;box-shadow:0 4px 14px rgba(10,44,97,.12)}
+.sectionbanner .bannertext{display:flex;align-items:center;gap:10px;padding:0 4px;width:100%}
+.sectionbanner .bannercategory{display:none}
+.sectionbanner h2{font-size:16px;margin:0;flex:1;min-width:0}
+.sectionbanner p{display:none}
+.sectionbanner button{flex:none;padding:8px 18px;font-size:12px;border-radius:18px}
+
+</style>
+<style>
+
+.cartfloat,.wafloat{display:none!important}
+.bnav{position:fixed;bottom:0;left:0;right:0;z-index:45;background:#fff;display:flex;box-shadow:0 -4px 18px rgba(10,44,97,.14);padding:6px 4px calc(6px + env(safe-area-inset-bottom))}
+.bnav a{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:10.5px;font-weight:700;color:#5d6b8c;padding:4px 0}
+.bnav a.on{color:#1976d2}
+.bnav a .ic{font-size:20px;line-height:1.2}
+
+</style>
+<style>
+
+header{background:linear-gradient(135deg,#071f45,#123f7d)}
+.add{background:#0A2C61}
+.price{color:#8a6400}
+.sectionbanner button{background:#0A2C61}
+.chip.on{background:#0A2C61}
+#chips .chip.on .em{background:#0A2C61}
+.productbadge.newbadge{background:#0A2C61}
+.search input{border:2px solid #FFC400}
+.cartfloat{background:#0A2C61}
+
+</style>
+<style>
+
+.deliv{margin-top:8px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);color:#fff;border-radius:20px;padding:6px 12px;font-size:11.5px;font-weight:600;display:flex;gap:6px;align-items:center;flex:0 0 100%;order:9;margin-top:8px}
+.deliv b{font-weight:800;text-decoration:underline}
+.deliv small{margin-inline-start:auto;opacity:.85;font-weight:600}
+
+</style>
+<style>
+
+#pDetail{background:#eef2fa}
+#pDetail .dph{margin:14px;border-radius:22px;overflow:hidden;box-shadow:0 6px 20px rgba(10,44,97,.12)}
+#pDetail .dbody{background:#fff;border-radius:26px 26px 0 0;margin-top:-30px;position:relative;z-index:2;padding:20px 16px;box-shadow:0 -8px 24px rgba(10,44,97,.08);min-height:40vh}
+.dfoot button{background:var(--primary);color:#fff;box-shadow:0 8px 18px rgba(25,118,210,.30)}
+.dbody .dprice{color:var(--navy)}
+
+</style>
+<style>
+
+footer{background:linear-gradient(160deg,#0A2C61,#14448a);border-radius:30px 30px 0 0;padding:26px 18px;text-align:right;margin-top:30px}
+footer .sooqak-logo{margin:0;width:120px;height:51px}
+footer p{font-size:13px;color:#cfe0ff;margin-top:10px}
+footer a.ph2{font-size:1.15rem}
+.fbtn{display:flex;align-items:center;justify-content:center;gap:8px;background:#1faa53;color:#fff;border-radius:14px;padding:13px;font-weight:800;margin-top:14px;font-size:15px}
+
+</style>
 </head>
 <body>
 <header>
-<div class="wrap">
-<div class="top">
-<div class="logo"><img class="sooqak-logo" src="images/sooqak-logo-filled.png" alt="سوقك" width="174" height="74"></div>
-
-</div>
+<div class="wrap top2">
+<div class="logo"><img class="sooqak-logo" src="images/sooqak-logo-filled.png" alt="سوقك"></div>
 <div class="search">
 <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.47 6.47 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
 <input id="q" type="search" placeholder="دوّر على منتج..." autocomplete="off" enterkeyhint="search">
@@ -534,11 +645,70 @@ var checkoutBusy=false;
 function checkout(){if(checkoutBusy||orderOpening)return;var before=grand(),discount=couponDiscount();checkoutBusy=true;var btn=$('checkout');if(btn){btn.disabled=true;btn.textContent='بنحدّث السعر والخصم...'}Promise.all([fetchCoupons(),fetch('products.json?v='+Date.now(),{cache:'no-store'}).then(function(r){if(!r.ok)throw Error();return r.json()}),fetch('deals.json?v='+Date.now(),{cache:'no-store'}).then(function(r){if(!r.ok)throw Error();return r.json()})]).then(function(v){DEALS=v[2];applyProducts(v[1]);renderCart(true);if(before!==grand()||discount!==couponDiscount()){toast('اتحدث السعر أو الخصم. راجع الإجمالي واضغط تأكيد تاني');return}checkoutReady()}).catch(function(){toast('ما قدرنا نتحقق من السعر والخصم. اتأكد من النت وجرّب تاني')}).then(function(){checkoutBusy=false;var btn=$('checkout');if(btn){btn.disabled=false;btn.innerHTML=WA+'أكّد الطلب عبر واتساب'}})}
 
 
-var SECTION_BANNER=null,ALL_IMAGE=null;
+var SECTION_BANNER=null,SECTION_BANNERS=null,ALL_IMAGE=null;
 function renderSectionBanner(){var el=$('sectionBanner'),b=SECTION_BANNER,m=b&&MERCHANTS.find(function(m){return m.id===b.merchantId});if(!b||!b.enabled||!b.image||!b.title||!m||!badgeActive(b.until)){el.hidden=true;el.innerHTML='';return}el.innerHTML='<div class="bannertext"><span class="bannercategory">'+esc(m.name)+'</span><h2>'+esc(b.title)+'</h2>'+(b.subtitle?'<p>'+esc(b.subtitle)+'</p>':'')+'<button type="button">'+esc(b.buttonText||'تصفح القسم')+' ←</button></div><img src="'+esc(b.image)+'" alt="'+esc(m.name)+'">';el.hidden=false;el.querySelector('img').onerror=function(){el.hidden=true};el.querySelector('button').onclick=function(){activeCat=b.merchantId;activeSub='';query='';$('q').value='';$('clr').style.display='none';renderChips();renderGrid();$('categoryTitle').scrollIntoView({behavior:'smooth',block:'start'})}}
-fetch('homepage.json?v='+Date.now(),{cache:'no-store'}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(d){SECTION_BANNER=d.banner||null;ALL_IMAGE=d.allImage||null;ORDER_CFG=d.orderCode||null;renderSectionBanner();renderChips()}).catch(function(){});
+fetch('homepage.json?v='+Date.now(),{cache:'no-store'}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(d){SECTION_BANNER=d.banner||null;SECTION_BANNERS=(d.banners&&d.banners.length)?d.banners:null;ALL_IMAGE=d.allImage||null;ORDER_CFG=d.orderCode||null;renderSectionBanner();renderChips()}).catch(function(){});
 setInterval(renderSectionBanner,60000);document.addEventListener('visibilitychange',function(){if(!document.hidden)renderSectionBanner()});
 try{if(!sessionStorage.getItem("sooqak_counted")){sessionStorage.setItem("sooqak_counted","1");counterHit("site-visits").catch(function(){});counterHit("visits-"+new Date().toLocaleDateString("en-CA",{timeZone:"Africa/Khartoum"})).catch(function(){})}}catch(e){}
+</script>
+<script>setInterval(function(){var t=document.getElementById('tot');var b=document.getElementById('checkout');if(!t||!b)return;var s=b.querySelector('.cktot');if(!s){s=document.createElement('span');s.className='cktot';b.appendChild(s)}var v=' \u00b7 '+t.textContent;if(s.textContent!==v)s.textContent=v;},400);</script>
+<script>var n=document.createElement('nav');n.className='bnav';
+n.innerHTML='<a class="on" href="#"><span class="ic">\u{1F3E0}</span>الرئيسية</a><a href="#" id="bnCats"><span class="ic">\u{1F5C2}</span>الأقسام</a><a href="#" id="bnCart"><span class="ic">\u{1F6D2}</span>السلة</a><a href="https://wa.me/249115079683" target="_blank" rel="noopener"><span class="ic">\u{1F4AC}</span>واتساب</a>';
+document.body.appendChild(n);
+document.getElementById('bnCart').onclick=function(e){e.preventDefault();document.getElementById('cartFloat').click()};
+document.getElementById('bnCats').onclick=function(e){e.preventDefault();document.getElementById('categoryTitle').scrollIntoView({behavior:'smooth'})};</script>
+<script>var d=document.createElement('div');d.className='deliv';d.innerHTML='\u{1F4CD} التوصيل لـ: <b>اختار منطقتك</b><small>\u{1F556} من ٧ الصباح لـ ٦ المساء</small>';document.querySelector('header .wrap').appendChild(d);</script>
+<script>var a=document.createElement('a');a.className='fbtn';a.href='https://wa.me/249115079683';a.target='_blank';a.rel='noopener';a.textContent='تواصل معنا واتساب \u{1F4AC}';document.querySelector('footer').appendChild(a);</script>
+<style>body{padding-bottom:calc(88px + env(safe-area-inset-bottom))}</style><style id="bcar">
+#sectionBanner.sectionbanner{display:block!important;min-height:0!important;gap:0!important;background:transparent!important;border:0!important}
+.bcarview{overflow:hidden}
+.bcartrack{display:flex;transition:transform .45s ease;direction:ltr}
+.bcarslide{flex:0 0 100%;direction:rtl}
+.bcarimg{display:block;width:100%;height:150px;object-fit:cover;border-radius:18px;box-shadow:0 4px 14px rgba(10,44,97,.12)}
+.bcarinfo{display:flex;align-items:center;gap:10px;padding:9px 4px 0}
+.bcarinfo h2{font-size:16px;margin:0;flex:1;min-width:0;color:#0A2C61;font-weight:800}
+.bcartag{font-size:10.5px;font-weight:700;color:#0A2C61;background:#e3efff;border-radius:10px;padding:3px 9px;flex:none}
+.bcarinfo button{flex:none;padding:8px 18px;font-size:12px;border-radius:18px;background:#0A2C61;color:#fff;border:0;font-family:inherit;font-weight:700;cursor:pointer}
+.bdots{display:flex;justify-content:center;gap:5px;padding:9px 0 0}
+.bdots button{width:7px;height:7px;border-radius:50%;border:0;background:#c3d6ef;padding:0;cursor:pointer;transition:all .3s}
+.bdots button.on{background:#0A2C61;width:18px;border-radius:4px}
+.adslink{display:inline-block;margin-top:12px;font-size:11px;color:#8aa0c4;text-decoration:underline}
+</style>
+<script>
+(function(){
+var KEY='sooqak_banners_preview';
+window.__bcarIdx=0;window.__bcarTimer=null;window.__bcarN=0;
+function getBanners(){if(window.SECTION_BANNERS&&SECTION_BANNERS.length)return SECTION_BANNERS.slice();if(window.SECTION_BANNER&&SECTION_BANNER.image)return [SECTION_BANNER];return []}
+function valid(b){if(!b||!b.image||!b.title||b.enabled===false)return false;if(typeof badgeActive==='function'&&b.until&&!badgeActive(b.until))return false;return true}
+function show(i){var n=window.__bcarN;if(!n)return;window.__bcarIdx=((i%n)+n)%n;
+var t=document.querySelector('.bcartrack');if(t)t.style.transform='translateX(-'+(window.__bcarIdx*100)+'%)';
+var ds=document.querySelectorAll('.bdots button');for(var j=0;j<ds.length;j++){ds[j].className=(window.__bcarIdx===j)?'on':''}}
+function restart(){if(window.__bcarTimer)clearInterval(window.__bcarTimer);if(window.__bcarN>1){window.__bcarTimer=setInterval(function(){show(window.__bcarIdx+1)},7000)}}
+window.renderSectionBanner=function(){
+var el=$('sectionBanner');var list=getBanners().filter(valid);
+if(!list.length){el.hidden=true;el.innerHTML='';return}
+el.hidden=false;window.__bcarN=list.length;if(window.__bcarIdx>=list.length)window.__bcarIdx=0;
+var h='<div class="bcarview"><div class="bcartrack">';
+list.forEach(function(b){var m=MERCHANTS.find(function(x){return x.id===b.merchantId});
+h+='<div class="bcarslide"><img class="bcarimg" src="'+esc(b.image)+'" alt="'+esc(b.title)+'">';
+h+='<div class="bcarinfo">'+(m?'<span class="bcartag">'+esc(m.name)+'</span>':'')+'<h2>'+esc(b.title)+'</h2>';
+h+='<button type="button" data-m="'+esc(b.merchantId||'')+'">'+esc(b.buttonText||'تصفح القسم')+' ←</button></div></div>'});
+h+='</div></div>';
+if(list.length>1){h+='<div class="bdots">';for(var j=0;j<list.length;j++){h+='<button type="button" data-i="'+j+'" aria-label="إعلان '+(j+1)+'"></button>'}h+='</div>'}
+el.innerHTML=h;
+var view=el.querySelector('.bcarview');
+var btns=el.querySelectorAll('.bcarinfo button');
+btns.forEach(function(btn){btn.onclick=function(){var mid=this.getAttribute('data-m');if(mid){activeCat=mid;activeSub='';query='';$('q').value='';$('clr').style.display='none';renderChips();renderGrid();$('categoryTitle').scrollIntoView({behavior:'smooth',block:'start'})}}});
+var dots=el.querySelectorAll('.bdots button');
+dots.forEach(function(d){d.onclick=function(){show(parseInt(this.getAttribute('data-i')));restart()}});
+var sx=0;
+view.addEventListener('touchstart',function(e){sx=e.touches[0].clientX},{passive:true});
+view.addEventListener('touchend',function(e){var dx=sx-e.changedTouches[0].clientX;if(Math.abs(dx)>40){show(window.__bcarIdx+(dx>0?1:-1));restart()}},{passive:true});
+show(window.__bcarIdx);restart()};
+renderSectionBanner();
+var __rb=false;
+new MutationObserver(function(){if(__rb)return;var el=document.getElementById('sectionBanner');if(el&&!el.hidden&&!el.querySelector('.bcarview')){__rb=true;renderSectionBanner();__rb=false}}).observe(document.getElementById('sectionBanner'),{childList:true});
+})();
 </script>
 </body>
 </html>
