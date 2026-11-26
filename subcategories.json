@@ -10,5 +10,11 @@
   "merchantId": "mmwt9rw3z",
   "name": "شامبو",
   "icon": "shampoo"
+ },
+ {
+  "id": "smwx5hjyq",
+  "merchantId": "mmwt9rw3z",
+  "name": "لوشن",
+  "icon": "lotion"
  }
 ]
