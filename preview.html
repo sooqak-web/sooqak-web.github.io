@@ -659,5 +659,58 @@ document.getElementById('bnCart').onclick=function(e){e.preventDefault();documen
 document.getElementById('bnCats').onclick=function(e){e.preventDefault();document.getElementById('categoryTitle').scrollIntoView({behavior:'smooth'})};</script>
 <script>var d=document.createElement('div');d.className='deliv';d.innerHTML='\u{1F4CD} التوصيل لـ: <b>اختار منطقتك</b><small>\u{1F556} من ٧ الصباح لـ ٦ المساء</small>';document.querySelector('header .wrap').appendChild(d);</script>
 <script>var a=document.createElement('a');a.className='fbtn';a.href='https://wa.me/249115079683';a.target='_blank';a.rel='noopener';a.textContent='تواصل معنا واتساب \u{1F4AC}';document.querySelector('footer').appendChild(a);</script>
-<style>body{padding-bottom:calc(88px + env(safe-area-inset-bottom))}</style></body>
+<style>body{padding-bottom:calc(88px + env(safe-area-inset-bottom))}</style><style id="bcar">
+#sectionBanner.sectionbanner{display:block!important;min-height:0!important;gap:0!important;background:transparent!important;border:0!important}
+.bcarview{overflow:hidden}
+.bcartrack{display:flex;transition:transform .45s ease;direction:ltr}
+.bcarslide{flex:0 0 100%;direction:rtl}
+.bcarimg{display:block;width:100%;height:150px;object-fit:cover;border-radius:18px;box-shadow:0 4px 14px rgba(10,44,97,.12)}
+.bcarinfo{display:flex;align-items:center;gap:10px;padding:9px 4px 0}
+.bcarinfo h2{font-size:16px;margin:0;flex:1;min-width:0;color:#0A2C61;font-weight:800}
+.bcartag{font-size:10.5px;font-weight:700;color:#0A2C61;background:#e3efff;border-radius:10px;padding:3px 9px;flex:none}
+.bcarinfo button{flex:none;padding:8px 18px;font-size:12px;border-radius:18px;background:#0A2C61;color:#fff;border:0;font-family:inherit;font-weight:700;cursor:pointer}
+.bdots{display:flex;justify-content:center;gap:5px;padding:9px 0 0}
+.bdots button{width:7px;height:7px;border-radius:50%;border:0;background:#c3d6ef;padding:0;cursor:pointer;transition:all .3s}
+.bdots button.on{background:#0A2C61;width:18px;border-radius:4px}
+.adslink{display:inline-block;margin-top:12px;font-size:11px;color:#8aa0c4;text-decoration:underline}
+</style>
+<script>
+(function(){
+var KEY='sooqak_banners_preview';
+window.__bcarIdx=0;window.__bcarTimer=null;window.__bcarN=0;
+function seed(){var arr=[];if(window.SECTION_BANNER&&SECTION_BANNER.image){arr.push(SECTION_BANNER)}
+arr.push({title:'عروض سوقك',subtitle:'تابع جديد العروض كل أسبوع',buttonText:'تصفح القسم',image:'images/banner-mwubtvy8-os5au.jpg',merchantId:(window.SECTION_BANNER&&SECTION_BANNER.merchantId)||'',until:'2099-01-01'});return arr}
+function getBanners(){try{var s=localStorage.getItem(KEY);if(s){var a=JSON.parse(s);if(a&&a.length)return a}}catch(e){}return seed()}
+function valid(b){if(!b||!b.image||!b.title)return false;if(typeof badgeActive==='function'&&b.until&&!badgeActive(b.until))return false;return true}
+function show(i){var n=window.__bcarN;if(!n)return;window.__bcarIdx=((i%n)+n)%n;
+var t=document.querySelector('.bcartrack');if(t)t.style.transform='translateX(-'+(window.__bcarIdx*100)+'%)';
+var ds=document.querySelectorAll('.bdots button');for(var j=0;j<ds.length;j++){ds[j].className=(window.__bcarIdx===j)?'on':''}}
+function restart(){if(window.__bcarTimer)clearInterval(window.__bcarTimer);if(window.__bcarN>1){window.__bcarTimer=setInterval(function(){show(window.__bcarIdx+1)},7000)}}
+window.renderSectionBanner=function(){
+var el=$('sectionBanner');var list=getBanners().filter(valid);
+if(!list.length){el.hidden=true;el.innerHTML='';return}
+el.hidden=false;window.__bcarN=list.length;if(window.__bcarIdx>=list.length)window.__bcarIdx=0;
+var h='<div class="bcarview"><div class="bcartrack">';
+list.forEach(function(b){var m=MERCHANTS.find(function(x){return x.id===b.merchantId});
+h+='<div class="bcarslide"><img class="bcarimg" src="'+esc(b.image)+'" alt="'+esc(b.title)+'">';
+h+='<div class="bcarinfo">'+(m?'<span class="bcartag">'+esc(m.name)+'</span>':'')+'<h2>'+esc(b.title)+'</h2>';
+h+='<button type="button" data-m="'+esc(b.merchantId||'')+'">'+esc(b.buttonText||'تصفح القسم')+' ←</button></div></div>'});
+h+='</div></div>';
+if(list.length>1){h+='<div class="bdots">';for(var j=0;j<list.length;j++){h+='<button type="button" data-i="'+j+'" aria-label="إعلان '+(j+1)+'"></button>'}h+='</div>'}
+el.innerHTML=h;
+var view=el.querySelector('.bcarview');
+var btns=el.querySelectorAll('.bcarinfo button');
+btns.forEach(function(btn){btn.onclick=function(){var mid=this.getAttribute('data-m');if(mid){activeCat=mid;activeSub='';query='';$('q').value='';$('clr').style.display='none';renderChips();renderGrid();$('categoryTitle').scrollIntoView({behavior:'smooth',block:'start'})}}});
+var dots=el.querySelectorAll('.bdots button');
+dots.forEach(function(d){d.onclick=function(){show(parseInt(this.getAttribute('data-i')));restart()}});
+var sx=0;
+view.addEventListener('touchstart',function(e){sx=e.touches[0].clientX},{passive:true});
+view.addEventListener('touchend',function(e){var dx=sx-e.changedTouches[0].clientX;if(Math.abs(dx)>40){show(window.__bcarIdx+(dx>0?1:-1));restart()}},{passive:true});
+show(window.__bcarIdx);restart()};
+renderSectionBanner();
+var f=document.querySelector('footer');
+if(f&&!document.querySelector('.adslink')){var a=document.createElement('a');a.className='adslink';a.href='banner-admin.html';a.textContent='⚙ إدارة الإعلانات الرئيسية (نسخة تجريبية)';f.appendChild(a)}
+})();
+</script>
+</body>
 </html>
