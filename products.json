@@ -1,19 +1,5 @@
 [
  {
-  "id": "pmwvlcust",
-  "name": "مزيل دوف رول",
-  "price": "30900",
-  "img": "images/pmwvlcust-mwvlcuvg.jpg",
-  "cat": "بوتيك",
-  "badge": "",
-  "isNew": true,
-  "newUntil": "2026-11-30",
-  "weight": "",
-  "unit": "",
-  "merchantId": "mmwt9rw3z",
-  "subcategoryId": ""
- },
- {
   "id": "pmwvldgdq",
   "name": "مزيل دوف شمعي",
   "price": "20300",
