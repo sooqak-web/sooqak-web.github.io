@@ -585,5 +585,54 @@ return resizeImage(list[k].file).then(function(b64){var id='p'+stamp+k,path='ima
 step(0).then(function(){added.forEach(function(p){products.push(p)});return saveProducts('bulk add '+added.length)}).then(function(){toast('تم رفع '+added.length+' منتج ✓ بتظهر في الموقع خلال دقيقة','ok',7000);bulkItems=[];bulkRender();render();openAdmin('products')}).catch(function(e){toast((e.message||'حصل خطأ')+' (لو وقف في النص، حدّث الصفحة وراجع المنتجات)','err',9000);load()}).then(function(){busy=false;btn.textContent='✓ رفع كل المنتجات';btn.disabled=!bulkItems.length});
 };
 </script>
+<style>
+#bannerList{display:flex;flex-direction:column;gap:10px;margin:0 0 16px}
+.bl-row{display:flex;align-items:center;gap:10px;background:#f7faff;border:1px solid #c6d7ed;border-radius:14px;padding:10px}
+.bl-row img{width:64px;height:44px;object-fit:cover;border-radius:10px;flex:none;background:#e3edfb}
+.bl-info{flex:1;min-width:0}
+.bl-info b{display:block;color:#0a2c61;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bl-info small{color:#5b7299}
+.bl-off{opacity:.55}
+.bl-btns{display:flex;gap:6px;flex:none}
+.bl-btns button{width:34px;height:34px;border-radius:10px;border:1px solid #c6d7ed;background:#fff;font-size:16px;cursor:pointer;color:#0a2c61}
+.bl-btns button:disabled{opacity:.35}
+</style>
+<script>
+(function(){
+var editIdx=-1,wired=false,lastRendered='';
+function cur(){if(homepage&&homepage.banners&&homepage.banners.length)return homepage.banners.slice();if(homepage&&homepage.banner&&homepage.banner.image)return [homepage.banner];return []}
+function legacy(list){var en=list.filter(function(b){return b.enabled!==false});return en[0]||list[0]||{enabled:false}}
+function escH(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function mName(id){var m=(merchants||[]).find(function(x){return x.id===id});return m?m.name:'بدون قسم'}
+function persist(list,msg){var next=Object.assign({},homepage,{banners:list,banner:legacy(list)});return putFile('homepage.json',b64enc(JSON.stringify(next,null,1)),msg,homepageSha).then(function(j){homepageSha=j.content.sha;homepage=next;renderList(true)})}
+function renderList(force){var box=document.getElementById('bannerList');if(!box)return;var list=cur();var key=JSON.stringify(list);if(!force&&key===lastRendered)return;lastRendered=key;
+if(!list.length){box.innerHTML='<p class="hint">لا توجد إعلانات بعد. أضف أول إعلان من النموذج بالأسفل.</p>';return}
+box.innerHTML=list.map(function(b,i){var off=b.enabled===false;
+return '<div class="bl-row'+(off?' bl-off':'')+'"><img src="'+escH(b.image)+'" alt="" onerror="this.style.visibility=\'hidden\'"><div class="bl-info"><b>'+escH(b.title)+'</b><small>'+escH(mName(b.merchantId))+(b.until?' · حتى '+escH(b.until):'')+(off?' · مخفي':'')+'</small></div><div class="bl-btns"><button type="button" data-up="'+i+'"'+(i===0?' disabled':'')+'>↑</button><button type="button" data-dn="'+i+'"'+(i===list.length-1?' disabled':'')+'>↓</button><button type="button" data-ed="'+i+'">✎</button><button type="button" data-del="'+i+'">×</button></div></div>'}).join('')}
+function move(i,j){if(busy)return;var list=cur();var x=list[i];list.splice(i,1);list.splice(j,0,x);busy=true;persist(list,'reorder homepage banners').then(function(){toast('تم إعادة الترتيب ✓','ok')}).catch(function(e){toast('لم يتم الحفظ. '+(e.message||''),'err',7000)}).then(function(){busy=false})}
+function del(i){if(busy)return;var list=cur();if(!confirm('حذف الإعلان "'+(list[i].title||'')+'"؟'))return;list.splice(i,1);busy=true;persist(list,'delete homepage banner').then(function(){toast('تم حذف الإعلان ✓','ok')}).catch(function(e){toast('لم يتم الحفظ. '+(e.message||''),'err',7000)}).then(function(){busy=false})}
+function edit(i){var list=cur(),b=list[i];if(!b)return;editIdx=i;bImage=b.image||'';document.getElementById('bannerEnabled').checked=b.enabled!==false;document.getElementById('bannerTitle').value=b.title||'';document.getElementById('bannerSubtitle').value=b.subtitle||'';document.getElementById('bannerButton').value=b.buttonText||'';document.getElementById('bannerUntil').value=b.until||'';document.getElementById('bannerPhoto').value='';showSettingImage('b',bImage);fillBannerCategories(b.merchantId);document.getElementById('bannerSave').textContent='حفظ التعديل';document.getElementById('bannerCancelEdit').hidden=false;document.getElementById('bannerFormHead').textContent='تعديل إعلان';document.getElementById('bannerForm').scrollIntoView({behavior:'smooth',block:'start'})}
+function resetForm(){editIdx=-1;bImage='';var f=document.getElementById('bannerForm');f.reset();showSettingImage('b','');fillBannerCategories('');document.getElementById('bannerSave').textContent='+ إضافة إعلان';document.getElementById('bannerCancelEdit').hidden=true;document.getElementById('bannerFormHead').textContent='إضافة إعلان جديد'}
+function wire(){if(wired)return;var form=document.getElementById('bannerForm');if(!form||typeof putFile!=='function')return;wired=true;
+var card=form.closest('.card');var h=card.querySelector('h2');if(h)h.textContent='إعلانات الرئيسية';
+var hint=card.querySelector('.hint');if(hint)hint.textContent='تقدر تضيف أكثر من إعلان رئيسي، والموقع يبدّل بينهم تلقائي كل ٧ ثواني. اسحب بالأسهم لترتيبهم.';
+var listDiv=document.createElement('div');listDiv.id='bannerList';card.insertBefore(listDiv,form);
+var head=document.createElement('h2');head.id='bannerFormHead';head.textContent='إضافة إعلان جديد';head.style.marginTop='18px';card.insertBefore(head,form);
+var cancel=document.createElement('button');cancel.type='button';cancel.id='bannerCancelEdit';cancel.className='ghost';cancel.hidden=true;cancel.style.cssText='width:100%;margin-top:8px';cancel.textContent='إلغاء التعديل';cancel.onclick=resetForm;form.appendChild(cancel);
+document.getElementById('bannerSave').textContent='+ إضافة إعلان';
+listDiv.addEventListener('click',function(e){var t=e.target.closest('button');if(!t)return;if(t.hasAttribute('data-up'))move(+t.getAttribute('data-up'),+t.getAttribute('data-up')-1);else if(t.hasAttribute('data-dn'))move(+t.getAttribute('data-dn'),+t.getAttribute('data-dn')+1);else if(t.hasAttribute('data-del'))del(+t.getAttribute('data-del'));else if(t.hasAttribute('data-ed'))edit(+t.getAttribute('data-ed'))});
+form.onsubmit=function(e){e.preventDefault();if(busy)return;if(!homepageReady){toast('انتظر تحميل الإعلانات أو حدّث الصفحة','err',6000);return}
+var enabled=document.getElementById('bannerEnabled').checked,title=document.getElementById('bannerTitle').value.trim(),mid=document.getElementById('bannerCategory').value,file=document.getElementById('bannerPhoto').files[0];
+if(!title||!mid||(!file&&!bImage)){toast('أضف صورة وعنوان واختار القسم','err',7000);return}
+busy=true;document.getElementById('bannerSave').disabled=true;toast('جاري الحفظ...','info');
+uploadSettingImage(file,'banner').then(function(path){var entry={enabled:enabled,title:title,subtitle:document.getElementById('bannerSubtitle').value.trim(),buttonText:document.getElementById('bannerButton').value.trim()||'تصفح القسم',merchantId:mid,image:path||bImage,until:document.getElementById('bannerUntil').value};
+var list=cur();if(editIdx>=0)list[editIdx]=entry;else list.push(entry);
+return persist(list,editIdx>=0?'edit homepage banner':'add homepage banner').then(function(){toast('تم الحفظ ✓ يظهر بعد تحديث الموقع خلال دقائق','ok',7000);resetForm()})}).catch(function(e){toast('لم يتم الحفظ. حدّث الصفحة وحاول ثانية. '+(e.message||''),'err',8000)}).then(function(){busy=false;document.getElementById('bannerSave').disabled=false})};
+if(homepageReady){resetForm();renderList(true)}}
+var tries=0;var iv=setInterval(function(){tries++;if(!wired){wire()}else if(homepageReady){resetFormOnce()}if(tries>240)clearInterval(iv)},500);
+var resetDone=false;function resetFormOnce(){if(resetDone)return;resetDone=true;resetForm();renderList(true);setInterval(function(){renderList(false)},2000)}
+})();
+</script>
+
 </body>
 </html>
