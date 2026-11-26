@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>إدارة الإعلانات الرئيسية — نسخة تجريبية</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Estedad:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Estedad','Segoe UI',Tahoma,sans-serif}
+body{background:#eef2f9;color:#0A2C61;min-height:100vh}
+header{background:linear-gradient(180deg,#123a7a,#0A2C61);color:#fff;padding:22px 16px 18px;text-align:center}
+header h1{font-size:19px;font-weight:800}
+header .tbadge{display:inline-block;margin-top:8px;font-size:11px;font-weight:700;background:#FFC93D;color:#0A2C61;border-radius:12px;padding:3px 12px}
+.wrap{max-width:640px;margin:0 auto;padding:14px 12px 90px}
+.note{background:#fff8e1;border:1px solid #ffe08a;color:#6b5310;border-radius:14px;padding:10px 14px;font-size:12.5px;font-weight:600;line-height:1.8;margin-bottom:14px}
+.card{background:#fff;border-radius:16px;box-shadow:0 2px 10px rgba(10,44,97,.08);padding:14px;margin-bottom:12px}
+.card h2{font-size:15px;font-weight:800;margin-bottom:10px}
+.bitem{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #eef2f9}
+.bitem:last-child{border-bottom:0}
+.bitem img{width:74px;height:48px;object-fit:cover;border-radius:10px;flex:none;background:#eef2f9}
+.bitem .binfo{flex:1;min-width:0}
+.bitem .binfo .t{font-size:13.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bitem .binfo .m{font-size:11px;color:#5b6b8c;margin-top:2px}
+.bitem .ops{display:flex;gap:4px;flex:none}
+.bitem .ops button{border:1px solid #d5e0f0;background:#f4f8ff;color:#0A2C61;border-radius:9px;width:30px;height:30px;font-size:14px;cursor:pointer}
+.bitem .ops button.del{background:#fff0f0;border-color:#ffd0d0;color:#c0392b}
+label{display:block;font-size:12px;font-weight:700;margin:10px 0 4px;color:#33456b}
+input,select{width:100%;border:1.5px solid #d5e0f0;border-radius:12px;padding:10px 12px;font-size:13.5px;background:#fbfdff;color:#0A2C61}
+input:focus,select:focus{outline:none;border-color:#1976D2}
+.row2{display:flex;gap:8px}
+.row2>div{flex:1}
+.btn{display:block;width:100%;border:0;border-radius:14px;padding:13px;font-size:14.5px;font-weight:800;cursor:pointer;margin-top:14px}
+.btn-primary{background:#1976D2;color:#fff}
+.btn-ghost{background:#eef2f9;color:#0A2C61}
+.btn-preview{background:#25D366;color:#fff;text-decoration:none;text-align:center}
+.hint{font-size:11px;color:#7b8bab;margin-top:3px;line-height:1.7}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#0A2C61;color:#fff;font-size:13px;font-weight:700;border-radius:24px;padding:10px 22px;box-shadow:0 6px 20px rgba(10,44,97,.35);opacity:0;transition:opacity .3s;pointer-events:none;z-index:9}
+.empty{text-align:center;color:#7b8bab;font-size:13px;padding:18px 0}
+</style>
+</head>
+<body>
+<header>
+<h1>إدارة الإعلانات الرئيسية</h1>
+<span class="tbadge">نسخة تجريبية — للمراجعة فقط</span>
+</header>
+<div class="wrap">
+<div class="note">⚠️ التعديلات هنا خاصة بالنسخة التجريبية فقط وبتتحفظ على جهازك. الموقع الأساسي وبياناته ما بيتأثروا بأي حاجة.</div>
+
+<div class="card">
+<h2>الإعلانات الحالية</h2>
+<div id="list"><div class="empty">بنحمّل…</div></div>
+<button class="btn btn-ghost" id="resetBtn" type="button">رجوع للوضع الافتراضي</button>
+</div>
+
+<div class="card">
+<h2>إضافة إعلان جديد</h2>
+<label>عنوان الإعلان *</label>
+<input id="fTitle" placeholder="مثال: أفضل الملابس">
+<label>رابط الصورة *</label>
+<input id="fImage" placeholder="images/اسم-الصورة.jpg" dir="ltr" style="text-align:left">
+<div class="hint">انسخ رابط صورة من الموقع (اضغط على أي صورة مطوّل وانسخ الرابط)، أو اكتب مسار صورة من صور الموقع.</div>
+<div class="row2">
+<div>
+<label>القسم</label>
+<select id="fMerchant"></select>
+</div>
+<div>
+<label>تاريخ الانتهاء (اختياري)</label>
+<input id="fUntil" type="date">
+</div>
+</div>
+<label>نص الزر (اختياري)</label>
+<input id="fBtn" placeholder="تصفح القسم">
+<button class="btn btn-primary" id="addBtn" type="button">إضافة الإعلان</button>
+</div>
+
+<a class="btn btn-preview" href="preview.html">فتح النسخة التجريبية ↩</a>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+var KEY='sooqak_banners_preview';
+var MERCHANTS=[];
+var banners=null;
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function toast(m){var t=document.getElementById('toast');t.textContent=m;t.style.opacity=1;setTimeout(function(){t.style.opacity=0},2200)}
+function seed(hp){var arr=[];if(hp&&hp.banner&&hp.banner.image){arr.push(hp.banner)}
+arr.push({title:'عروض سوقك',subtitle:'تابع جديد العروض كل أسبوع',buttonText:'تصفح القسم',image:'images/banner-mwubtvy8-os5au.jpg',merchantId:(hp&&hp.banner&&hp.banner.merchantId)||'',until:'2099-01-01'});return arr}
+function load(){try{var s=localStorage.getItem(KEY);if(s){var a=JSON.parse(s);if(a&&a.length)return a}}catch(e){}return null}
+function save(){localStorage.setItem(KEY,JSON.stringify(banners));render()}
+function mname(id){var m=MERCHANTS.find(function(x){return x.id===id});return m?m.name:'بدون قسم'}
+function render(){
+var el=document.getElementById('list');
+if(!banners||!banners.length){el.innerHTML='<div class="empty">ما في إعلانات — ضيف واحد تحت</div>';return}
+el.innerHTML=banners.map(function(b,i){
+return '<div class="bitem"><img src="'+esc(b.image)+'" onerror="this.style.visibility=\'hidden\'">'+
+'<div class="binfo"><div class="t">'+esc(b.title)+'</div><div class="m">'+esc(mname(b.merchantId))+(b.until&&b.until!=='2099-01-01'?' · لغاية '+esc(b.until):'')+'</div></div>'+
+'<div class="ops"><button type="button" onclick="moveB('+i+',-1)" title="طلّع">↑</button>'+
+'<button type="button" onclick="moveB('+i+',1)" title="نزّل">↓</button>'+
+'<button type="button" class="del" onclick="delB('+i+')" title="احذف">✕</button></div></div>'}).join('')}
+function moveB(i,d){var j=i+d;if(j<0||j>=banners.length)return;var t=banners[i];banners[i]=banners[j];banners[j]=t;save();toast('اتحفظ الترتيب')}
+function delB(i){banners.splice(i,1);save();toast('اتحذف الإعلان')}
+document.getElementById('addBtn').onclick=function(){
+var title=document.getElementById('fTitle').value.trim();
+var image=document.getElementById('fImage').value.trim();
+if(!title||!image){toast('اكتب العنوان ورابط الصورة');return}
+var until=document.getElementById('fUntil').value||'2099-01-01';
+banners.push({title:title,image:image,merchantId:document.getElementById('fMerchant').value,until:until,buttonText:document.getElementById('fBtn').value.trim()||'تصفح القسم'});
+document.getElementById('fTitle').value='';document.getElementById('fImage').value='';document.getElementById('fBtn').value='';
+save();toast('اتضاف الإعلان ✓')};
+document.getElementById('resetBtn').onclick=function(){localStorage.removeItem(KEY);location.reload()};
+Promise.all([
+fetch('merchants.json?v='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():[]}).catch(function(){return[]}),
+fetch('homepage.json?v='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():{}}).catch(function(){return{}})
+]).then(function(v){
+MERCHANTS=Array.isArray(v[0])?v[0]:(v[0].merchants||[]);
+var sel=document.getElementById('fMerchant');
+sel.innerHTML='<option value="">بدون قسم</option>'+MERCHANTS.map(function(m){return '<option value="'+esc(m.id)+'">'+esc(m.name)+'</option>'}).join('');
+banners=load()||seed(v[1]);
+render()});
+</script>
+</body>
+</html>
