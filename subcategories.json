@@ -16,5 +16,11 @@
   "merchantId": "mmwt9rw3z",
   "name": "لوشن",
   "icon": "lotion"
+ },
+ {
+  "id": "smwx5hsb6",
+  "merchantId": "mmwt9rw3z",
+  "name": "كريم شعر",
+  "icon": "skincare"
  }
 ]
