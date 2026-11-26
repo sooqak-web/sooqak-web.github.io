@@ -587,14 +587,14 @@ step(0).then(function(){added.forEach(function(p){products.push(p)});return save
 </script>
 <style>
 #bannerList{display:flex;flex-direction:column;gap:10px;margin:0 0 16px}
-.bl-row{display:flex;align-items:center;gap:10px;background:#f7faff;border:1px solid #c6d7ed;border-radius:14px;padding:10px}
+.bl-row{display:flex;flex-wrap:wrap;align-items:center;gap:10px;background:#f7faff;border:1px solid #c6d7ed;border-radius:14px;padding:10px}
 .bl-row img{width:64px;height:44px;object-fit:cover;border-radius:10px;flex:none;background:#e3edfb}
-.bl-info{flex:1;min-width:0}
-.bl-info b{display:block;color:#0a2c61;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bl-info{flex:1 1 0;min-width:120px}
+.bl-info b{display:block;color:#0a2c61;font-size:15px;line-height:1.4;white-space:normal;word-break:break-word}.bl-info small{display:block;line-height:1.6;margin-top:2px}
 .bl-info small{color:#5b7299}
 .bl-off{opacity:.55}
-.bl-btns{display:flex;gap:6px;flex:none}
-.bl-btns button{width:34px;height:34px;border-radius:10px;border:1px solid #c6d7ed;background:#fff;font-size:16px;cursor:pointer;color:#0a2c61}
+.bl-btns{display:flex;gap:8px;flex:1 1 100%;justify-content:flex-start;border-top:1px solid #dbe6f6;padding-top:8px}
+.bl-btns button{width:44px!important;min-width:0!important;height:38px!important;padding:0!important;margin:0!important;display:flex;align-items:center;justify-content:center;border-radius:10px;border:1px solid #c6d7ed;background:#fff;font-size:16px;cursor:pointer;color:#0a2c61}
 .bl-btns button:disabled{opacity:.35}
 </style>
 <script>
@@ -612,7 +612,7 @@ return '<div class="bl-row'+(off?' bl-off':'')+'"><img src="'+escH(b.image)+'" a
 function move(i,j){if(busy)return;var list=cur();var x=list[i];list.splice(i,1);list.splice(j,0,x);busy=true;persist(list,'reorder homepage banners').then(function(){toast('تم إعادة الترتيب ✓','ok')}).catch(function(e){toast('لم يتم الحفظ. '+(e.message||''),'err',7000)}).then(function(){busy=false})}
 function del(i){if(busy)return;var list=cur();if(!confirm('حذف الإعلان "'+(list[i].title||'')+'"؟'))return;list.splice(i,1);busy=true;persist(list,'delete homepage banner').then(function(){toast('تم حذف الإعلان ✓','ok')}).catch(function(e){toast('لم يتم الحفظ. '+(e.message||''),'err',7000)}).then(function(){busy=false})}
 function edit(i){var list=cur(),b=list[i];if(!b)return;editIdx=i;bImage=b.image||'';document.getElementById('bannerEnabled').checked=b.enabled!==false;document.getElementById('bannerTitle').value=b.title||'';document.getElementById('bannerSubtitle').value=b.subtitle||'';document.getElementById('bannerButton').value=b.buttonText||'';document.getElementById('bannerUntil').value=b.until||'';document.getElementById('bannerPhoto').value='';showSettingImage('b',bImage);fillBannerCategories(b.merchantId);document.getElementById('bannerSave').textContent='حفظ التعديل';document.getElementById('bannerCancelEdit').hidden=false;document.getElementById('bannerFormHead').textContent='تعديل إعلان';document.getElementById('bannerForm').scrollIntoView({behavior:'smooth',block:'start'})}
-function resetForm(){editIdx=-1;bImage='';var f=document.getElementById('bannerForm');f.reset();showSettingImage('b','');fillBannerCategories('');document.getElementById('bannerSave').textContent='+ إضافة إعلان';document.getElementById('bannerCancelEdit').hidden=true;document.getElementById('bannerFormHead').textContent='إضافة إعلان جديد'}
+function resetForm(){editIdx=-1;bImage='';var f=document.getElementById('bannerForm');f.reset();showSettingImage('b','');fillBannerCategories('');document.getElementById('bannerEnabled').checked=true;document.getElementById('bannerSave').textContent='+ إضافة إعلان';document.getElementById('bannerCancelEdit').hidden=true;document.getElementById('bannerFormHead').textContent='إضافة إعلان جديد'}
 function wire(){if(wired)return;var form=document.getElementById('bannerForm');if(!form||typeof putFile!=='function')return;wired=true;
 var card=form.closest('.card');var h=card.querySelector('h2');if(h)h.textContent='إعلانات الرئيسية';
 var hint=card.querySelector('.hint');if(hint)hint.textContent='تقدر تضيف أكثر من إعلان رئيسي، والموقع يبدّل بينهم تلقائي كل ٧ ثواني. اسحب بالأسهم لترتيبهم.';
