@@ -708,6 +708,8 @@ view.addEventListener('touchstart',function(e){sx=e.touches[0].clientX},{passive
 view.addEventListener('touchend',function(e){var dx=sx-e.changedTouches[0].clientX;if(Math.abs(dx)>40){show(window.__bcarIdx+(dx>0?1:-1));restart()}},{passive:true});
 show(window.__bcarIdx);restart()};
 renderSectionBanner();
+var __rb=false;
+new MutationObserver(function(){if(__rb)return;var el=document.getElementById('sectionBanner');if(el&&!el.hidden&&!el.querySelector('.bcarview')){__rb=true;renderSectionBanner();__rb=false}}).observe(document.getElementById('sectionBanner'),{childList:true});
 var f=document.querySelector('footer');
 if(f&&!document.querySelector('.adslink')){var a=document.createElement('a');a.className='adslink';a.href='banner-admin.html';a.textContent='⚙ إدارة الإعلانات الرئيسية (نسخة تجريبية)';f.appendChild(a)}
 })();
