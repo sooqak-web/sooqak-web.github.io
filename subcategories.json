@@ -28,5 +28,11 @@
   "merchantId": "mmwt9rw3z",
   "name": "قسم الصابون",
   "icon": "soap"
+ },
+ {
+  "id": "smwx5kl3g",
+  "merchantId": "mmwt9rw3z",
+  "name": "قسم الكريمات",
+  "icon": "skincare"
  }
 ]
