@@ -300,10 +300,10 @@ header{padding:7px 0 8px}
 </style>
 <style>
 
-#chips{display:flex;flex-wrap:wrap;overflow-x:visible;gap:4px;padding:2px 12px 8px}
+#chips{display:flex;flex-wrap:wrap;overflow-x:visible;gap:4px;padding:2px 8px 8px;justify-content:space-between}
 #chips::-webkit-scrollbar{display:none}
-#chips .chip{flex:0 0 74px;padding:8px 2px 6px;gap:6px;border-radius:12px;background:transparent;border:none;box-shadow:none;font-size:11px}
-#chips .chip .em{width:54px;height:54px;border-radius:50%;background:#fff;box-shadow:0 2px 8px rgba(10,44,97,.10);border:2px solid transparent}
+#chips .chip{flex:0 0 65px;padding:8px 0 6px;gap:4px;border-radius:12px;background:transparent;border:none;box-shadow:none;font-size:10.5px}
+#chips .chip .em{width:50px;height:50px;border-radius:50%;background:#fff;box-shadow:0 2px 8px rgba(10,44,97,.10);border:2px solid transparent}
 #chips .chip .em img{width:100%!important;height:100%!important;border-radius:50%}
 #chips .chip.on{background:transparent;border:none;box-shadow:none;color:#1976d2}
 #chips .chip.on .em{background:#1976d2;box-shadow:0 0 0 3px #d6e8ff}
@@ -659,5 +659,5 @@ document.getElementById('bnCart').onclick=function(e){e.preventDefault();documen
 document.getElementById('bnCats').onclick=function(e){e.preventDefault();document.getElementById('categoryTitle').scrollIntoView({behavior:'smooth'})};</script>
 <script>var d=document.createElement('div');d.className='deliv';d.innerHTML='\u{1F4CD} التوصيل لـ: <b>اختار منطقتك</b><small>\u{1F556} من ٧ الصباح لـ ٦ المساء</small>';document.querySelector('header .wrap').appendChild(d);</script>
 <script>var a=document.createElement('a');a.className='fbtn';a.href='https://wa.me/249115079683';a.target='_blank';a.rel='noopener';a.textContent='تواصل معنا واتساب \u{1F4AC}';document.querySelector('footer').appendChild(a);</script>
-</body>
+<style>body{padding-bottom:calc(88px + env(safe-area-inset-bottom))}</style></body>
 </html>
