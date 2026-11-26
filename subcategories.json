@@ -40,5 +40,11 @@
   "merchantId": "mmwt9rw3z",
   "name": "قسم الزيوت",
   "icon": "skincare"
+ },
+ {
+  "id": "smwx8mbcp",
+  "merchantId": "mmwt9rw3z",
+  "name": "قسم الحنة والصبغات",
+  "icon": "skincare"
  }
 ]
