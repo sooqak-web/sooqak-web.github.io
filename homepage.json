@@ -11,5 +11,25 @@
  "orderCode": {
   "prefix": "SQ",
   "offset": -2
- }
+ },
+ "banners": [
+  {
+   "enabled": true,
+   "title": "افضل الملابس",
+   "subtitle": "الافضل اسبوعي",
+   "buttonText": "تصفح القسم",
+   "merchantId": "mmwt9rw3z",
+   "image": "images/banner-mwubtvy8-os5au.jpg",
+   "until": "2026-11-30"
+  },
+  {
+   "enabled": true,
+   "title": "عفهلعرعلله",
+   "subtitle": "هفءققي",
+   "buttonText": "تصفح القسمهلىن",
+   "merchantId": "mmwt9p9zm",
+   "image": "images/banner-mwxqd02r-8ajqg.jpg",
+   "until": "2026-11-30"
+  }
+ ]
 }
