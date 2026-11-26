@@ -270,6 +270,20 @@ footer a.ph2{display:inline-block;margin-top:8px;color:var(--gold);font-family:v
 .ctoggle{margin:10px 0}.ctoggle summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:7px;background:#eef5ff;border:1px solid #d7e7fa;border-radius:12px;padding:11px 12px;font-size:13px;font-weight:700;color:#0a2c61}.ctoggle summary::-webkit-details-marker{display:none}.ctoggle summary:after{content:'\2039';margin-inline-start:auto;color:#5d6b8c;font-weight:800;transition:transform .2s}.ctoggle[open] summary:after{transform:rotate(-90deg)}.ctoggle[open] summary{border-bottom-left-radius:0;border-bottom-right-radius:0;border-bottom:0}.ctoggle .couponbox{margin:0;border-top-left-radius:0;border-top-right-radius:0;border-top:0}
 #checkout{position:sticky;bottom:8px;z-index:6;box-shadow:0 10px 20px rgba(18,93,176,.30)}
 
+/* subcats v2: icon tiles in one scrolling row (Noon/Amazon style) */
+#subchips{display:block;margin:0 12px 12px;padding:12px 0 10px;background:#fff;border:1px solid #e1e9f5;border-radius:16px}
+#subchips[hidden]{display:none}
+#subchips .subhead{font-size:13px;font-weight:800;color:#0A2C61;padding:0 14px 8px}
+#subchips .subrow{display:flex;gap:6px;overflow-x:auto;padding:0 10px 2px;scrollbar-width:none;scroll-snap-type:x proximity}
+#subchips .subrow::-webkit-scrollbar{display:none}
+#subchips .chip.subtile{flex:0 0 76px;width:76px;display:flex;flex-direction:column;align-items:center;gap:6px;padding:4px 2px;background:transparent;border:0;border-radius:12px;font-size:11.5px;font-weight:700;line-height:1.35;color:#0A2C61;white-space:normal;text-align:center;scroll-snap-align:start;margin:0}
+#subchips .subtile .em{display:flex;align-items:center;justify-content:center;width:56px;height:56px;border-radius:50%;background:#eef5ff;border:2px solid transparent;color:#1976d2;margin:0;font-size:26px}
+#subchips .subtile .shopicon{width:30px;height:30px}
+#subchips .subtile .lbl{display:block;min-height:31px;max-width:100%;overflow-wrap:anywhere}
+#subchips .subtile.on{background:transparent;color:#1976d2}
+#subchips .subtile.on .em{background:#1976d2;color:#fff;border-color:#1976d2;box-shadow:0 0 0 3px #d6e8ff}
+#subchips .subtile.on .shopicon{color:#fff}
+#subchips .subtile .em.allem{font-weight:800;font-size:15px}
 </style>
 </head>
 <body>
@@ -358,7 +372,7 @@ $("chips").innerHTML=list.map(function(c){return'<button class="chip'+(c[0]===ac
 $('categoryAll').onclick=function(){activeCat='';activeSub='';query='';$('q').value='';$('clr').style.display='none';renderChips();renderGrid()};
 $("chips").addEventListener("click",function(e){var b=e.target.closest(".chip");if(!b)return;activeCat=b.getAttribute("data-c");activeSub="";renderChips();renderGrid()});
 
-function renderSubchips(){var list=SUBCATEGORIES.filter(function(x){return x.merchantId===activeCat});var el=$("subchips");el.hidden=!activeCat||!list.length;if(el.hidden){activeSub="";el.innerHTML="";return}if(!list.some(function(x){return x.id===activeSub}))activeSub="";el.innerHTML='<button class="chip '+(!activeSub?'on':'')+'" data-sub="">الكل في القسم</button>'+list.map(function(x){return '<button class="chip '+(activeSub===x.id?'on':'')+'" data-sub="'+esc(x.id)+'"><span class="em">'+shopIcon(x.icon)+'</span>'+esc(x.name)+'</button>'}).join('')}
+function renderSubchips(){var list=SUBCATEGORIES.filter(function(x){return x.merchantId===activeCat});var el=$("subchips");el.hidden=!activeCat||!list.length;if(el.hidden){activeSub="";el.innerHTML="";return}if(!list.some(function(x){return x.id===activeSub}))activeSub="";var prev=el.querySelector('.subrow'),sx=prev?prev.scrollLeft:0;el.innerHTML='<div class="subhead">التصنيفات</div><div class="subrow"><button class="chip subtile '+(!activeSub?'on':'')+'" data-sub=""><span class="em allem">الكل</span><span class="lbl">الكل في القسم</span></button>'+list.map(function(x){return '<button class="chip subtile '+(activeSub===x.id?'on':'')+'" data-sub="'+esc(x.id)+'"><span class="em">'+shopIcon(x.icon)+'</span><span class="lbl">'+esc(String(x.name).replace(/^قسم\s+/,''))+'</span></button>'}).join('')+'</div>';var r=el.querySelector('.subrow');if(r)r.scrollLeft=sx}
 $("subchips").onclick=function(e){var b=e.target.closest('[data-sub]');if(b){activeSub=b.dataset.sub;renderSubchips();renderGrid()}};
 /* grid */
 
