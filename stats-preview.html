@@ -1,0 +1,24 @@
+<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>زوار سوقك (تجريبي)</title>
+<style>body{margin:0;background:#f3f5f9;font-family:Tahoma,Arial,sans-serif;color:#17233b}header{background:#0b2a5b;color:#fff;padding:16px;font-weight:700;font-size:18px;border-bottom:4px solid #e0a82e}main{padding:14px;max-width:560px;margin:auto}.card{background:#fff;border-radius:18px;box-shadow:0 2px 8px #0001;padding:16px;margin-bottom:14px}.big{display:flex;gap:10px}.big div{flex:1;background:#eef3fb;border-radius:14px;padding:12px;text-align:center}.big b{display:block;font-size:28px;color:#0b2a5b}.big span{font-size:13px}h2{margin:0 0 10px;font-size:16px}.row{display:flex;align-items:center;gap:8px;margin:7px 0;font-size:14px}.row i{display:block;height:12px;border-radius:6px;background:#0b2a5b;min-width:2px}.row .n{width:70px;flex:none}.row .v{width:34px;flex:none;text-align:left}.hint{font-size:13px;color:#56627a;line-height:1.8;margin:8px 0 0}button{width:100%;background:#0b2a5b;color:#fff;border:0;border-radius:14px;padding:12px;font-size:15px;font-family:inherit}</style></head><body>
+<header>📊 زوار سوقك (نسخة تجريبية)</header><main>
+<div class="card"><div class="big"><div><b id="t">…</b><span>زوار اليوم</span></div><div><b id="w">…</b><span>آخر 7 أيام</span></div><div><b id="a">…</b><span>من البداية</span></div></div>
+<p class="hint">كل رقم = كم مرة فتح شخص الموقع. الشخص الواحد لو فتحه كذا مرة في نفس الجلسة بيتحسب مرة بس.</p></div>
+<div class="card"><h2>الطلبات مقابل الزوار</h2><div class="big"><div><b id="o">…</b><span>طلبات اليوم</span></div><div><b id="r">…</b><span>من كل 100 زائر طلبوا (اليوم)</span></div></div>
+<p class="hint">لو الرقم صغير: الناس بيدخلوا وما بيطلبوا، فراجع الأسعار أو الصور. الرقم الكويس عادةً من 2 إلى 5 من كل 100.</p></div>
+<div class="card"><h2>الأيام الأخيرة</h2><div id="days"></div></div>
+<div class="card"><h2>الزوار جو من وين؟</h2><div id="src"></div>
+<p class="hint">واتساب وفيسبوك بيتعرفوا لو الرابط فيه <b dir="ltr">?s=wa</b> أو <b dir="ltr">?s=fb</b> في آخره. "مباشر" يعني فتح الرابط من غير معرفة المصدر (زي ما يجي من رسالة واتساب عادية). الأرقام دي بدأت اليوم بس.</p></div>
+<div class="card"><p class="hint" style="margin:0">ملاحظة: الأرقام تقريبية، وزياراتك أنت وتجاربنا بتتحسب كمان. ما بنخزن أي اسم ولا رقم.</p></div>
+<button onclick="load()">تحديث</button></main>
+<script>
+var API="https://abacus.jasoncameron.dev",NS="sooqak-store";
+function g(k){return fetch(API+"/get/"+NS+"/"+k,{cache:"no-store"}).then(function(r){if(r.status===404)return 0;if(!r.ok)throw 0;return r.json()}).then(function(d){return typeof d==="number"?d:(d&&d.value)||0}).catch(function(){return 0})}
+function day(off){var d=new Date(Date.now()-off*864e5);return d.toLocaleDateString("en-CA",{timeZone:"Africa/Khartoum"})}
+function bar(n,v,m){return '<div class="row"><span class="n">'+n+'</span><i style="width:'+Math.round(v/Math.max(m,1)*55)+'%"></i><span class="v">'+v+'</span></div>'}
+function load(){var ds=[0,1,2,3,4,5,6].map(day);Promise.all(ds.map(function(d){return g("visits-"+d)}).concat([g("site-visits"),g("orders-"+ds[0]),g("src-wa"),g("src-fb"),g("src-other"),g("src-direct")])).then(function(v){
+var days=v.slice(0,7),tot=v[7],o=v[8],s=v.slice(9),sum=days.reduce(function(a,b){return a+b},0);
+document.getElementById("t").textContent=days[0];document.getElementById("w").textContent=sum;document.getElementById("a").textContent=tot;document.getElementById("o").textContent=o;document.getElementById("r").textContent=days[0]?Math.round(o/days[0]*100):0;
+var m=Math.max.apply(null,days);document.getElementById("days").innerHTML=days.map(function(x,i){return bar(i==0?"اليوم":i==1?"أمس":ds[i].slice(5),x,m)}).join("");
+var sn=["واتساب","فيسبوك","مواقع أخرى","مباشر"],sm=Math.max.apply(null,s);document.getElementById("src").innerHTML=s.map(function(x,i){return bar(sn[i],x,sm)}).join("")})}
+load();
+</script></body></html>
