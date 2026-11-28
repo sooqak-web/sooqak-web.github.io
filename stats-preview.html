@@ -8,11 +8,15 @@
 <div class="card"><h2>الأيام الأخيرة</h2><div id="days"></div></div>
 <div class="card"><h2>الزوار جو من وين؟</h2><div id="src"></div>
 <p class="hint">واتساب وفيسبوك بيتعرفوا لو الرابط فيه <b dir="ltr">?s=wa</b> أو <b dir="ltr">?s=fb</b> في آخره. "مباشر" يعني فتح الرابط من غير معرفة المصدر (زي ما يجي من رسالة واتساب عادية). الأرقام دي بدأت اليوم بس.</p></div>
-<div class="card"><p class="hint" style="margin:0">ملاحظة: الأرقام تقريبية، وزياراتك أنت وتجاربنا بتتحسب كمان. ما بنخزن أي اسم ولا رقم.</p></div>
+<div class="card"><p class="hint" style="margin:0">ملاحظة: الأرقام تقريبية، وزياراتك من التلفونات اللي فتحت منها الصفحة دي ما بتتحسب. ما بنخزن أي اسم ولا رقم.</p></div>
+<div class="card"><h2>إعدادات</h2><p class="hint" style="margin:0 0 10px">✅ التلفون ده ما بيتحسب في الزيارات (فتحت الصفحة دي منه). افتح الصفحة دي مرة من أي جهاز تاني عايز تستبعده.</p><button onclick="resetCount()" style="background:#b3261e">ابدأ العد من جديد</button><p class="hint">الأرقام الحالية بتتصفر في الصفحة دي بس (من تلفونك). العدّاد الأصلي ما بيتمسح.</p></div>
 <button onclick="load()">تحديث</button></main>
 <script>
 var API="https://abacus.jasoncameron.dev",NS="sooqak-store";
-function g(k){return fetch(API+"/get/"+NS+"/"+k,{cache:"no-store"}).then(function(r){if(r.status===404)return 0;if(!r.ok)throw 0;return r.json()}).then(function(d){return typeof d==="number"?d:(d&&d.value)||0}).catch(function(){return 0})}
+var B={};try{B=JSON.parse(localStorage.getItem("sooqak_base")||"{}")}catch(e){}
+try{localStorage.setItem("sooqak_owner","1")}catch(e){}
+function g(k){return g0(k).then(function(v){return Math.max(0,v-(B[k]||0))})}
+function g0(k){return fetch(API+"/get/"+NS+"/"+k,{cache:"no-store"}).then(function(r){if(r.status===404)return 0;if(!r.ok)throw 0;return r.json()}).then(function(d){return typeof d==="number"?d:(d&&d.value)||0}).catch(function(){return 0})}
 function day(off){var d=new Date(Date.now()-off*864e5);return d.toLocaleDateString("en-CA",{timeZone:"Africa/Khartoum"})}
 function bar(n,v,m){return '<div class="row"><span class="n">'+n+'</span><i style="width:'+Math.round(v/Math.max(m,1)*55)+'%"></i><span class="v">'+v+'</span></div>'}
 function load(){var ds=[0,1,2,3,4,5,6].map(day);Promise.all(ds.map(function(d){return g("visits-"+d)}).concat([g("site-visits"),g("orders-"+ds[0]),g("src-wa"),g("src-fb"),g("src-other"),g("src-direct")])).then(function(v){
@@ -20,5 +24,6 @@ var days=v.slice(0,7),tot=v[7],o=v[8],s=v.slice(9),sum=days.reduce(function(a,b)
 document.getElementById("t").textContent=days[0];document.getElementById("w").textContent=sum;document.getElementById("a").textContent=tot;document.getElementById("o").textContent=o;document.getElementById("r").textContent=days[0]?Math.round(o/days[0]*100):0;
 var m=Math.max.apply(null,days);document.getElementById("days").innerHTML=days.map(function(x,i){return bar(i==0?"اليوم":i==1?"أمس":ds[i].slice(5),x,m)}).join("");
 var sn=["واتساب","فيسبوك","مواقع أخرى","مباشر"],sm=Math.max.apply(null,s);document.getElementById("src").innerHTML=s.map(function(x,i){return bar(sn[i],x,sm)}).join("")})}
+function resetCount(){if(!confirm("تبدأ العد من الصفر؟"))return;var ks=["site-visits","src-wa","src-fb","src-other","src-direct","orders-"+day(0)];for(var i=0;i<7;i++)ks.push("visits-"+day(i));B={};Promise.all(ks.map(function(k){return g0(k).then(function(v){B[k]=v})})).then(function(){try{localStorage.setItem("sooqak_base",JSON.stringify(B))}catch(e){}load()})}
 load();
 </script></body></html>
